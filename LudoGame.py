@@ -2,16 +2,30 @@ class LudoGame:
     """
 
     """
-    def __init__(self, players, turns):
-        self._players = players
-        self._turns = turns
+    def __init__(self):
+        self._players = None
+        self._turns = None
         self._board = []
 
-        for i in range(0, 57):
+        home_rows_player_A = ["A1", "A2", "A3", "A4", "A5", "A6", "E"]
+        home_rows_player_B = ["B1", "B2", "B3", "B4", "B5", "B6", "E"]
+        home_rows_player_C = ["C1", "C2", "C3", "C4", "C5", "C6", "E"]
+        home_rows_player_D = ["D1", "D2", "D3", "D4", "D5", "D6", "E"]
+
+        for i in range(0, 51):
             self._board.append(i)
+        self._board.append(home_rows_player_A)
+        self._board.append(home_rows_player_B)
+        self._board.append(home_rows_player_C)
+        self._board.append(home_rows_player_D)
 
     def play_game(self, players_list, turns_list):
-        pass
+        self.create_player_list(players_list)
+
+    def create_player_list(self, players_list):
+
+        for position in players_list:
+            self._players.append(Player(position))
 
     def print_game_board(self):
         print(self._board)
@@ -81,13 +95,16 @@ class Player:
 
 
 def main():
+    players = ['A', 'B']
+    turns = [('A', 6), ('A', 4), ('A', 5), ('A', 4), ('B', 6), ('B', 4), ('B', 1), ('B', 2), ('A', 6), ('A', 4),
+             ('A', 6), ('A', 3), ('A', 5), ('A', 1), ('A', 5), ('A', 4)]
 
     game = LudoGame()
+    current_tokens_space = game.play_game(players, turns)
     game.print_game_board()
 
-    # players = ['A', 'B']
-    # turns = [('A', 6), ('A', 4), ('A', 5), ('A', 4), ('B', 6), ('B', 4), ('B', 1), ('B', 2), ('A', 6), ('A', 4),
-    #          ('A', 6), ('A', 3), ('A', 5), ('A', 1), ('A', 5), ('A', 4)]
+
+
     #
     #
     # current_tokens_space = game.play_game(players, turns)
