@@ -90,6 +90,7 @@ class LudoGame:
                 print("[  ]", end="")
             else:
                 print(self._board[i], end="")
+        print("")
 
     def get_player_by_position(self, player_position):
         """takes as a parameter the player's position as a string and returns the player object, or not found"""
@@ -162,6 +163,8 @@ def main():
 
     game = LudoGame()
     game.print_game_board()
+    game._board[5] = "P-A"
+    print(game._board[5])
 
     # current_tokens_space = game.play_game(players, turns)
 
