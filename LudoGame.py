@@ -32,9 +32,9 @@ class LudoGame:
 
         for i in range(0, 15):
             if self._board[i] == '':
-                print("[  ]", end="")
+                print("[    ]", end="")
             else:
-                print(self._board[i], end="")
+                print("[ " + self._board[i] + "]", end="")
 
         for j in range(0, 13):
             print("")
@@ -42,54 +42,55 @@ class LudoGame:
 
                 if i == 0:
                     if self._board[55 - i] == '':
-                        print("[  ]", end="")
+                        print("[    ]", end="")
                     else:
-                        print("[" + self._board[55 - i] + "]", end="")
+                        print("[ " + self._board[55 - i] + " ]", end="")
 
                 if j == 6:
                     if i > 6:
                         if self._board[58][-2-(i-7)] == '':
-                            print("[  ]", end="")
+                            print("[    ]", end="")
                         else:
-                            print("[" + self._board[58][-2-(i-7)] + "]", end="")
+                            print("[ " + self._board[58][-2-(i-7)] + " ]", end="")
 
                     if i == 6:
-                        print("[E ]", end="")
+                        print("[ EE ]", end="")
 
                     if i < 6:
                         if self._board[56][i] == '':
-                            print("[  ]", end="")
+                            print("[    ]", end="")
                         else:
-                            print("[" + self._board[56][i] + "]", end="")
+                            print("[ " + self._board[56][i] + " ]", end="")
 
                 if i == 6 and j < 6:
                     if self._board[57][j] == '':
-                        print("[  ]", end="")
+                        print("[    ]", end="")
                     else:
-                        print("[" + self._board[57][j] + "]", end="")
+                        print("[ " + self._board[57][j] + " ]", end="")
 
                 if i == 6 and j > 6:
                     if self._board[59][-2-(j-7)] == '':
-                        print("[  ]", end="")
+                        print("[    ]", end="")
                     else:
-                        print("[" + self._board[59][-2-(j-7)] + "]", end="")
+                        print("[ " + self._board[59][-2-(j-7)] + " ]", end="")
 
                 if i == 12:
-                    if self._board[29 - i] == '':
-                        print("[  ]", end="")
+                    if self._board[33 - j] == '':
+                        print("[    ]", end="")
                     else:
-                        print("[" + self._board[29 - i] + "]", end="")
+                        print("[ " + self._board[33 - j] + "]", end="")
 
                 else:
                     if j != 6:
-                        print("    ", end="")
+                        print("      ", end="")
 
         print("")
         for i in range(44, 29, -1):
             if self._board[i] == '':
-                print("[  ]", end="")
+                print("[    ]", end="")
             else:
-                print(self._board[i], end="")
+                print("[ " + self._board[i] + "]", end="")
+
         print("")
 
     def get_player_by_position(self, player_position):
@@ -162,9 +163,13 @@ def main():
              ('A', 6), ('A', 3), ('A', 5), ('A', 1), ('A', 5), ('A', 4)]
 
     game = LudoGame()
+    #game.print_game_board()
+    game._board[14] = "A_P"
+    game._board[25] = "A_Q"
+    game._board[51] = "B_P"
+    game._board[39] = "B_Q"
+    #print(game._board[5])
     game.print_game_board()
-    game._board[5] = "P-A"
-    print(game._board[5])
 
     # current_tokens_space = game.play_game(players, turns)
 
