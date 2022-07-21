@@ -25,8 +25,77 @@ class LudoGame:
     def play_game(self, players_list, turns_list):
         self.create_player_list(players_list)
 
-        for turns in turns_list:
-            print(turns[1])
+        for turn in turns_list:
+            current_player = self.get_player_by_position(turn[0])
+            current_roll = turn[1]
+
+            player_token_p = current_player.get_token_p_step_count
+            player_token_q = current_player.get_token_q_step_count
+
+            self.choose_token_algorithm(current_player, current_roll, player_token_p, player_token_q)
+
+    def choose_token_algorithm(self, player, current_roll, p_steps, q_steps):
+        """
+        This function
+        :param player:
+        :param current_roll:
+        :param p_steps:
+        :param q_steps:
+        :return:
+        """
+
+        """
+        Step 1) If the die roll is 6, if a token is in the home yard, return that token to move.  Checks P first so if
+        both are in the home yard, P will be chosen as the token.
+
+        Also incorporates step 2 of the algorithm.  If one token is in the home square, and the other is exactly 6 steps
+        away from the end, let the one closest to the end move and finish.
+        """
+        if current_roll == 6:
+            if p_steps == "H":
+                if q_steps + current_roll == 57:
+                    return "Q"
+                else:
+                    return "P"
+            elif q_steps == "H":
+                if p_steps + current_roll == 57:
+                    return "P"
+                else:
+                    return "Q"
+
+        """Step 3)  If one token can move and kick out an opponent token, then move that token"""
+
+
+        """Step 4)  Move the token that is furthest from the finishing square"""
+        if p_steps > q_steps:
+            return "P"
+        elif q_steps > p_steps:
+            return "Q"
+        elif p_steps == q_steps:
+            if p_steps != "H" and p_steps != "R":
+                return "P and Q"        # special case
+
+        return "Can't move any tokens!  Skipping Turn."
+
+
+
+    def move_token(self, player_object, token_name, board_steps):
+        """
+        Moves one a player's tokens across the game board a specified number of steps.  It will then update the
+        token's total steps and kick out other opponent's tokens as needed.
+
+        If a player's two tokens land on the same space on the board, the player will stack the two tokens, and move
+        them as one piece until they reach the finishing square.  The tokens are not stacked if both at home.
+
+        If a player's token lands on a space occupied by an opponent's token, the opponent token will be returned
+        or kicked back to its home yard, and can only re-enter into play when the owner rolls a 6.
+
+        :param player_object:   player
+        :param token_name:      token name ('p' or 'q') as each player has two tokens
+        :param board_steps:     steps the token will take across the board as an int
+        :return:                none;
+        """
+        pass
 
     def create_player_list(self, players_list):
 
@@ -111,24 +180,6 @@ class LudoGame:
 
         return "Player not found!"
 
-    def move_token(self, player_object, token_name, board_steps):
-        """
-        Moves one a player's tokens across the game board a specified number of steps.  It will then update the
-        token's total steps and kick out other opponent's tokens as needed.
-
-        If a player's two tokens land on the same space on the board, the player will stack the two tokens, and move
-        them as one piece until they reach the finishing square.  The tokens are not stacked if both at home.
-
-        If a player's token lands on a space occupied by an opponent's token, the opponent token will be returned
-        or kicked back to its home yard, and can only re-enter into play when the owner rolls a 6.
-
-        :param player_object:   player
-        :param token_name:      token name ('p' or 'q') as each player has two tokens
-        :param board_steps:     steps the token will take across the board as an int
-        :return:                none;
-        """
-        pass
-
 
 class Player:
 
@@ -163,20 +214,20 @@ class Player:
         return self._game_status
 
     def get_token_p_step_count(self):                        # H = -1, R = 0, s/b no more than 57
-        position = self._token_positions["P"]
-        if position == "H":
+        steps = self._token_positions["P"]
+        if steps == "H":
             return -1
-        if position == "R":
+        if steps == "R":
             return 0
-        return position
+        return steps
 
     def get_token_q_step_count(self):                            # H = -1, R = 0, s/b no more than 57
-        position = self._token_positions["Q"]
-        if position == "H":
+        steps = self._token_positions["Q"]
+        if steps == "H":
             return -1
-        if position == "R":
+        if steps == "R":
             return 0
-        return position
+        return steps
 
     def get_space_name(self, total_steps):
 
