@@ -39,6 +39,14 @@ class LudoGame:
 
             self.move_token(current_player, token_choice, current_roll)
 
+            self.print_game_board()
+
+
+
+
+
+
+
 
 
 
@@ -63,36 +71,47 @@ class LudoGame:
         if current_roll == 6:
             if p_steps == -1:
                 if q_steps + current_roll == 57:
-                    return "Q"
+                    return ["Q"]
                 else:
-                    return "P"
+                    return ["P"]
             elif q_steps == -1:
                 if p_steps + current_roll == 57:
-                    return "P"
+                    return ["P"]
                 else:
-                    return "Q"
+                    return ["Q"]
 
         """Step 3)  If one token can move and kick out an opponent token, then move that token.  Tests P first so 
         will choose P if both tokens can kick out an opponent's token."""
-        future_board_position_p = self.get_board_position_space(p_steps + current_roll)
-        future_board_position_q = self.get_board_position_space(q_steps + current_roll)
+        player_start_space = player.get_start_space()-1
+
+        if p_steps == 0:
+            future_board_position_p = self.get_board_position_space(player_start_space + current_roll)
+        else:
+            future_board_position_p = self.get_board_position_space(p_steps + current_roll)
+
+        if q_steps == 0:
+            future_board_position_q = self.get_board_position_space(player_start_space + current_roll)
+        else:
+            future_board_position_q = self.get_board_position_space(q_steps + current_roll)
 
         if future_board_position_p != "":
             if future_board_position_p[0] != player.get_position():
-                return "P"
+                return ["P"]
 
         if future_board_position_q != "":
             if future_board_position_q[0] != player.get_position():
-                return "P"
+                return ["P"]
 
         """Step 4)  Move the token that is furthest from the finishing square"""
         if p_steps > q_steps:
-            return "P"
+            return ["Q"]
         elif q_steps > p_steps:
-            return "Q"
+            return ["P"]
         elif p_steps == q_steps:
-            if p_steps != "H" and p_steps != "R":
-                return "P and Q"        # special case to stack tokens
+            if p_steps != -1 and p_steps != 0:
+                return ["P", "Q"]        # special case to stack tokens
+            else:
+                return ["P"]
 
         return "Can't move any tokens!  Skipping Turn."
 
@@ -112,7 +131,71 @@ class LudoGame:
         :param board_steps:     steps the token will take across the board as an int
         :return:                none;
         """
-        pass
+
+
+
+
+        player_position_letter = player_object.get_position()
+        player_start_space = player_object.get_start_space()-1
+        player_end_space = player_object.get_end_space()-1
+        future_board_position = ""
+
+        if token_name[0] == "P":
+            step_count = player_object.get_token_p_step_count()
+        else:
+            step_count = player_object.get_token_q_step_count()
+
+        if step_count == -1:
+            # don't set board position here as in ready space, not yet on board.
+            player_object.set_token_position(token_name[0], "R")
+            return
+
+        if step_count == 0:
+            future_board_position = player_start_space + board_steps - 1
+        else:
+            future_board_position = step_count + board_steps - 1
+
+        # home_rows_player_A = pos 56
+        # home_rows_player_B = pos 57
+        # home_rows_player_C = pos 58
+        # home_rows_player_D = pos 59
+
+        if future_board_position > player_end_space:
+            steps_over_end_space = future_board_position - player_end_space
+            if steps_over_end_space > 7:
+                steps_to_backtrack = future_board_position - steps_over_end_space
+                player_object.set_token_position(token_name, future_board_position)
+                self.set_board_position_space(token_name, 56, steps_over_end_space)
+            else:
+                if player_position_letter == "A":
+                    player_object.set_token_position(token_name, future_board_position)
+                    self.set_board_position_space(token_name, 56, steps_over_end_space)
+                elif player_position_letter == "B":
+                    player_object.set_token_position(token_name, future_board_position)
+                    self.set_board_position_space(token_name, 57, steps_over_end_space)
+                elif player_position_letter == "C":
+                    player_object.set_token_position(token_name, future_board_position)
+                    self.set_board_position_space(token_name, 58, steps_over_end_space)
+                elif player_position_letter == "D":
+                    player_object.set_token_position(token_name, future_board_position)
+                    self.set_board_position_space(token_name, 59, steps_over_end_space)
+
+        if future_board_position <= player_end_space:
+            for token in token_name:
+                token_string = token.lower() + player_position_letter
+                player_object.set_token_position(token, future_board_position)
+                self.set_board_position_space(token_string, future_board_position)
+
+        # TODO:  add if other player has occupied space
+
+
+
+    def set_board_position_space(self, token, board_pos, board_pos2=None):
+
+        if board_pos2 is not None:
+            self._board[board_pos][board_pos2] = token
+        else:
+            self._board[board_pos] = token
 
     def get_board_position_space(self, board_pos):
         return self._board[board_pos]
@@ -229,6 +312,9 @@ class Player:
     def get_position(self):                                 # e.g- "A", "B", "C", or "D"
         return self._position
 
+    def set_token_position(self, token, pos):
+        self._token_positions[token] = pos
+
     def get_completed(self):
         """:return: true if player has finished the game, or false it not finished."""
         return self._game_status
@@ -268,6 +354,12 @@ class Player:
 
         elif total_steps > 57:
             return self.get_space_name(total_steps - (total_steps - 57))    # recursion if over step limit
+
+    def get_start_space(self):
+        return self._start_space
+
+    def get_end_space(self):
+        return self._end_space
 
 
 def main():
