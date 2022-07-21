@@ -100,8 +100,14 @@ class LudoGame:
         print("")
 
     def get_player_by_position(self, player_position):
-        """takes as a parameter the player's position as a string and returns the player object, or not found"""
-        pass
+        """takes as a parameter the player's position as a string and returns the player object, or a string
+        indicating that player was not found."""
+        for player in self._players:
+            if player.get_position() == player_position:
+                return player
+
+        return "Player not found!"
+
 
     def move_token(self, player_object, token_name, board_steps):
         """
@@ -148,6 +154,9 @@ class Player:
 
         self._token_positions = {"P": "H", "Q": "H"}
         self._game_status = False
+
+    def get_position(self):
+       return self._position
 
     def get_completed(self):
         """:return: true if player has finished the game, or false it not finished."""
