@@ -25,6 +25,9 @@ class LudoGame:
     def play_game(self, players_list, turns_list):
         self.create_player_list(players_list)
 
+        for turns in turns_list:
+            print(turns[1])
+
     def create_player_list(self, players_list):
 
         for position in players_list:
@@ -108,7 +111,6 @@ class LudoGame:
 
         return "Player not found!"
 
-
     def move_token(self, player_object, token_name, board_steps):
         """
         Moves one a player's tokens across the game board a specified number of steps.  It will then update the
@@ -132,51 +134,86 @@ class Player:
 
     def __init__(self, position):
 
-        self._position = position
+        self._position = position.upper()
 
         if self._position == 'A':
             self._start_space = 1
+            self._end_space = 50
+
         elif self._position == 'B':
             self._start_space = 15
+            self._end_space = 8
+
         elif self._position == 'C':
             self._start_space = 29
+            self._end_space = 22
+
         elif self._position == 'D':
             self._start_space = 43
-
-        if self._position == 'A':
-            self._end_space = 50
-        elif self._position == 'B':
-            self._end_space = 8
-        elif self._position == 'C':
-            self._end_space = 22
-        elif self._position == 'D':
             self._end_space = 36
 
-        self._token_positions = {"P": "H", "Q": "H"}
+        self._token_positions = {"P": "H", "Q": "H"}        # H = home yard; R = ready to go;
         self._game_status = False
 
-    def get_position(self):
-       return self._position
+    def get_position(self):                                 # e.g- "A", "B", "C", or "D"
+        return self._position
 
     def get_completed(self):
         """:return: true if player has finished the game, or false it not finished."""
         return self._game_status
 
-    def get_token_p_step_count(self):
-        pass
+    def get_token_p_step_count(self):                        # H = -1, R = 0, s/b no more than 57
+        position = self._token_positions["P"]
+        if position == "H":
+            return -1
+        if position == "R":
+            return 0
+        return position
 
-    def get_token_q_step_count(self):
-        pass
+    def get_token_q_step_count(self):                            # H = -1, R = 0, s/b no more than 57
+        position = self._token_positions["Q"]
+        if position == "H":
+            return -1
+        if position == "R":
+            return 0
+        return position
 
-    def get_space_name(self):
-        pass
+    def get_space_name(self, total_steps):
+
+        if total_steps == -1:
+            return "H"
+
+        elif total_steps == 0:
+            return "R"
+
+        elif total_steps <= 50:
+            return total_steps
+
+        elif 57 > total_steps > 50:
+            return str(self._position) + str(total_steps - 50)
+
+        elif total_steps == 57:
+            return "E"
+
+        elif total_steps > 57:
+            return self.get_space_name(total_steps - (total_steps - 57))    # recursion if over step limit
 
 
 def main():
     players = ['A', 'B']
     turns = [('A', 6), ('A', 4), ('A', 5), ('A', 4), ('B', 6), ('B', 4), ('B', 1), ('B', 2), ('A', 6), ('A', 4),
              ('A', 6), ('A', 3), ('A', 5), ('A', 1), ('A', 5), ('A', 4)]
+
+    game = LudoGame()
+    game.play_game(players, turns)
+    player_B = Player("A")
+    print(player_B.get_space_name(55))
+
+
     print_walk_around_board()
+
+
+
 
     # current_tokens_space = game.play_game(players, turns)
 
