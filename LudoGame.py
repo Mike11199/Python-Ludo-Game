@@ -1,3 +1,5 @@
+import time
+
 class LudoGame:
     """
 
@@ -29,6 +31,10 @@ class LudoGame:
             self._players.append(Player(position))
 
     def print_game_board(self):
+        """
+        This prints the array and 4 sub-arrays to the console in a form that actually looks like a Ludo board.
+        :return:
+        """
 
         for i in range(0, 15):
             if self._board[i] == '':
@@ -41,10 +47,10 @@ class LudoGame:
             for i in range(0, 13):
 
                 if i == 0:
-                    if self._board[55 - i] == '':
+                    if self._board[55 - j] == '':
                         print("[    ]", end="")
                     else:
-                        print("[ " + self._board[55 - i] + " ]", end="")
+                        print("[ " + self._board[55 - j] + "]", end="")
 
                 if j == 6:
                     if i > 6:
@@ -56,7 +62,7 @@ class LudoGame:
                     if i == 6:
                         print("[ EE ]", end="")
 
-                    if i < 6:
+                    if 6 > i >= 0:
                         if self._board[56][i] == '':
                             print("[    ]", end="")
                         else:
@@ -75,17 +81,17 @@ class LudoGame:
                         print("[ " + self._board[59][-2-(j-7)] + " ]", end="")
 
                 if i == 12:
-                    if self._board[33 - j] == '':
+                    if self._board[15 + j] == '':
                         print("[    ]", end="")
                     else:
-                        print("[ " + self._board[33 - j] + "]", end="")
+                        print("[ " + self._board[15 + j] + "]", end="")
 
                 else:
                     if j != 6:
                         print("      ", end="")
 
         print("")
-        for i in range(44, 29, -1):
+        for i in range(42, 27, -1):
             if self._board[i] == '':
                 print("[    ]", end="")
             else:
@@ -164,10 +170,26 @@ def main():
 
     game = LudoGame()
     #game.print_game_board()
-    game._board[14] = "A_P"
-    game._board[25] = "A_Q"
-    game._board[51] = "B_P"
-    game._board[39] = "B_Q"
+    #game._board[28] = "A_P"
+    # game._board[12] = "A_Q"
+    # game._board[2] = "B_P"
+    # game._board[39] = "B_Q"
+    game.print_game_board()
+
+    for i in range(0, 56):
+
+        print("\r")
+        print("\r")
+        print("\r")
+        game._board[i] = "A_P"
+
+        if i >0:
+            game._board[i-1] = ""
+        time.sleep(.5)
+        game.print_game_board()
+
+
+
     #print(game._board[5])
     game.print_game_board()
 
