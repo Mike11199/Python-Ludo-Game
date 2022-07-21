@@ -10,10 +10,10 @@ class LudoGame:
         self._turns = None
         self._board = []
 
-        home_rows_player_A = ["A1", "A2", "A3", "A4", "A5", "A6", "E"]
-        home_rows_player_B = ["B1", "B2", "B3", "B4", "B5", "B6", "E"]
-        home_rows_player_C = ["C1", "C2", "C3", "C4", "C5", "C6", "E"]
-        home_rows_player_D = ["D1", "D2", "D3", "D4", "D5", "D6", "E"]
+        home_rows_player_A = ["", "", "", "", "", "", ""] # pos 56
+        home_rows_player_B = ["", "", "", "", "", "", ""] # pos 57
+        home_rows_player_C = ["", "", "", "", "", "", ""] # pos 58
+        home_rows_player_D = ["", "", "", "", "", "", ""] # pos 59
 
         for i in range(1, 57):
             self._board.append("")
@@ -29,19 +29,28 @@ class LudoGame:
             current_player = self.get_player_by_position(turn[0])
             current_roll = turn[1]
 
-            player_token_p = current_player.get_token_p_step_count
-            player_token_q = current_player.get_token_q_step_count
+            player_token_p = current_player.get_token_p_step_count()
+            player_token_q = current_player.get_token_q_step_count()
 
-            self.choose_token_algorithm(current_player, current_roll, player_token_p, player_token_q)
+            token_choice = self.choose_token_algorithm(current_player, current_roll, player_token_p, player_token_q)
+
+            if token_choice == "Can't move any tokens!  Skipping Turn.":
+                break
+
+            self.move_token(current_player, token_choice, current_roll)
+
+
+
 
     def choose_token_algorithm(self, player, current_roll, p_steps, q_steps):
         """
-        This function
-        :param player:
-        :param current_roll:
-        :param p_steps:
-        :param q_steps:
-        :return:
+        This function implements the algorithm to decide which of the two player's tokens they should move.
+
+        :param player:          Player object by reference
+        :param current_roll:    Int of how far each token could move based on the die roll
+        :param p_steps:         How many steps the player's p token has moved so far in the game
+        :param q_steps:         How many steps the player's q token has moved so far in the game
+        :return:                A string.  Will return the "P" token, the "Q" token, or "P and Q" for stacked tokens.
         """
 
         """
@@ -52,19 +61,29 @@ class LudoGame:
         away from the end, let the one closest to the end move and finish.
         """
         if current_roll == 6:
-            if p_steps == "H":
+            if p_steps == -1:
                 if q_steps + current_roll == 57:
                     return "Q"
                 else:
                     return "P"
-            elif q_steps == "H":
+            elif q_steps == -1:
                 if p_steps + current_roll == 57:
                     return "P"
                 else:
                     return "Q"
 
-        """Step 3)  If one token can move and kick out an opponent token, then move that token"""
+        """Step 3)  If one token can move and kick out an opponent token, then move that token.  Tests P first so 
+        will choose P if both tokens can kick out an opponent's token."""
+        future_board_position_p = self.get_board_position_space(p_steps + current_roll)
+        future_board_position_q = self.get_board_position_space(q_steps + current_roll)
 
+        if future_board_position_p != "":
+            if future_board_position_p[0] != player.get_position():
+                return "P"
+
+        if future_board_position_q != "":
+            if future_board_position_q[0] != player.get_position():
+                return "P"
 
         """Step 4)  Move the token that is furthest from the finishing square"""
         if p_steps > q_steps:
@@ -73,11 +92,9 @@ class LudoGame:
             return "Q"
         elif p_steps == q_steps:
             if p_steps != "H" and p_steps != "R":
-                return "P and Q"        # special case
+                return "P and Q"        # special case to stack tokens
 
         return "Can't move any tokens!  Skipping Turn."
-
-
 
     def move_token(self, player_object, token_name, board_steps):
         """
@@ -96,6 +113,9 @@ class LudoGame:
         :return:                none;
         """
         pass
+
+    def get_board_position_space(self, board_pos):
+        return self._board[board_pos]
 
     def create_player_list(self, players_list):
 
