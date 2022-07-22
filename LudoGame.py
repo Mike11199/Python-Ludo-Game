@@ -126,10 +126,10 @@ class LudoGame:
 
         """Step 4)  Move the token that is furthest from the finishing square.  Don't move if at end step."""
         if p_steps > q_steps:
-            if q_steps != -1 or q_steps != 57:
+            if q_steps != -1 and q_steps != 57:
                 return ["Q"]
         else:
-            if p_steps != -1 or p_steps != 57:
+            if p_steps != -1 and p_steps != 57:
                 return ["P"]
 
         """
