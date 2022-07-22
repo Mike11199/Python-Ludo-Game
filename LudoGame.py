@@ -124,13 +124,15 @@ class LudoGame:
             if future_board_pos_q[0] != player.get_position():
                 return ["Q"]
 
-        """Step 4)  Move the token that is furthest from the finishing square.  Don't move if at end step."""
+        """Step 4)  Move the token that is furthest from the finishing square.  Don't move if at end step.
+           Also don't move token if it's at the home yard as if it were possible to move, would have been handled
+           above at the if dice roll 6 conditional lines."""
         if p_steps > q_steps:
             if q_steps != -1 and q_steps != 57:
                 return ["Q"]
-        else:
-            if p_steps != -1 and p_steps != 57:
-                return ["P"]
+            else:
+                if p_steps != -1 and p_steps != 57:
+                    return ["P"]
 
         """
         This will be the case where both tokens are in the home yard and the player hasn't rolled a six, or perhaps
