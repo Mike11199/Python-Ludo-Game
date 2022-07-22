@@ -27,9 +27,19 @@ class LudoGame:
         self._board.append(home_rows_player_C)
         self._board.append(home_rows_player_D)
 
+    # TODO:  finish
+    def sort_turns(self, turns_list):
+        for i in range(0, len(turns_list)-1):
+            current_player = turns_list[i][0]
+            current_roll = turns_list[i][0]
+            next_player = turns_list[i+1][0]
+            next_roll = turns_list[i+1][0]
+
+
     def play_game(self, players_list, turns_list):
 
         self.create_player_list(players_list)       # add player objects to LudoGame object as an array of objects
+        self.sort_turns(turns_list)                 # sort turns.  A, B, C, D unless roll 6 then player goes twice
 
         for turn in turns_list:
             current_player = self.get_player_by_position(turn[0])
@@ -214,20 +224,29 @@ class LudoGame:
         else:
             future_board_pos = step_count + board_steps - 1  # else add steps to board_count where start pos already in
 
-        # TODO:  handle B, C, and D positions which have to move from board space 56 (index 55) to space 1 (index 0):
-
+        # handle B, C, and D positions which have to move from board space 56 (index 55) to space 1 (index 0):
         if future_board_pos > 55:
             if player_pos_char != 'A':
                 future_board_pos = future_board_pos - 55
 
         """
         This determines whether the future board position will be in the player's home rows.  It adds backtracking if
-        the die roll is not the exact roll needed to enter the end "E" space of the game board.        
+        the die roll is not the exact roll needed to enter the end "E" space of the game board.   
+        
+        It also tests to make sure      
         """
         home_row_spaces = None
 
-        if future_board_pos > player_end_space:
-            if future_board_pos < player_start_space:
+        if player_pos_char != 'A':
+            if future_board_pos > player_end_space:                      # test if position over end space
+                if future_board_pos < player_start_space:                # test if position also less than start space
+                    home_row_spaces = future_board_pos - player_end_space
+                    if home_row_spaces > 6:
+                        steps_to_backtrack = home_row_spaces - 6
+                        home_row_spaces = home_row_spaces - steps_to_backtrack
+
+        if player_pos_char == 'A':
+            if future_board_pos > player_end_space:                      # test if position over end space
                 home_row_spaces = future_board_pos - player_end_space
                 if home_row_spaces > 6:
                     steps_to_backtrack = home_row_spaces - 6
@@ -304,16 +323,16 @@ class LudoGame:
 
         for token in token_name:
             if player_pos_char == "A":
-                player_obj.set_token_steps(token_name, future_board_pos)
+                player_obj.set_token_steps(token, str(player_pos_char + home_row_spaces))
                 self.set_board_pos_space(token_name, 56, home_row_spaces)
             elif player_pos_char == "B":
-                player_obj.set_token_steps(token_name, future_board_pos)
+                player_obj.set_token_steps(token, str(player_pos_char + home_row_spaces))
                 self.set_board_pos_space(token_name, 57, home_row_spaces)
             elif player_pos_char == "C":
-                player_obj.set_token_steps(token_name, future_board_pos)
+                player_obj.set_token_steps(token, str(player_pos_char + home_row_spaces))
                 self.set_board_pos_space(token_name, 58, home_row_spaces)
             elif player_pos_char == "D":
-                player_obj.set_token_steps(token_name, future_board_pos)
+                player_obj.set_token_steps(token, str(player_pos_char + home_row_spaces))
                 self.set_board_pos_space(token_name, 59, home_row_spaces)
 
     def set_board_pos_space(self, token, board_pos, board_pos2=None):
