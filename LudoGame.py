@@ -200,17 +200,10 @@ class LudoGame:
         If an opponent token exists, it will be kicked out of the space.
         """
         if home_row_spaces is None:
-            pass
+            future_board_position_space = self.get_board_position_space(future_board_pos)
 
-
-        future_board_position_space = self.get_board_position_space(future_board_pos)
-
-
-        self.kick_out_opponent_tokens(future_board_pos, future_board_position_space)
-
-
-        #player_obj.set_token_position(token_name, "H")
-       # future_board_position_space
+            if future_board_position_space != "" and future_board_position_space[-1] !=player_pos_char:
+                self.kick_out_opponent_tokens(future_board_pos, future_board_position_space)
 
 
         # home_rows_player_A = pos 56
@@ -218,14 +211,10 @@ class LudoGame:
         # home_rows_player_C = pos 58
         # home_rows_player_D = pos 59
 
-        if future_board_pos > player_end_space:
-            steps_over_end_space = future_board_pos - player_end_space
-            if steps_over_end_space > 7:
-                steps_to_backtrack = future_board_pos - steps_over_end_space
-                player_obj.set_token_position(token_name, future_board_pos)
-                self.set_board_pos_space(token_name, 56, steps_over_end_space)
-            else:
-                self.move_to_home_rows(player_pos_char, player_obj, token_name, future_board_pos, steps_over_end_space)
+        if home_row_spaces is not None:
+            self.move_to_home_rows(player_pos_char, player_obj, token_name, home_row_spaces)
+
+
 
         if future_board_pos <= player_end_space:
             for token in token_name:
@@ -234,32 +223,30 @@ class LudoGame:
 
         # TODO:  add if other player has occupied space
 
-
-
-
     def kick_out_opponent_tokens(self, future_board_pos, future_board_position_space):
 
+        future_board_position_space = self.get_board_position_space(future_board_pos)
+        self.set_board_pos_space("", future_board_pos)
 
-
-
-    def move_to_home_rows(self, player_pos_char, player_obj, token_name, future_board_pos, steps_over_end_space):
+    def move_to_home_rows(self, player_pos_char, player_obj, token_name, future_board_pos, home_row_spaces):
 
         for token in token_name:
             if player_pos_char == "A":
                 player_obj.set_token_position(token_name, future_board_pos)
-                self.set_board_pos_space(token_name, 56, steps_over_end_space)
+                self.set_board_pos_space(token_name, 56, home_row_spaces)
             elif player_pos_char == "B":
                 player_obj.set_token_position(token_name, future_board_pos)
-                self.set_board_pos_space(token_name, 57, steps_over_end_space)
+                self.set_board_pos_space(token_name, 57, home_row_spaces)
             elif player_pos_char == "C":
                 player_obj.set_token_position(token_name, future_board_pos)
-                self.set_board_pos_space(token_name, 58, steps_over_end_space)
+                self.set_board_pos_space(token_name, 58, home_row_spaces)
             elif player_pos_char == "D":
                 player_obj.set_token_position(token_name, future_board_pos)
-                self.set_board_pos_space(token_name, 59, steps_over_end_space)
+                self.set_board_pos_space(token_name, 59, home_row_spaces)
 
     def set_board_pos_space(self, token, board_pos, board_pos2=None):
 
+        # board_pops2 = home rows before end space
         if board_pos2 is not None:
             self._board[board_pos][board_pos2] = token
         else:
