@@ -128,18 +128,20 @@ class LudoGame:
            Also don't move token if it's at the home yard as if it were possible to move, would have been handled
            above at the if dice roll 6 conditional lines."""
         if p_steps > q_steps:
-            if q_steps != -1 and q_steps != 57:
-                return ["Q"]
-            elif p_steps != -1 and p_steps != 57:
-                return ["P"]
+            if q_steps != -1:       # debugger breaks if attempting one line:  if q_steps != -1 and q_steps != 57
+                if q_steps != 57:
+                    return ["Q"]
+            if p_steps != -1:
+                if p_steps != 57:
+                    return ["P"]
 
         if p_steps < q_steps:
-            if p_steps != -1 and p_steps != 57:
-                return ["P"]
-            elif q_steps != -1 and q_steps != 57:
-                return ["Q"]
-
-
+            if p_steps != -1:
+                if p_steps != 57:
+                    return ["P"]
+            if q_steps != -1:
+                if q_steps != 57:
+                    return ["Q"]
 
         """
         This will be the case where both tokens are in the home yard and the player hasn't rolled a six, or perhaps
