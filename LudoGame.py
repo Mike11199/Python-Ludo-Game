@@ -214,18 +214,24 @@ class LudoGame:
         else:
             future_board_pos = step_count + board_steps - 1  # else add steps to board_count where start pos already in
 
+        # TODO:  handle B, C, and D positions which have to move from board space 56 (index 55) to space 1 (index 0):
+
+        if future_board_pos > 55:
+            if player_pos_char != 'A':
+                future_board_pos = future_board_pos - 55
+
         """
         This determines whether the future board position will be in the player's home rows.  It adds backtracking if
-        the die roll is not the exact roll needed to enter the end "E" space of the game board.
-        
+        the die roll is not the exact roll needed to enter the end "E" space of the game board.        
         """
         home_row_spaces = None
 
         if future_board_pos > player_end_space:
-            home_row_spaces = future_board_pos - player_end_space
-            if home_row_spaces > 6:
-                steps_to_backtrack = home_row_spaces - 6
-                home_row_spaces = home_row_spaces - steps_to_backtrack
+            if future_board_pos < player_start_space:
+                home_row_spaces = future_board_pos - player_end_space
+                if home_row_spaces > 6:
+                    steps_to_backtrack = home_row_spaces - 6
+                    home_row_spaces = home_row_spaces - steps_to_backtrack
 
         """
         This determines whether the future board position has an opponent's token in it already to be kicked out.
