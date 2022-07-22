@@ -10,10 +10,10 @@ class LudoGame:
         self._turns = None
         self._board = []
 
-        home_rows_player_A = ["", "", "", "", "", "", ""] # pos 56
-        home_rows_player_B = ["", "", "", "", "", "", ""] # pos 57
-        home_rows_player_C = ["", "", "", "", "", "", ""] # pos 58
-        home_rows_player_D = ["", "", "", "", "", "", ""] # pos 59
+        home_rows_player_A = ["", "", "", "", "", "", ""]  # pos 56
+        home_rows_player_B = ["", "", "", "", "", "", ""]  # pos 57
+        home_rows_player_C = ["", "", "", "", "", "", ""]  # pos 58
+        home_rows_player_D = ["", "", "", "", "", "", ""]  # pos 59
 
         for i in range(1, 57):
             self._board.append("")
