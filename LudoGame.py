@@ -179,13 +179,21 @@ class LudoGame:
         else:
             future_board_pos = step_count + board_steps - 1  # else add steps to board_count where start pos already in
 
-        # TODO:  Determine whether board space is occupied and an opponent token needs to be kicked out
 
-        # TODO:  Need function to modify future_board_pos if over
+        # TODO:  Need function to modify future_board_pos if over or else func to determine whether space occupied
+        # TODO:  could be wrong.
+        home_row_spaces = None
+
         if future_board_pos > player_end_space:
-            steps_over_end_space = future_board_pos - player_end_space
-            if steps_over_end_space > 7:
-                steps_to_backtrack = future_board_pos - steps_over_end_space
+            home_row_spaces = future_board_pos - player_end_space
+            if home_row_spaces > 7:
+                home_row_spaces = future_board_pos - home_row_spaces
+
+
+        # TODO:  Determine whether board space is occupied and an opponent token needs to be kicked out only if
+        #  not in home row
+        if home_row_spaces is None:
+            pass
 
 
         future_board_position_space = self.get_board_position_space(future_board_pos)
