@@ -140,8 +140,9 @@ class LudoGame:
         player_start_space = player_obj.get_start_space()-1
         player_end_space = player_obj.get_end_space()-1
 
+        token_string = []
         for token in token_name:
-            token_string = token.lower() + player_pos_char
+            token_string.append(token.lower() + player_pos_char)
 
         """
         Get the steps the token has already traversed on the board.  The token will be a list of [P], [Q], or 
@@ -179,7 +180,6 @@ class LudoGame:
         else:
             future_board_pos = step_count + board_steps - 1  # else add steps to board_count where start pos already in
 
-
         """
         This determines whether the future board position will be in the player's home rows.  It adds backtracking if
         the die roll is not the exact roll needed to enter the end "E" space of the game board.
@@ -192,7 +192,6 @@ class LudoGame:
                 steps_to_backtrack = home_row_spaces - 6
                 home_row_spaces = home_row_spaces - steps_to_backtrack
 
-
         """
         This determines whether the future board position has an opponent's token in it already to be kicked out.
         It will skip if in the home_row_spaces as it would be impossible for an opponent's token to be there.
@@ -202,26 +201,28 @@ class LudoGame:
         if home_row_spaces is None:
             future_board_position_space = self.get_board_position_space(future_board_pos)
 
-            if future_board_position_space != "" and future_board_position_space[-1] !=player_pos_char:
+            if future_board_position_space != "" and future_board_position_space[-1] != player_pos_char:
                 self.kick_out_opponent_tokens(future_board_pos, future_board_position_space)
 
-
-        # home_rows_player_A = pos 56
-        # home_rows_player_B = pos 57
-        # home_rows_player_C = pos 58
-        # home_rows_player_D = pos 59
-
+        """
+        This determines moves the token to the home row spaces (using a function move_to_home_rows to determine what
+        home row based on the player char letter) if the home_row_spaces is not empty.
+        
+        If the home row spaces variables is empty, then we don't need a helper function to decide which home row array
+        to enter, and can directly place the token in the board array.  
+        
+        Uses for loops to handle the possibility that the tokens are stacked.
+        
+        Previous lines in this function should have kicked out an opponent's token if it was present.
+        """
         if home_row_spaces is not None:
             self.move_to_home_rows(player_pos_char, player_obj, token_name, home_row_spaces)
-
-
-
-        if future_board_pos <= player_end_space:
+        else:
             for token in token_name:
-                player_obj.set_token_position(token, future_board_pos)      # set token info in player object
-                self.set_board_pos_space(token_string, future_board_pos)    # place token on board as string "e.g pA"
-
-        # TODO:  add if other player has occupied space
+                i = 0
+                player_obj.set_token_position(token, future_board_pos)  # set token info in player object
+                self.set_board_pos_space(token_string[i], future_board_pos)
+                i += 1
 
     def kick_out_opponent_tokens(self, future_board_pos, future_board_position_space):
 
@@ -229,6 +230,11 @@ class LudoGame:
         self.set_board_pos_space("", future_board_pos)
 
     def move_to_home_rows(self, player_pos_char, player_obj, token_name, future_board_pos, home_row_spaces):
+
+        # home_rows_player_A = pos 56
+        # home_rows_player_B = pos 57
+        # home_rows_player_C = pos 58
+        # home_rows_player_D = pos 59
 
         for token in token_name:
             if player_pos_char == "A":
