@@ -226,6 +226,7 @@ class LudoGame:
 
     def kick_out_opponent_tokens(self, future_board_pos, future_board_position_space):
 
+        # TODO:  have to find player object token belongs to and edit that too somehow
         future_board_position_space = self.get_board_position_space(future_board_pos)
         self.set_board_pos_space("", future_board_pos)
 
