@@ -40,7 +40,8 @@ class LudoGame:
 
             token_choice = self.choose_token_algorithm(current_player, current_roll, player_token_p, player_token_q)
 
-            if token_choice == "Can't move any tokens!  Skipping Turn.":
+            if token_choice == "No possible move.":
+                print("Player " + turn[0] + " can't move! Skipping turn.")
                 break   # go to next turn in for loop
 
             self.move_token(current_player, token_choice, current_roll)
@@ -98,25 +99,28 @@ class LudoGame:
 
         player_start_space = player.get_start_space()-1
 
-        # Test whether token p is in home yard.  Get p token's steps
+        future_board_pos_p = None
+        future_board_pos_q = None
+
+        # Test whether token p is in ready to go yard.  Get p token's steps
         if p_steps == 0:
             future_board_pos_p = self.get_board_position_space(player_start_space + current_roll)
-        else:
+        elif p_steps != -1:
             future_board_pos_p = self.get_board_position_space(p_steps + current_roll)
 
-        # Test whether q is in home yard.  Get q token's steps
+        # Test whether q is in ready to go yard.  Get q token's steps
         if q_steps == 0:
             future_board_pos_q = self.get_board_position_space(player_start_space + current_roll)
-        else:
+        elif q_steps != -1:
             future_board_pos_q = self.get_board_position_space(q_steps + current_roll)
 
         # if future board pos token p is not empty, and it contains an enemy token
-        if future_board_pos_p != "":
+        if future_board_pos_p is not None and future_board_pos_p != "":
             if future_board_pos_p[0] != player.get_position():
                 return ["P"]
 
         # if future board pos token q is not empty, and it contains an enemy token
-        if future_board_pos_q != "":
+        if future_board_pos_q is not None and future_board_pos_q != "":
             if future_board_pos_q[0] != player.get_position():
                 return ["Q"]
 
@@ -132,7 +136,7 @@ class LudoGame:
         This will be the case where both tokens are in the home yard and the player hasn't rolled a six, or perhaps
         they have won the game, but were still fed a turn into the LudoGame object for some reason.
         """
-        return "Player " + str(player.get_position()) + " can't move any tokens!  Skipping Turn."
+        return "No possible move."
 
     def move_token(self, player_obj, token_name, board_steps):
         """
@@ -159,9 +163,9 @@ class LudoGame:
         player_start_space = player_obj.get_start_space()-1
         player_end_space = player_obj.get_end_space()-1
 
-        token_string = []
+        token_string = ""
         for token in token_name:
-            token_string.append(token.lower() + player_pos_char)  # e.g - pA, pB, qA, pAqA
+            token_string += (token.lower() + player_pos_char)  # e.g - pA, pB, qA, pAqA
 
         """
         Get the steps the token has already traversed on the board.  The token will be a list of [P], [Q], or 
@@ -265,12 +269,12 @@ class LudoGame:
 
         if len(future_board_pos) == 2:                                                  # e.g - pA, pB, qA
             opponent_token = future_board_pos_space[0]
-            opponent_player_obj.set_token_steps(opponent_token.upper(), -1)             # kick back to home yard
+            opponent_player_obj.set_token_steps(opponent_token.upper(), "H")             # kick back to home yard
         else:                                                                           # e.g - pAqA or pBqB
             opponent_token_p = future_board_pos_space[0]
             opponent_token_q = future_board_pos_space[2]
-            opponent_player_obj.set_token_steps(opponent_token_p.upper(), -1)           # kick back to home yard
-            opponent_player_obj.set_token_steps(opponent_token_q.upper(), -1)           # kick back to home yard
+            opponent_player_obj.set_token_steps(opponent_token_p.upper(), "H")           # kick back to home yard
+            opponent_player_obj.set_token_steps(opponent_token_q.upper(), "H")           # kick back to home yard
 
         self.set_board_pos_space("", future_board_pos)          # clear opponent token or tokens from board space
 
