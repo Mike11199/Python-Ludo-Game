@@ -1,20 +1,25 @@
 import time
 
+
 class LudoGame:
     """
     This represents the Ludo game being currently played.  It contains an array which represents the board.
     """
 
     def __init__(self):
-        self._players = []
-        self._turns = None
-        self._board = []
+        self._players = []      # array of player objects
+        self._turns = None      # array of turns
+        self._board = []        # board created in init function
 
         home_rows_player_A = ["", "", "", "", "", "", ""]  # pos 56
         home_rows_player_B = ["", "", "", "", "", "", ""]  # pos 57
         home_rows_player_C = ["", "", "", "", "", "", ""]  # pos 58
         home_rows_player_D = ["", "", "", "", "", "", ""]  # pos 59
 
+        """
+        Create the board which is an array.  The last four elements of the array are subarrays, for the home rows of 
+        players A-D.
+        """
         for i in range(1, 57):
             self._board.append("")
         self._board.append(home_rows_player_A)
@@ -23,7 +28,8 @@ class LudoGame:
         self._board.append(home_rows_player_D)
 
     def play_game(self, players_list, turns_list):
-        self.create_player_list(players_list)
+
+        self.create_player_list(players_list)       # add player objects to LudoGame object as an array of objects
 
         for turn in turns_list:
             current_player = self.get_player_by_position(turn[0])
@@ -35,24 +41,16 @@ class LudoGame:
             token_choice = self.choose_token_algorithm(current_player, current_roll, player_token_p, player_token_q)
 
             if token_choice == "Can't move any tokens!  Skipping Turn.":
-                break
+                break   # go to next turn in for loop
 
             self.move_token(current_player, token_choice, current_roll)
 
             self.print_game_board()
 
-
-
-
-
-
-
-
-
-
     def choose_token_algorithm(self, player, current_roll, p_steps, q_steps):
         """
-        This function implements the algorithm to decide which of the two player's tokens they should move.
+        This function implements the algorithm to decide which of the player's two tokens they should move.  Or if the
+        tokens will be stacked.
 
         :param player:          Player object by reference
         :param current_roll:    Int of how far each token could move based on the die roll
@@ -60,6 +58,14 @@ class LudoGame:
         :param q_steps:         How many steps the player's q token has moved so far in the game
         :return:                A string.  Will return the "P" token, the "Q" token, or "P and Q" for stacked tokens.
         """
+
+        """
+        Step 0) If the tokens are already stacked then the algorithm has no choice but to move both.
+        """
+        if p_steps == q_steps:
+            if p_steps != 57:                            # edge case if both tokens are in E
+                if p_steps != -1 and p_steps != 0:       # if tokens are not both in ready or home space.
+                    return ["P", "Q"]                    # tokens are stacked so move both
 
         """
         Step 1) If the die roll is 6, if a token is in the home yard, return that token to move.  Checks P first so if
@@ -80,40 +86,53 @@ class LudoGame:
                 else:
                     return ["Q"]
 
-        """Step 3)  If one token can move and kick out an opponent token, then move that token.  Tests P first so 
-        will choose P if both tokens can kick out an opponent's token."""
+        """
+        Step 3)  If one token can move and kick out an opponent token, then move that token.  Tests P first so 
+        will choose P if both tokens can kick out an opponent's token.
+        
+        First, we must determine where the token will be on the game board, to test if an opponent's token will
+        be there.  If the token is in the "ready to go" position, then this is a special case, as the future position
+        will be impacted by the start position, which is different for each player "A", "B" have different start
+        positions for example.
+        """
+
         player_start_space = player.get_start_space()-1
 
+        # Test whether token p is in home yard.  Get p token's steps
         if p_steps == 0:
             future_board_pos_p = self.get_board_position_space(player_start_space + current_roll)
         else:
             future_board_pos_p = self.get_board_position_space(p_steps + current_roll)
 
+        # Test whether q is in home yard.  Get q token's steps
         if q_steps == 0:
             future_board_pos_q = self.get_board_position_space(player_start_space + current_roll)
         else:
             future_board_pos_q = self.get_board_position_space(q_steps + current_roll)
 
+        # if future board pos token p is not empty, and it contains an enemy token
         if future_board_pos_p != "":
             if future_board_pos_p[0] != player.get_position():
                 return ["P"]
 
+        # if future board pos token q is not empty, and it contains an enemy token
         if future_board_pos_q != "":
             if future_board_pos_q[0] != player.get_position():
-                return ["P"]
+                return ["Q"]
 
-        """Step 4)  Move the token that is furthest from the finishing square"""
+        """Step 4)  Move the token that is furthest from the finishing square.  Don't move if at end step."""
         if p_steps > q_steps:
-            return ["Q"]
-        elif q_steps > p_steps:
-            return ["P"]
-        elif p_steps == q_steps:
-            if p_steps != -1 and p_steps != 0:
-                return ["P", "Q"]        # special case to stack tokens
-            else:
+            if q_steps != -1 or q_steps != 57:
+                return ["Q"]
+        else:
+            if p_steps != -1 or p_steps != 57:
                 return ["P"]
 
-        return "Can't move any tokens!  Skipping Turn."
+        """
+        This will be the case where both tokens are in the home yard and the player hasn't rolled a six, or perhaps
+        they have won the game, but were still fed a turn into the LudoGame object for some reason.
+        """
+        return "Player " + str(player.get_position()) + " can't move any tokens!  Skipping Turn."
 
     def move_token(self, player_obj, token_name, board_steps):
         """
