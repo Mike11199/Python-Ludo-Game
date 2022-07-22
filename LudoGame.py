@@ -130,9 +130,16 @@ class LudoGame:
         if p_steps > q_steps:
             if q_steps != -1 and q_steps != 57:
                 return ["Q"]
-            else:
-                if p_steps != -1 and p_steps != 57:
-                    return ["P"]
+            elif p_steps != -1 and p_steps != 57:
+                return ["P"]
+
+        if p_steps < q_steps:
+            if p_steps != -1 and p_steps != 57:
+                return ["P"]
+            elif q_steps != -1 and q_steps != 57:
+                return ["Q"]
+
+
 
         """
         This will be the case where both tokens are in the home yard and the player hasn't rolled a six, or perhaps
