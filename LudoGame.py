@@ -85,21 +85,21 @@ class LudoGame:
         player_start_space = player.get_start_space()-1
 
         if p_steps == 0:
-            future_board_position_p = self.get_board_position_space(player_start_space + current_roll)
+            future_board_pos_p = self.get_board_position_space(player_start_space + current_roll)
         else:
-            future_board_position_p = self.get_board_position_space(p_steps + current_roll)
+            future_board_pos_p = self.get_board_position_space(p_steps + current_roll)
 
         if q_steps == 0:
-            future_board_position_q = self.get_board_position_space(player_start_space + current_roll)
+            future_board_pos_q = self.get_board_position_space(player_start_space + current_roll)
         else:
-            future_board_position_q = self.get_board_position_space(q_steps + current_roll)
+            future_board_pos_q = self.get_board_position_space(q_steps + current_roll)
 
-        if future_board_position_p != "":
-            if future_board_position_p[0] != player.get_position():
+        if future_board_pos_p != "":
+            if future_board_pos_p[0] != player.get_position():
                 return ["P"]
 
-        if future_board_position_q != "":
-            if future_board_position_q[0] != player.get_position():
+        if future_board_pos_q != "":
+            if future_board_pos_q[0] != player.get_position():
                 return ["P"]
 
         """Step 4)  Move the token that is furthest from the finishing square"""
@@ -115,7 +115,7 @@ class LudoGame:
 
         return "Can't move any tokens!  Skipping Turn."
 
-    def move_token(self, player_object, token_name, board_steps):
+    def move_token(self, player_obj, token_name, board_steps):
         """
         Moves one a player's tokens across the game board a specified number of steps.  It will then update the
         token's total steps and kick out other opponent's tokens as needed.
@@ -126,71 +126,124 @@ class LudoGame:
         If a player's token lands on a space occupied by an opponent's token, the opponent token will be returned
         or kicked back to its home yard, and can only re-enter into play when the owner rolls a 6.
 
-        :param player_object:   player
-        :param token_name:      token name ('p' or 'q') as each player has two tokens
+
+        :param token_name:      list token name ['P'], ['Q'], or [P, Q] if choose_token algorithm decides tokens are
+                                stacked
+
         :param board_steps:     steps the token will take across the board as an int
-        :return:                none;
+        :return:                none
+        :param player_obj:      player object
         """
 
+        """Set up the variables that will be used in this function."""
+        player_pos_char = player_obj.get_position()
+        player_start_space = player_obj.get_start_space()-1
+        player_end_space = player_obj.get_end_space()-1
 
+        for token in token_name:
+            token_string = token.lower() + player_pos_char
 
-
-        player_position_letter = player_object.get_position()
-        player_start_space = player_object.get_start_space()-1
-        player_end_space = player_object.get_end_space()-1
-        future_board_position = ""
-
+        """
+        Get the steps the token has already traversed on the board.  The token will be a list of [P], [Q], or 
+        [P, Q] as the choose_token_algorithm will determine whether the tokens are stacked.
+           
+        If the first item in the list is [P], get the P step count, as that will be the same if only P or if stacked.
+           
+        Else, return the Q token steps. 
+           
+        The past steps of the token is used to determine where the token will be moved to the board.            
+        """
         if token_name[0] == "P":
-            step_count = player_object.get_token_p_step_count()
+            step_count = player_obj.get_token_p_step_count()
         else:
-            step_count = player_object.get_token_q_step_count()
+            step_count = player_obj.get_token_q_step_count()
 
+        """
+        If token in home yard, move to ready space and return.  Don't edit board as technically not on board array
+        yet.
+        """
         if step_count == -1:
-            # don't set board position here as in ready space, not yet on board.
-            player_object.set_token_position(token_name[0], "R")
+            player_obj.set_token_position(token_name[0], "R")
             return
 
+        """
+        If token in home yard, set steps as the player start space plus board steps to move.
+          
+        If not in home yard, set steps as the step_count, which has the start space now already built in, 
+        and the steps to move.
+           
+        This variable, future_board_pos, will be used to determine if the board space is occupied.
+        """
         if step_count == 0:
-            future_board_position = player_start_space + board_steps - 1
+            future_board_pos = player_start_space + board_steps - 1     # if in home yard set steps plus start pos
         else:
-            future_board_position = step_count + board_steps - 1
+            future_board_pos = step_count + board_steps - 1  # else add steps to board_count where start pos already in
+
+        # TODO:  Determine whether board space is occupied and an opponent token needs to be kicked out
+
+        # TODO:  Need function to modify future_board_pos if over
+        if future_board_pos > player_end_space:
+            steps_over_end_space = future_board_pos - player_end_space
+            if steps_over_end_space > 7:
+                steps_to_backtrack = future_board_pos - steps_over_end_space
+
+
+        future_board_position_space = self.get_board_position_space(future_board_pos)
+
+
+        self.kick_out_opponent_tokens(future_board_pos, future_board_position_space)
+
+
+        #player_obj.set_token_position(token_name, "H")
+       # future_board_position_space
+
 
         # home_rows_player_A = pos 56
         # home_rows_player_B = pos 57
         # home_rows_player_C = pos 58
         # home_rows_player_D = pos 59
 
-        if future_board_position > player_end_space:
-            steps_over_end_space = future_board_position - player_end_space
+        if future_board_pos > player_end_space:
+            steps_over_end_space = future_board_pos - player_end_space
             if steps_over_end_space > 7:
-                steps_to_backtrack = future_board_position - steps_over_end_space
-                player_object.set_token_position(token_name, future_board_position)
-                self.set_board_position_space(token_name, 56, steps_over_end_space)
+                steps_to_backtrack = future_board_pos - steps_over_end_space
+                player_obj.set_token_position(token_name, future_board_pos)
+                self.set_board_pos_space(token_name, 56, steps_over_end_space)
             else:
-                if player_position_letter == "A":
-                    player_object.set_token_position(token_name, future_board_position)
-                    self.set_board_position_space(token_name, 56, steps_over_end_space)
-                elif player_position_letter == "B":
-                    player_object.set_token_position(token_name, future_board_position)
-                    self.set_board_position_space(token_name, 57, steps_over_end_space)
-                elif player_position_letter == "C":
-                    player_object.set_token_position(token_name, future_board_position)
-                    self.set_board_position_space(token_name, 58, steps_over_end_space)
-                elif player_position_letter == "D":
-                    player_object.set_token_position(token_name, future_board_position)
-                    self.set_board_position_space(token_name, 59, steps_over_end_space)
+                self.move_to_home_rows(player_pos_char, player_obj, token_name, future_board_pos, steps_over_end_space)
 
-        if future_board_position <= player_end_space:
+        if future_board_pos <= player_end_space:
             for token in token_name:
-                token_string = token.lower() + player_position_letter
-                player_object.set_token_position(token, future_board_position)
-                self.set_board_position_space(token_string, future_board_position)
+                player_obj.set_token_position(token, future_board_pos)      # set token info in player object
+                self.set_board_pos_space(token_string, future_board_pos)    # place token on board as string "e.g pA"
 
         # TODO:  add if other player has occupied space
 
 
 
-    def set_board_position_space(self, token, board_pos, board_pos2=None):
+
+    def kick_out_opponent_tokens(self, future_board_pos, future_board_position_space):
+
+
+
+
+    def move_to_home_rows(self, player_pos_char, player_obj, token_name, future_board_pos, steps_over_end_space):
+
+        for token in token_name:
+            if player_pos_char == "A":
+                player_obj.set_token_position(token_name, future_board_pos)
+                self.set_board_pos_space(token_name, 56, steps_over_end_space)
+            elif player_pos_char == "B":
+                player_obj.set_token_position(token_name, future_board_pos)
+                self.set_board_pos_space(token_name, 57, steps_over_end_space)
+            elif player_pos_char == "C":
+                player_obj.set_token_position(token_name, future_board_pos)
+                self.set_board_pos_space(token_name, 58, steps_over_end_space)
+            elif player_pos_char == "D":
+                player_obj.set_token_position(token_name, future_board_pos)
+                self.set_board_pos_space(token_name, 59, steps_over_end_space)
+
+    def set_board_pos_space(self, token, board_pos, board_pos2=None):
 
         if board_pos2 is not None:
             self._board[board_pos][board_pos2] = token
