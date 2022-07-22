@@ -2,7 +2,7 @@ import time
 
 class LudoGame:
     """
-
+    This represents the Ludo game being currently played.  It contains an array which represents the board.
     """
 
     def __init__(self):
