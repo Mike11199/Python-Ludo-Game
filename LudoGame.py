@@ -27,8 +27,15 @@ class LudoGame:
         self._board.append(home_rows_player_C)
         self._board.append(home_rows_player_D)
 
-    # TODO:  finish
     def sort_turns(self, turns_list):
+        """
+        This sorts the list of tuples that represents the move order of the game.  A goes first, then B, then C, then D.
+
+        If anyone rolls a 6, that player can go again (one time).
+        :param turns_list:
+        :return:
+        """
+
 
         A_turns = []
         B_turns = []
@@ -99,13 +106,14 @@ class LudoGame:
                         D_turns.pop(0)
 
         print(sorted_turns_list)
+        return sorted_turns_list
 
     def play_game(self, players_list, turns_list):
 
-        self.create_player_list(players_list)       # add player objects to LudoGame object as an array of objects
-        self.sort_turns(turns_list)                 # sort turns.  A, B, C, D unless roll 6 then player goes twice
+        self.create_player_list(players_list)            # add player objects to LudoGame object as an array of objects
+        sorted_turns_list = self.sort_turns(turns_list)  # sort turns.  A, B, C, D unless roll 6 then player goes twice
 
-        for turn in turns_list:
+        for turn in sorted_turns_list:
             current_player = self.get_player_by_position(turn[0])
             current_roll = turn[1]
 
@@ -577,16 +585,15 @@ def main():
     turns = [('A', 6), ('A', 4), ('A', 5), ('A', 4), ('B', 6), ('B', 4), ('B', 1), ('B', 2), ('A', 6), ('A', 4),
              ('A', 6), ('A', 3), ('A', 5), ('A', 1), ('A', 5), ('A', 4)]
 
+    turns2 = [('A', 6), ('A', 6), ('A', 5), ('A', 4), ('B', 6), ('B', 4), ('B', 1), ('B', 2), ('A', 6), ('A', 4),
+             ('A', 6), ('A', 3), ('A', 5), ('A', 1), ('A', 5), ('A', 4)]
+
     game = LudoGame()
-    game.play_game(players, turns)
+    game.play_game(players, turns2)
     player_B = Player("A")
     print(player_B.get_space_name(55))
 
-
     print_walk_around_board()
-
-
-
 
     # current_tokens_space = game.play_game(players, turns)
 
@@ -603,8 +610,8 @@ def main():
 
 def print_walk_around_board():
     game = LudoGame()
-    #game.print_game_board()
-    #game._board[28] = "A_P"
+    # game.print_game_board()
+    # game._board[28] = "A_P"
     # game._board[12] = "A_Q"
     # game._board[2] = "B_P"
     # game._board[39] = "B_Q"
