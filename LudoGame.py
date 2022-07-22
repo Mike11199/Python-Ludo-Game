@@ -29,12 +29,76 @@ class LudoGame:
 
     # TODO:  finish
     def sort_turns(self, turns_list):
+
+        A_turns = []
+        B_turns = []
+        C_turns = []
+        D_turns = []
+        sorted_turns_list = []
+
         for i in range(0, len(turns_list)-1):
             current_player = turns_list[i][0]
-            current_roll = turns_list[i][0]
-            next_player = turns_list[i+1][0]
-            next_roll = turns_list[i+1][0]
+            if current_player == 'A':
+                A_turns.append(turns_list[i])
+            elif current_player == 'B':
+                B_turns.append(turns_list[i])
+            elif current_player == 'C':
+                C_turns.append(turns_list[i])
+            elif current_player == 'D':
+                D_turns.append(turns_list[i])
 
+        for i in range(0, len(turns_list) - 1):
+
+            first_roll_a = ""
+            first_roll_b = ""
+            first_roll_c = ""
+            first_roll_d = ""
+
+            if A_turns:
+                first_roll_a = A_turns[0][1]
+                sorted_turns_list.append(A_turns[0])
+                A_turns.pop(0)
+
+                # If the first roll was 6, and A is not out of moves, then A can go again.
+                if A_turns:
+                    if first_roll_a == 6:
+                        sorted_turns_list.append(A_turns[0])
+                        A_turns.pop(0)
+
+            if B_turns:
+                first_roll_b = B_turns[0][1]
+                sorted_turns_list.append(B_turns[0])
+                B_turns.pop(0)
+
+                # If the first roll was 6, and B is not out of moves, then B can go again.
+                if B_turns:
+                    if first_roll_b == 6:
+                        sorted_turns_list.append(B_turns[0])
+                        B_turns.pop(0)
+
+            if C_turns:
+                first_roll_c = C_turns[0][1]
+                sorted_turns_list.append(C_turns[0])
+                C_turns.pop(0)
+
+                # If the first roll was 6, and C is not out of moves, then C can go again.
+                if C_turns:
+                    if first_roll_c == 6:
+                        sorted_turns_list.append(C_turns[0])
+                        C_turns.pop(0)
+
+            if D_turns:
+                first_roll_d = D_turns[0][1]
+                sorted_turns_list.append(D_turns[0])
+                D_turns.pop(0)
+
+                # If the first roll was 6, and D is not out of moves, then D can go again.
+                if D_turns:
+                    if first_roll_d == 6:
+                        sorted_turns_list.append(D_turns[0])
+                        D_turns.pop(0)
+
+        print(sorted_turns_list)
 
     def play_game(self, players_list, turns_list):
 
