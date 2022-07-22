@@ -180,18 +180,25 @@ class LudoGame:
             future_board_pos = step_count + board_steps - 1  # else add steps to board_count where start pos already in
 
 
-        # TODO:  Need function to modify future_board_pos if over or else func to determine whether space occupied
-        # TODO:  could be wrong.
+        """
+        This determines whether the future board position will be in the player's home rows.  It adds backtracking if
+        the die roll is not the exact roll needed to enter the end "E" space of the game board.
+        """
         home_row_spaces = None
 
         if future_board_pos > player_end_space:
             home_row_spaces = future_board_pos - player_end_space
-            if home_row_spaces > 7:
-                home_row_spaces = future_board_pos - home_row_spaces
+            if home_row_spaces > 6:
+                steps_to_backtrack = home_row_spaces - 6
+                home_row_spaces = home_row_spaces - steps_to_backtrack
 
 
-        # TODO:  Determine whether board space is occupied and an opponent token needs to be kicked out only if
-        #  not in home row
+        """
+        This determines whether the future board position has an opponent's token in it already to be kicked out.
+        It will skip if in the home_row_spaces as it would be impossible for an opponent's token to be there.
+        
+        If an opponent token exists, it will be kicked out of the space.
+        """
         if home_row_spaces is None:
             pass
 
