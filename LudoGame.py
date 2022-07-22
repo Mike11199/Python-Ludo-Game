@@ -161,7 +161,7 @@ class LudoGame:
 
         token_string = []
         for token in token_name:
-            token_string.append(token.lower() + player_pos_char)
+            token_string.append(token.lower() + player_pos_char)  # e.g - pA, pB, qA, pAqA
 
         """
         Get the steps the token has already traversed on the board.  The token will be a list of [P], [Q], or 
@@ -183,7 +183,7 @@ class LudoGame:
         yet.
         """
         if step_count == -1:
-            player_obj.set_token_position(token_name[0], "R")
+            player_obj.set_token_steps(token_name[0], "R")
             return
 
         """
@@ -202,6 +202,7 @@ class LudoGame:
         """
         This determines whether the future board position will be in the player's home rows.  It adds backtracking if
         the die roll is not the exact roll needed to enter the end "E" space of the game board.
+        
         """
         home_row_spaces = None
 
@@ -218,10 +219,10 @@ class LudoGame:
         If an opponent token exists, it will be kicked out of the space.
         """
         if home_row_spaces is None:
-            future_board_position_space = self.get_board_position_space(future_board_pos)
+            future_board_pos_space = self.get_board_position_space(future_board_pos)
 
-            if future_board_position_space != "" and future_board_position_space[-1] != player_pos_char:
-                self.kick_out_opponent_tokens(future_board_pos, future_board_position_space)
+            if future_board_pos_space != "" and future_board_pos_space[-1] != player_pos_char:
+                self.kick_out_opponent_tokens(future_board_pos, future_board_pos_space)
 
         """
         This determines moves the token to the home row spaces (using a function move_to_home_rows to determine what
@@ -239,15 +240,39 @@ class LudoGame:
         else:
             for token in token_name:
                 i = 0
-                player_obj.set_token_position(token, future_board_pos)  # set token info in player object
+                player_obj.set_token_steps(token, future_board_pos)  # set token info in player object
                 self.set_board_pos_space(token_string[i], future_board_pos)
                 i += 1
 
-    def kick_out_opponent_tokens(self, future_board_pos, future_board_position_space):
+    def kick_out_opponent_tokens(self, future_board_pos, future_board_pos_space):
 
-        # TODO:  have to find player object token belongs to and edit that too somehow
-        future_board_position_space = self.get_board_position_space(future_board_pos)
-        self.set_board_pos_space("", future_board_pos)
+        """
+        This function kicks an opponent's token or stacked tokens back to that opponent's home yard, or position -1.
+
+        It edits both the board data variable of the LudoGame object, and the token information of the player object.
+
+        If the tokens are stacked, it kicks back both.  Or kicks back one if not stacked.
+
+        To do this, it scrapes the text on the board space to determine what player object and token/tokens to edit.
+
+        :param      future_board_pos:         steps on the board where the enemy token is
+        :param      future_board_pos_space:   the token that is actually on that board space.
+        :return:    none
+        """
+
+        opponent_pos_letter = future_board_pos_space[-1]
+        opponent_player_obj = self.get_player_by_position(opponent_pos_letter)
+
+        if len(future_board_pos) == 2:                                                  # e.g - pA, pB, qA
+            opponent_token = future_board_pos_space[0]
+            opponent_player_obj.set_token_steps(opponent_token.upper(), -1)             # kick back to home yard
+        else:                                                                           # e.g - pAqA or pBqB
+            opponent_token_p = future_board_pos_space[0]
+            opponent_token_q = future_board_pos_space[2]
+            opponent_player_obj.set_token_steps(opponent_token_p.upper(), -1)           # kick back to home yard
+            opponent_player_obj.set_token_steps(opponent_token_q.upper(), -1)           # kick back to home yard
+
+        self.set_board_pos_space("", future_board_pos)          # clear opponent token or tokens from board space
 
     def move_to_home_rows(self, player_pos_char, player_obj, token_name, future_board_pos, home_row_spaces):
 
@@ -258,16 +283,16 @@ class LudoGame:
 
         for token in token_name:
             if player_pos_char == "A":
-                player_obj.set_token_position(token_name, future_board_pos)
+                player_obj.set_token_steps(token_name, future_board_pos)
                 self.set_board_pos_space(token_name, 56, home_row_spaces)
             elif player_pos_char == "B":
-                player_obj.set_token_position(token_name, future_board_pos)
+                player_obj.set_token_steps(token_name, future_board_pos)
                 self.set_board_pos_space(token_name, 57, home_row_spaces)
             elif player_pos_char == "C":
-                player_obj.set_token_position(token_name, future_board_pos)
+                player_obj.set_token_steps(token_name, future_board_pos)
                 self.set_board_pos_space(token_name, 58, home_row_spaces)
             elif player_pos_char == "D":
-                player_obj.set_token_position(token_name, future_board_pos)
+                player_obj.set_token_steps(token_name, future_board_pos)
                 self.set_board_pos_space(token_name, 59, home_row_spaces)
 
     def set_board_pos_space(self, token, board_pos, board_pos2=None):
@@ -276,7 +301,7 @@ class LudoGame:
         if board_pos2 is not None:
             self._board[board_pos][board_pos2] = token
         else:
-            self._board[board_pos] = token
+            self._board[board_pos] += token
 
     def get_board_position_space(self, board_pos):
         return self._board[board_pos]
@@ -393,7 +418,7 @@ class Player:
     def get_position(self):                                 # e.g- "A", "B", "C", or "D"
         return self._position
 
-    def set_token_position(self, token, pos):
+    def set_token_steps(self, token, pos):
         self._token_positions[token] = pos
 
     def get_completed(self):
