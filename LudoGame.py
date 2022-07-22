@@ -11,10 +11,12 @@ class LudoGame:
         self._turns = None      # array of turns
         self._board = []        # board created in init function
 
-        home_rows_player_A = ["", "", "", "", "", "", ""]  # pos 56
-        home_rows_player_B = ["", "", "", "", "", "", ""]  # pos 57
-        home_rows_player_C = ["", "", "", "", "", "", ""]  # pos 58
-        home_rows_player_D = ["", "", "", "", "", "", ""]  # pos 59
+        home_rows_player_A = ["", "", "", "", "", "", ""]                   # pos 56
+        home_rows_player_B = ["", "", "", "", "", "", ""]                   # pos 57
+        home_rows_player_C = ["", "", "", "", "", "", ""]                   # pos 58
+        home_rows_player_D = ["", "", "", "", "", "", ""]                   # pos 59
+        board_home_yard_positions = {"A": ["", ""], "B": ["", ""], "C": ["", ""], "D": ["", ""]}    # pos 60
+        board_ready_positions = {"A": ["", ""], "B": ["", ""], "C": ["", ""], "D": ["", ""]}        # pos 61
 
         """
         Create the board which is an array.  The last four elements of the array are subarrays, for the home rows of 
@@ -26,6 +28,8 @@ class LudoGame:
         self._board.append(home_rows_player_B)
         self._board.append(home_rows_player_C)
         self._board.append(home_rows_player_D)
+        self._board.append(board_home_yard_positions)
+        self._board.append(board_ready_positions)
 
     def sort_turns(self, turns_list):
         """
@@ -116,7 +120,7 @@ class LudoGame:
         for turn in sorted_turns_list:
             current_player = self.get_player_by_position(turn[0])
             current_roll = turn[1]
-
+            current_player_char = turn[0]
             player_token_p = current_player.get_token_p_step_count()
             player_token_q = current_player.get_token_q_step_count()
 
@@ -147,8 +151,9 @@ class LudoGame:
         """
         if p_steps == q_steps:
             if p_steps != 57:                            # edge case if both tokens are in E
-                if p_steps != -1 and p_steps != 0:       # if tokens are not both in ready or home space.
-                    return ["P", "Q"]                    # tokens are stacked so move both
+                if p_steps != -1:
+                    if p_steps != 0:                     # if tokens are not both in ready or home space.
+                        return ["P", "Q"]                # tokens are stacked so move both
 
         """
         Step 1) If the die roll is 6, if a token is in the home yard, return that token to move.  Checks P first so if
@@ -179,7 +184,7 @@ class LudoGame:
         positions for example.
         """
 
-        player_start_space = player.get_start_space()-1
+        player_start_space = player.get_start_space()-1  # -1 for pos on board array
 
         future_board_pos_p = None
         future_board_pos_q = None
@@ -225,6 +230,11 @@ class LudoGame:
                 if q_steps != 57:
                     return ["Q"]
 
+        if p_steps == q_steps:   # if both tokens are in the ready position, and we've already tested for opponents
+            if p_steps != 57:
+                if p_steps != -1:
+                    return ["P"]
+
         """
         This will be the case where both tokens are in the home yard and the player hasn't rolled a six, or perhaps
         they have won the game, but were still fed a turn into the LudoGame object for some reason.
@@ -253,8 +263,8 @@ class LudoGame:
 
         """Set up the variables that will be used in this function."""
         player_pos_char = player_obj.get_position()
-        player_start_space = player_obj.get_start_space()-1
-        player_end_space = player_obj.get_end_space()-1
+        player_start_space = player_obj.get_start_space()-1     # -1 for pos in board array
+        player_end_space = player_obj.get_end_space()-1         # -1 for pos in board array
 
         token_string = ""
         for token in token_name:
@@ -280,7 +290,9 @@ class LudoGame:
         yet.
         """
         if step_count == -1:
-            player_obj.set_token_steps(token_name[0], "R")
+            player_obj.set_token_steps(token_name[0], "R")                     # edit player object
+            self.set_board_pos_space(token_name[0], 60, player_pos_char, 1)    # clear board pos in home yard
+            self.set_board_pos_space(token_name[0], 61, player_pos_char)       # set board pos in ready yard
             return
 
         """
@@ -292,9 +304,9 @@ class LudoGame:
         This variable, future_board_pos, will be used to determine if the board space is occupied.
         """
         if step_count == 0:
-            future_board_pos = player_start_space + board_steps - 1     # if in home yard set steps plus start pos
+            future_board_pos = player_start_space + board_steps  # if in home yard set steps plus start pos
         else:
-            future_board_pos = step_count + board_steps - 1  # else add steps to board_count where start pos already in
+            future_board_pos = step_count + board_steps      # else add steps to board_count where start pos already in
 
         # handle B, C, and D positions which have to move from board space 56 (index 55) to space 1 (index 0):
         if future_board_pos > 55:
@@ -350,11 +362,11 @@ class LudoGame:
         if home_row_spaces is not None:
             self.move_to_home_rows(player_pos_char, player_obj, token_name, home_row_spaces)
         else:
+            self.set_board_pos_space(token_string, future_board_pos)  # set board position (not +1 as array)
             for token in token_name:
-                i = 0
-                player_obj.set_token_steps(token, future_board_pos)  # set token info in player object
-                self.set_board_pos_space(token_string[i], future_board_pos)
-                i += 1
+                player_obj.set_token_steps(token, future_board_pos + 1)      # set token info in player object. +1
+
+
 
     def kick_out_opponent_tokens(self, future_board_pos, future_board_pos_space):
 
@@ -375,14 +387,17 @@ class LudoGame:
         opponent_pos_letter = future_board_pos_space[-1]
         opponent_player_obj = self.get_player_by_position(opponent_pos_letter)
 
-        if len(future_board_pos) == 2:                                                  # e.g - pA, pB, qA
+        if len(future_board_pos) == 2:                                                   # e.g - pA, pB, qA
             opponent_token = future_board_pos_space[0]
             opponent_player_obj.set_token_steps(opponent_token.upper(), "H")             # kick back to home yard
-        else:                                                                           # e.g - pAqA or pBqB
+            self.set_board_pos_space(opponent_token, 60, opponent_pos_letter)            # set board pos in home yard
+        else:                                                                            # e.g - pAqA or pBqB
             opponent_token_p = future_board_pos_space[0]
             opponent_token_q = future_board_pos_space[2]
             opponent_player_obj.set_token_steps(opponent_token_p.upper(), "H")           # kick back to home yard
             opponent_player_obj.set_token_steps(opponent_token_q.upper(), "H")           # kick back to home yard
+            self.set_board_pos_space(opponent_token_p, 60, opponent_pos_letter)          # set board pos in home yard
+            self.set_board_pos_space(opponent_token_q, 60, opponent_pos_letter)          # set board pos in home yard
 
         self.set_board_pos_space("", future_board_pos)          # clear opponent token or tokens from board space
 
@@ -407,11 +422,37 @@ class LudoGame:
                 player_obj.set_token_steps(token, str(player_pos_char + home_row_spaces))
                 self.set_board_pos_space(token_name, 59, home_row_spaces)
 
-    def set_board_pos_space(self, token, board_pos, board_pos2=None):
+    def set_board_pos_space(self, token, board_pos, board_pos2=None, clear=None):
 
         # board_pops2 = home rows before end space
+        if board_pos == 60:
+            if clear is not None:
+                if token == 'P':
+                    self._board[board_pos][board_pos2][0] = ""
+                if token == 'Q':
+                    self._board[board_pos][board_pos2][1] = ""
+            else:
+                if token == 'P':
+                    self._board[board_pos][board_pos2][0] = "P"
+                if token == 'Q':
+                    self._board[board_pos][board_pos2][1] = "Q"
+            return
+
+        if board_pos == 61:
+            if clear is not None:
+                if token == 'P':
+                    self._board[board_pos][board_pos2][0] = ""
+                if token == 'Q':
+                    self._board[board_pos][board_pos2][1] = ""
+            else:
+                if token == 'P':
+                    self._board[board_pos][board_pos2][0] = "P"
+                if token == 'Q':
+                    self._board[board_pos][board_pos2][1] = "Q"
+            return
+
         if board_pos2 is not None:
-            self._board[board_pos][board_pos2] = token
+            self._board[board_pos][board_pos2] += token
         else:
             self._board[board_pos] += token
 
@@ -422,6 +463,9 @@ class LudoGame:
 
         for position in players_list:
             self._players.append(Player(position))
+            self.set_board_pos_space("P", 60, position)
+            self.set_board_pos_space("Q", 60, position)
+
 
     def print_game_board(self):
         """
@@ -585,8 +629,8 @@ def main():
     turns = [('A', 6), ('A', 4), ('A', 5), ('A', 4), ('B', 6), ('B', 4), ('B', 1), ('B', 2), ('A', 6), ('A', 4),
              ('A', 6), ('A', 3), ('A', 5), ('A', 1), ('A', 5), ('A', 4)]
 
-    turns2 = [('A', 6), ('A', 6), ('A', 5), ('A', 4), ('B', 6), ('B', 4), ('B', 1), ('B', 2), ('A', 6), ('A', 4),
-             ('A', 6), ('A', 3), ('A', 5), ('A', 1), ('A', 5), ('A', 4)]
+    turns2 = [('A', 6), ('A', 6), ('A', 5), ('A', 5), ('B', 6), ('B', 4), ('B', 1), ('B', 2), ('A', 3), ('A', 4),
+             ('A', 6), ('A', 3), ('A', 5), ('A', 1), ('A', 5), ('A', 4), ('B', 4), ('B', 4), ('B', 4), ('B', 4)]
 
     game = LudoGame()
     game.play_game(players, turns2)
