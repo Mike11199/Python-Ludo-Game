@@ -438,15 +438,15 @@ class LudoGame:
         opponent_pos_letter = future_board_pos_space[-1]
         opponent_player_obj = self.get_player_by_position(opponent_pos_letter)
 
-        if len(future_board_pos) == 2:                                                   # e.g - pA, pB, qA
-            opponent_token = future_board_pos_space[0]
-            opponent_player_obj.set_token_steps(opponent_token.upper(), "H")             # kick back to home yard
+        if len(future_board_pos_space) == 2:                                                   # e.g - pA, pB, qA
+            opponent_token = future_board_pos_space[0].upper()
+            opponent_player_obj.set_token_steps(opponent_token, "H")             # kick back to home yard
             self.set_board_pos_space(opponent_token, 60, opponent_pos_letter)            # set board pos in home yard
         else:                                                                            # e.g - pAqA or pBqB
-            opponent_token_p = future_board_pos_space[0]
-            opponent_token_q = future_board_pos_space[2]
-            opponent_player_obj.set_token_steps(opponent_token_p.upper(), "H")           # kick back to home yard
-            opponent_player_obj.set_token_steps(opponent_token_q.upper(), "H")           # kick back to home yard
+            opponent_token_p = future_board_pos_space[0].upper()
+            opponent_token_q = future_board_pos_space[2].upper()
+            opponent_player_obj.set_token_steps(opponent_token_p, "H")           # kick back to home yard
+            opponent_player_obj.set_token_steps(opponent_token_q, "H")           # kick back to home yard
             self.set_board_pos_space(opponent_token_p, 60, opponent_pos_letter)          # set board pos in home yard
             self.set_board_pos_space(opponent_token_q, 60, opponent_pos_letter)          # set board pos in home yard
 
@@ -521,10 +521,43 @@ class LudoGame:
             else:
                 self._board[board_pos][board_pos2] += token
         else:
-            self._board[board_pos] += token
+            self._board[board_pos] = token
 
     def get_board_position_space(self, board_pos):
         return self._board[board_pos]
+
+    def get_entire_board(self):
+        return self._board
+
+    def get_entire_board_dictionary(self):
+        board_dictionary = {}
+        for index, item in enumerate(self._board):
+
+            if index < 56:
+                if item != "":
+                    board_dictionary.update({index: item})
+
+            elif index == 56:
+                for index2, item2 in enumerate(item):
+                    if item2 != "":
+                        board_dictionary.update({index: [index2, item2]})
+
+            elif index == 57:
+                for index2, item2 in enumerate(item):
+                    if item2 != "":
+                        board_dictionary.update({index: [index2, item2]})
+
+            elif index == 58:
+                for index2, item2 in enumerate(item):
+                    if item2 != "":
+                        board_dictionary.update({index: [index2, item2]})
+
+            elif index == 59:
+                for index2, item2 in enumerate(item):
+                    if item2 != "":
+                        board_dictionary.update({index: [index2, item2]})
+
+        return board_dictionary
 
     def create_player_list(self, players_list):
 

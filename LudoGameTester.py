@@ -123,7 +123,7 @@ class TestLinkedList(unittest.TestCase):
         expected = ['E', 'E', 'R', 'H', 'H', 'H', 'H', 'H']
         self.assertEqual(expected, token_space)  # expected, actual
 
-    def test_A_will_not_move_again_in_end_space_and_test_B_on_board(self):
+    def test_B_on_board_being_kicked_off_and_both_A_in_home_space(self):
         players = ['A', 'B', 'C', 'D']
         turns = [('A', 6), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5),
                  ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 1), ('A', 1),  # end space here
@@ -131,8 +131,12 @@ class TestLinkedList(unittest.TestCase):
                  ('A', 6), ('A', 6), ('A', 6), ('A', 3), ('B', 6), ('B', 6), ('B', 6)]
         game = LudoGame()
         token_space = game.play_game(players, turns)
-        expected = ['E', 'R', 'H', 'H', 'H', 'H', 'H', 'H']
+
+        expected = ['E', 'E', 'H', 'R', 'H', 'H', 'H', 'H']
         self.assertEqual(expected, token_space)  # expected, actual
+
+        board_dictionary = game.get_entire_board_dictionary()
+        self.assertEqual({56: [6, 'pAqA']}, board_dictionary)  # expected, actual
 
 
 """Statement so that file only runs main if ran as a script, not when imported."""
