@@ -46,7 +46,7 @@ class LudoGame:
         D_turns = []
         sorted_turns_list = []
 
-        for i in range(0, len(turns_list)-1):
+        for i in range(0, len(turns_list)):
             current_player = turns_list[i][0]
             if current_player == 'A':
                 A_turns.append(turns_list[i])
@@ -57,7 +57,11 @@ class LudoGame:
             elif current_player == 'D':
                 D_turns.append(turns_list[i])
 
-        for i in range(0, len(turns_list) - 1):
+        """
+        This sorts the turn list in order of A, B, C, D.  If any die rolls are 6, the player can go one (and only one)
+        additional turn, before resuming the A, B, C, D order.
+        """
+        for i in range(0, len(turns_list)):
 
             first_roll_a = ""
             first_roll_b = ""
@@ -127,12 +131,22 @@ class LudoGame:
             token_choice = self.choose_token_algorithm(current_player, current_roll, player_token_p, player_token_q)
 
             if token_choice == "No possible move.":
-                print("Player " + turn[0] + " can't move! Skipping turn.")
+                print("Player " + str(turn[0]) + " can't move! Skipping turn.")
                 break   # go to next turn in for loop
 
             self.move_token(current_player, token_choice, current_roll)
 
             self.print_game_board()
+
+        return self.current_spaces_of_all_tokens()
+
+    def current_spaces_of_all_tokens(self):
+        token_space = []
+        for player in self._players:
+            p_steps = player.get_token_p_step_count()
+            q_steps = player.get_token_q_step_count()
+            token_space.append(str(player.get_position()) + "P Steps: " + str(p_steps) + "Q Steps: " + str(q_steps))
+        return token_space
 
     def choose_token_algorithm(self, player, current_roll, p_steps, q_steps):
         """
@@ -184,7 +198,7 @@ class LudoGame:
         positions for example.
         """
 
-        player_start_space = player.get_start_space()-1  # -1 for pos on board array
+        player_start_space = player.get_start_space()-1  # subtract 1 for pos on board array
 
         future_board_pos_p = None
         future_board_pos_q = None
@@ -304,7 +318,7 @@ class LudoGame:
         This variable, future_board_pos, will be used to determine if the board space is occupied.
         """
         if step_count == 0:
-            future_board_pos = player_start_space + board_steps  # if in home yard set steps plus start pos
+            future_board_pos = player_start_space + board_steps-1  # if in home yard set steps plus start pos
         else:
             future_board_pos = step_count + board_steps      # else add steps to board_count where start pos already in
 
@@ -364,7 +378,7 @@ class LudoGame:
         else:
             self.set_board_pos_space(token_string, future_board_pos)  # set board position (not +1 as array)
             for token in token_name:
-                player_obj.set_token_steps(token, future_board_pos + 1)      # set token info in player object. +1
+                player_obj.set_token_steps(token, future_board_pos + 1 - player_start_space)      # set token info in player object. +1
 
 
 
@@ -466,12 +480,14 @@ class LudoGame:
             self.set_board_pos_space("P", 60, position)
             self.set_board_pos_space("Q", 60, position)
 
-
     def print_game_board(self):
         """
         This prints the array and 4 sub-arrays to the console in a form that actually looks like a Ludo board.
         :return:
         """
+
+        print("Home Yard Spaces:  " + str(self._board[60]))
+        print("Ready Yard Spaces:  " + str(self._board[61]))
 
         for i in range(0, 15):
             if self._board[i] == '':
@@ -632,12 +648,14 @@ def main():
     turns2 = [('A', 6), ('A', 6), ('A', 5), ('A', 5), ('B', 6), ('B', 4), ('B', 1), ('B', 2), ('A', 3), ('A', 4),
              ('A', 6), ('A', 3), ('A', 5), ('A', 1), ('A', 5), ('A', 4), ('B', 4), ('B', 4), ('B', 4), ('B', 4)]
 
-    game = LudoGame()
-    game.play_game(players, turns2)
-    player_B = Player("A")
-    print(player_B.get_space_name(55))
+    turns3 = [('A', 6), ('A', 4)]
 
-    print_walk_around_board()
+    game = LudoGame()
+   # game.play_game(players, turns2)
+    token_space = game.play_game(players, turns2)
+    print(token_space)
+
+   # print_walk_around_board()
 
     # current_tokens_space = game.play_game(players, turns)
 
