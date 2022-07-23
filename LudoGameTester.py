@@ -80,7 +80,7 @@ class TestLinkedList(unittest.TestCase):
         expected = ['E', 'H', 'H', 'H', 'H', 'H', 'H', 'H']
         self.assertEqual(expected, token_space)  # expected, actual
 
-    def test_game_does_not_move_token_q_if_token_p_in_end_space(self):
+    def test_game_does_not_move_token_q_if_token_p_in_end_space_should_move_token_q(self):
         players = ['A', 'B', 'C', 'D']
         turns = [('A', 6), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5),
                  ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 1), ('A', 1),
