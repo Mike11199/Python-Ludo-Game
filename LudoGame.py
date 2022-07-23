@@ -337,7 +337,7 @@ class LudoGame:
             future_board_pos = player_start_space + board_steps-1    # if in ready to go yard set steps plus start pos
             self.set_board_pos_space(token_name[0], 61, player_pos_char, 1)      # clear board pos in ready to go yard
         else:
-            future_board_pos = step_count + board_steps-1   # else add steps to board_count where start pos already in
+            future_board_pos = step_count + board_steps - 1   # else add steps to board_count where start pos already in
 
         # handle B, C, and D positions which have to move from board space 56 (index 55) to space 1 (index 0):
         if future_board_pos > 55:
@@ -362,7 +362,7 @@ class LudoGame:
 
         if player_pos_char == 'A':
             if future_board_pos > player_end_space:                      # test if position over end space
-                home_row_spaces = future_board_pos - player_end_space
+                home_row_spaces = future_board_pos - player_end_space - 1
                 if home_row_spaces > 6:
                     steps_to_backtrack = home_row_spaces - 6
                     home_row_spaces = home_row_spaces - steps_to_backtrack
@@ -446,20 +446,21 @@ class LudoGame:
         # home_rows_player_B = pos 57
         # home_rows_player_C = pos 58
         # home_rows_player_D = pos 59
+        future_board_pos_space += 1
 
         for token in token_name:
             if p_char == "A":
                 player_obj.set_token_steps(token, future_board_pos_space)
-                self.set_board_pos_space(token_string, 56, home_row_spaces - 1)
+                self.set_board_pos_space(token_string, 56, home_row_spaces)
             elif p_char == "B":
                 player_obj.set_token_steps(token, future_board_pos_space)
-                self.set_board_pos_space(token_string, 57, home_row_spaces - 1)
+                self.set_board_pos_space(token_string, 57, home_row_spaces)
             elif p_char == "C":
                 player_obj.set_token_steps(token, future_board_pos_space)
-                self.set_board_pos_space(token_string, 58, home_row_spaces - 1)
+                self.set_board_pos_space(token_string, 58, home_row_spaces)
             elif p_char == "D":
                 player_obj.set_token_steps(token, future_board_pos_space)
-                self.set_board_pos_space(token_string, 59, home_row_spaces - 1)
+                self.set_board_pos_space(token_string, 59, home_row_spaces)
 
     def set_board_pos_space(self, token, board_pos, board_pos2=None, clear=None):
 
@@ -655,7 +656,7 @@ class Player:
             return total_steps
 
         elif 57 > total_steps > 50:
-            return str(self._position) + str(total_steps - 49)
+            return str(self._position) + str(total_steps - 50)
 
         elif total_steps == 57:
             return "E"
