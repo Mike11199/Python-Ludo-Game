@@ -391,13 +391,18 @@ class LudoGame:
         
         Previous lines in this function should have kicked out an opponent's token off the board if it was present.
         """
-        if home_row_spaces is not None:
-            self.move_to_home_rows(player_pos_char, player_obj, token_name, home_row_spaces)
-        else:
-            self.set_board_pos_space(token_string, future_board_pos)         # set board position (not +1 as array)
-            if step_count > 0:
-                self.set_board_pos_space("", step_count-1, player_pos_char, 1)      # clear prev board pos
 
+        """edit board positions"""
+        if step_count > 0:
+            self.set_board_pos_space("", step_count - 1, player_pos_char, 1)  # clear prev board pos
+
+        # def move_to_home_rows(self, player_pos_char, player_obj, token_name, home_row_spaces):
+        if home_row_spaces is not None:
+            self.move_to_home_rows(player_pos_char, player_obj, token, home_row_spaces, future_board_pos, token_string)
+        else:
+            self.set_board_pos_space(token_string, future_board_pos)        # set board position (not +1 as array)
+
+            """edit player obj positions"""
             for token in token_name:
                 # set token info in player object. +1 as steps not array pos.  For loop if stacked token.
                 player_obj.set_token_steps(token, future_board_pos + 1 - player_start_space)
@@ -435,7 +440,7 @@ class LudoGame:
 
         self.set_board_pos_space("", future_board_pos)          # clear opponent token or tokens from board space
 
-    def move_to_home_rows(self, player_pos_char, player_obj, token_name, future_board_pos, home_row_spaces):
+    def move_to_home_rows(self, p_char, player_obj, token_name, home_row_spaces, future_board_pos_space, token_string):
 
         # home_rows_player_A = pos 56
         # home_rows_player_B = pos 57
@@ -443,18 +448,18 @@ class LudoGame:
         # home_rows_player_D = pos 59
 
         for token in token_name:
-            if player_pos_char == "A":
-                player_obj.set_token_steps(token, str(player_pos_char + home_row_spaces))
-                self.set_board_pos_space(token_name, 56, home_row_spaces)
-            elif player_pos_char == "B":
-                player_obj.set_token_steps(token, str(player_pos_char + home_row_spaces))
-                self.set_board_pos_space(token_name, 57, home_row_spaces)
-            elif player_pos_char == "C":
-                player_obj.set_token_steps(token, str(player_pos_char + home_row_spaces))
-                self.set_board_pos_space(token_name, 58, home_row_spaces)
-            elif player_pos_char == "D":
-                player_obj.set_token_steps(token, str(player_pos_char + home_row_spaces))
-                self.set_board_pos_space(token_name, 59, home_row_spaces)
+            if p_char == "A":
+                player_obj.set_token_steps(token, future_board_pos_space)
+                self.set_board_pos_space(token_string, 56, home_row_spaces - 1)
+            elif p_char == "B":
+                player_obj.set_token_steps(token, future_board_pos_space)
+                self.set_board_pos_space(token_string, 57, home_row_spaces - 1)
+            elif p_char == "C":
+                player_obj.set_token_steps(token, future_board_pos_space)
+                self.set_board_pos_space(token_string, 58, home_row_spaces - 1)
+            elif p_char == "D":
+                player_obj.set_token_steps(token, future_board_pos_space)
+                self.set_board_pos_space(token_string, 59, home_row_spaces - 1)
 
     def set_board_pos_space(self, token, board_pos, board_pos2=None, clear=None):
 
@@ -650,7 +655,7 @@ class Player:
             return total_steps
 
         elif 57 > total_steps > 50:
-            return str(self._position) + str(total_steps - 50)
+            return str(self._position) + str(total_steps - 49)
 
         elif total_steps == 57:
             return "E"
