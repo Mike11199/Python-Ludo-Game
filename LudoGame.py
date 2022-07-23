@@ -241,12 +241,14 @@ class LudoGame:
         # if future board pos token p is not empty, and it contains an enemy token
         if future_board_space_p is not None and future_board_space_p != "":
             if future_board_space_p[0] != player.get_position():
-                return ["P"]
+                if p_steps != 57:
+                    return ["P"]
 
         # if future board pos token q is not empty, and it contains an enemy token
         if future_board_space_q is not None and future_board_space_q != "":
             if future_board_space_q[0] != player.get_position():
-                return ["Q"]
+                if q_steps != 57:
+                    return ["Q"]
 
         """Step 4)  Move the token that is furthest from the finishing square.  Don't move if at end step.
            Also don't move token if it's at the home yard as if it were possible to move, would have been handled
@@ -388,7 +390,7 @@ class LudoGame:
                 self.kick_out_opponent_tokens(future_board_pos, future_board_pos_space)
 
         """
-        This function moves the token to the home row spaces (using a function move_to_home_rows to determine what
+        This section moves the token to the home row spaces (using a function move_to_home_rows to determine what
         home row based on the player char letter) if the home_row_spaces is not empty.
         
         If the home row spaces variables is empty, then we don't need a helper function to decide which home row array
@@ -402,11 +404,13 @@ class LudoGame:
 
         """edit board positions"""
         if step_count > 0:
-            self.set_board_pos_space("", step_count - 1, player_pos_char, 1)  # clear prev board pos
+            if step_count <= 50:
+                self.set_board_pos_space("", step_count - 1, None, 1)  # clear prev board pos
 
         # def move_to_home_rows(self, player_pos_char, player_obj, token_name, home_row_spaces):
         if home_row_spaces is not None:
-            self.move_to_home_rows(player_pos_char, player_obj, token, home_row_spaces, future_board_pos, token_string)
+            self.move_to_home_rows(player_pos_char, player_obj, token, home_row_spaces, future_board_pos, token_string,
+                                   step_count)
         else:
             self.set_board_pos_space(token_string, future_board_pos)        # set board position (not +1 as array)
 
@@ -448,7 +452,8 @@ class LudoGame:
 
         self.set_board_pos_space("", future_board_pos)          # clear opponent token or tokens from board space
 
-    def move_to_home_rows(self, p_char, player_obj, token_name, home_row_spaces, future_board_pos_space, token_string):
+    def move_to_home_rows(self, p_char, player_obj, token_name, home_row_spaces, future_board_pos_space, token_string,
+                          step_count):
 
         # home_rows_player_A = pos 56
         # home_rows_player_B = pos 57
@@ -456,19 +461,30 @@ class LudoGame:
         # home_rows_player_D = pos 59
         future_board_pos_space += 1
 
+        if step_count > 50:
+            past_home_space_pos = step_count - 51
+
         for token in token_name:
             if p_char == "A":
                 player_obj.set_token_steps(token, future_board_pos_space)
-                self.set_board_pos_space(token_string, 56, home_row_spaces)
+                self.set_board_pos_space(token_string, 56, home_row_spaces)     # set new board pos
+                if step_count > 50:
+                    self.set_board_pos_space("", 56, past_home_space_pos, 1)  # clear old board pos
             elif p_char == "B":
                 player_obj.set_token_steps(token, future_board_pos_space)
-                self.set_board_pos_space(token_string, 57, home_row_spaces)
+                self.set_board_pos_space(token_string, 57, home_row_spaces)     # set new board pos
+                if step_count > 50:
+                    self.set_board_pos_space("", 57, past_home_space_pos, 1)  # clear old board pos
             elif p_char == "C":
                 player_obj.set_token_steps(token, future_board_pos_space)
-                self.set_board_pos_space(token_string, 58, home_row_spaces)
+                self.set_board_pos_space(token_string, 58, home_row_spaces)     # set new board pos
+                if step_count > 50:
+                    self.set_board_pos_space("", 58, past_home_space_pos, 1)  # clear old board pos
             elif p_char == "D":
                 player_obj.set_token_steps(token, future_board_pos_space)
-                self.set_board_pos_space(token_string, 59, home_row_spaces)
+                self.set_board_pos_space("", 59, home_row_spaces)     # set new board pos
+                if step_count > 50:
+                    self.set_board_pos_space(token_string, 59, past_home_space_pos, 1)  # clear old board pos
 
     def set_board_pos_space(self, token, board_pos, board_pos2=None, clear=None):
 
@@ -501,7 +517,7 @@ class LudoGame:
 
         if board_pos2 is not None:
             if clear is not None:
-                self._board[board_pos] = token
+                self._board[board_pos][board_pos2] = token
             else:
                 self._board[board_pos][board_pos2] += token
         else:

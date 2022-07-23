@@ -80,7 +80,7 @@ class TestLinkedList(unittest.TestCase):
         expected = ['E', 'H', 'H', 'H', 'H', 'H', 'H', 'H']
         self.assertEqual(expected, token_space)  # expected, actual
 
-    def test_game_does_not_move_token_q_if_token_p_in_end_space_should_move_token_q(self):
+    def test_move_token_q_ready_yard_if_p_at_end_space(self):
         players = ['A', 'B', 'C', 'D']
         turns = [('A', 6), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5),
                  ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 1), ('A', 1),
@@ -89,6 +89,19 @@ class TestLinkedList(unittest.TestCase):
         token_space = game.play_game(players, turns)
         expected = ['E', 'R', 'H', 'H', 'H', 'H', 'H', 'H']
         self.assertEqual(expected, token_space)  # expected, actual
+
+    def test_moving_both_A_tokens_to_end_space(self):
+        players = ['A', 'B', 'C', 'D']
+        turns = [('A', 6), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5),
+                 ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 1), ('A', 1),  # end space here
+                 ('A', 6), ('A', 6), ('A', 6), ('A', 6), ('A', 6), ('A', 6), ('A', 6),   # these lines moves token q
+                 ('A', 6),  ('A', 6),  ('A', 6), ('A', 3)]
+        game = LudoGame()
+        token_space = game.play_game(players, turns)
+        expected = ['E', 'E', 'H', 'H', 'H', 'H', 'H', 'H']
+        self.assertEqual(expected, token_space)  # expected, actual
+
+
 
 
 """Statement so that file only runs main if ran as a script, not when imported."""
