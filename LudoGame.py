@@ -531,7 +531,7 @@ class LudoGame:
                             print("[" + self._board[58][-2-(i-7)] + "]", end="")
 
                     if i == 6:
-                        print("[E ]", end="")
+                        print("[  ]", end="")
 
                     if 6 > i >= 0:
                         if self._board[56][i] == '':
