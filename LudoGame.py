@@ -1,3 +1,13 @@
+"""
+Name:               Michael Iwanek
+GitHub:             https://github.com/osu-cs162-u22/portfolio-Mike11199
+GitHub Username:    Mike11199
+Assignment:         Portfolio Project
+Description:        Ludo Game
+Date:               08/11/2022
+Class:              CS_162_400_U2022
+"""
+
 import time
 
 
