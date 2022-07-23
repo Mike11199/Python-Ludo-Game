@@ -9,17 +9,24 @@ Class:              CS_162_400_U2022
 """
 
 import unittest
-from LudoGame import LudoGame, Player
+from LudoGame import LudoGame
 
 
 class TestLinkedList(unittest.TestCase):
 
-    def test_token_initialization(self):
+    def test_token_player_A_move_P_twice(self):
         players = ['A', 'B']
         turns = [('A', 6), ('A', 4)]
         game = LudoGame()
         token_space = game.play_game(players, turns)
         self.assertEqual(token_space, ['4', 'H', 'H', 'H'])
+
+    def test_token_player_A_move_all_out_of_home_rows(self):
+        players = ['A', 'B']
+        turns = [('A', 6), ('A', 6)]
+        game = LudoGame()
+        token_space = game.play_game(players, turns)
+        self.assertEqual(token_space, ['R', 'R', 'H', 'H'])
 
 
 """Statement so that file only runs main if ran as a script, not when imported."""

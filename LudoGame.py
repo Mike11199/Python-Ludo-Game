@@ -146,7 +146,7 @@ class LudoGame:
 
             self.move_token(current_player, token_choice, current_roll)
 
-            self.print_game_board()
+            # self.print_game_board()
 
         return self.current_spaces_of_all_tokens()
 
@@ -159,8 +159,8 @@ class LudoGame:
             q_space = player.get_space_name(q_steps)
             token_space.append(str(p_space))
             token_space.append(str(q_space))
-          #  token_space.append("Player " + str(player.get_position()) +
-          #                     " steps [P: " + str(p_space) + "], [Q: " + str(q_space) + "]")
+            #  token_space.append("Player " + str(player.get_position()) +
+            #                     " steps [P: " + str(p_space) + "], [Q: " + str(q_space) + "]")
 
 
         return token_space
@@ -396,8 +396,6 @@ class LudoGame:
             self.set_board_pos_space(token_string, future_board_pos)  # set board position (not +1 as array)
             for token in token_name:
                 player_obj.set_token_steps(token, future_board_pos + 1 - player_start_space)      # set token info in player object. +1
-
-
 
     def kick_out_opponent_tokens(self, future_board_pos, future_board_pos_space):
 
@@ -670,24 +668,13 @@ def main():
     turns3 = [('A', 6), ('A', 4)]
 
     game = LudoGame()
+    # game.play_game(players, turns)
     # game.play_game(players, turns2)
     token_space = game.play_game(players, turns3)
     print(token_space)
+    game.print_game_board()
 
     # print_walk_around_board()
-
-    # current_tokens_space = game.play_game(players, turns)
-
-    # player_A = game.get_player_by_position('A')
-
-    # print(player_A.get_completed())
-    # print(player_A.get_token_p_step_count())
-    # print(current_tokens_space)
-
-    # player_B = game.get_player_by_position('B')
-
-    # print(player_B.get_space_name(55))
-
 
 def print_walk_around_board():
     game = LudoGame()
