@@ -112,7 +112,7 @@ class LudoGame:
                         sorted_turns_list.append(D_turns[0])
                         D_turns.pop(0)
 
-        print(sorted_turns_list)
+        # print(sorted_turns_list)
         return sorted_turns_list
 
     def play_game(self, players_list, turns_list):
@@ -145,7 +145,14 @@ class LudoGame:
         for player in self._players:
             p_steps = player.get_token_p_step_count()
             q_steps = player.get_token_q_step_count()
-            token_space.append(str(player.get_position()) + "P Steps: " + str(p_steps) + "Q Steps: " + str(q_steps))
+            p_space = player.get_space_name(p_steps)
+            q_space = player.get_space_name(q_steps)
+            token_space.append(str(p_space))
+            token_space.append(str(q_space))
+          #  token_space.append("Player " + str(player.get_position()) +
+          #                     " steps [P: " + str(p_space) + "], [Q: " + str(q_space) + "]")
+
+
         return token_space
 
     def choose_token_algorithm(self, player, current_roll, p_steps, q_steps):
@@ -488,6 +495,7 @@ class LudoGame:
 
         print("Home Yard Spaces:  " + str(self._board[60]))
         print("Ready Yard Spaces:  " + str(self._board[61]))
+        print("")
 
         for i in range(0, 15):
             if self._board[i] == '':
@@ -550,6 +558,7 @@ class LudoGame:
             else:
                 print("[" + self._board[i] + "]", end="")
 
+        print("")
         print("")
 
     def get_player_by_position(self, player_position):
@@ -652,7 +661,7 @@ def main():
 
     game = LudoGame()
    # game.play_game(players, turns2)
-    token_space = game.play_game(players, turns2)
+    token_space = game.play_game(players, turns3)
     print(token_space)
 
    # print_walk_around_board()
