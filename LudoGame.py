@@ -215,29 +215,37 @@ class LudoGame:
 
         player_start_space = player.get_start_space()-1  # subtract 1 for pos on board array
 
-        future_board_pos_p = None
-        future_board_pos_q = None
+        future_board_space_p = None
+        future_board_space_q = None
 
-        # Test whether token p is in ready to go yard.  Get p token's steps
+        # Test whether token p is in ready to go or on board.  Get p token's steps
         if p_steps == 0:
-            future_board_pos_p = self.get_board_position_space(player_start_space + current_roll)
+            future_board_space_p = self.get_board_position_space(player_start_space + current_roll)
         elif p_steps != -1:
-            future_board_pos_p = self.get_board_position_space(p_steps + current_roll)
+            future_pos_p = p_steps + current_roll
+            if future_pos_p > 56:                   # test or else will return list of home rows when s/b blank
+                future_board_space_p = ""
+            else:
+                future_board_space_p = self.get_board_position_space(future_pos_p)
 
-        # Test whether q is in ready to go yard.  Get q token's steps
+        # Test whether token q is in ready to go or on board.  Get q token's steps
         if q_steps == 0:
-            future_board_pos_q = self.get_board_position_space(player_start_space + current_roll)
+            future_board_space_q = self.get_board_position_space(player_start_space + current_roll)
         elif q_steps != -1:
-            future_board_pos_q = self.get_board_position_space(q_steps + current_roll)
+            future_pos_q = q_steps + current_roll
+            if future_pos_q > 56:                   # test or else will return list of home rows when s/b blank
+                future_board_space_q = ""
+            else:
+                future_board_space_p = self.get_board_position_space(future_pos_q)
 
         # if future board pos token p is not empty, and it contains an enemy token
-        if future_board_pos_p is not None and future_board_pos_p != "":
-            if future_board_pos_p[0] != player.get_position():
+        if future_board_space_p is not None and future_board_space_p != "":
+            if future_board_space_p[0] != player.get_position():
                 return ["P"]
 
         # if future board pos token q is not empty, and it contains an enemy token
-        if future_board_pos_q is not None and future_board_pos_q != "":
-            if future_board_pos_q[0] != player.get_position():
+        if future_board_space_q is not None and future_board_space_q != "":
+            if future_board_space_q[0] != player.get_position():
                 return ["Q"]
 
         """Step 4)  Move the token that is furthest from the finishing square.  Don't move if at end step.
