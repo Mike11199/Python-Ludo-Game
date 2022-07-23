@@ -660,11 +660,11 @@ def main():
     turns3 = [('A', 6), ('A', 4)]
 
     game = LudoGame()
-   # game.play_game(players, turns2)
+    # game.play_game(players, turns2)
     token_space = game.play_game(players, turns3)
     print(token_space)
 
-   # print_walk_around_board()
+    # print_walk_around_board()
 
     # current_tokens_space = game.play_game(players, turns)
 
