@@ -333,11 +333,11 @@ class LudoGame:
            
         This variable, future_board_pos, will be used to determine if the board space is occupied.
         """
-        if step_count == 0:                                                         # if in ready to go yard
-            future_board_pos = player_start_space + board_steps-1  # if in ready to go yard set steps plus start pos
-            self.set_board_pos_space(token_name[0], 61, player_pos_char, 1)  # clear board pos in ready to go yard
+        if step_count == 0:                                                                  # if in ready to go yard
+            future_board_pos = player_start_space + board_steps-1    # if in ready to go yard set steps plus start pos
+            self.set_board_pos_space(token_name[0], 61, player_pos_char, 1)      # clear board pos in ready to go yard
         else:
-            future_board_pos = step_count + board_steps      # else add steps to board_count where start pos already in
+            future_board_pos = step_count + board_steps-1   # else add steps to board_count where start pos already in
 
         # handle B, C, and D positions which have to move from board space 56 (index 55) to space 1 (index 0):
         if future_board_pos > 55:
@@ -380,22 +380,26 @@ class LudoGame:
                 self.kick_out_opponent_tokens(future_board_pos, future_board_pos_space)
 
         """
-        This determines moves the token to the home row spaces (using a function move_to_home_rows to determine what
+        This function moves the token to the home row spaces (using a function move_to_home_rows to determine what
         home row based on the player char letter) if the home_row_spaces is not empty.
         
         If the home row spaces variables is empty, then we don't need a helper function to decide which home row array
-        to enter, and can directly place the token in the board array.  
+        to enter, and can directly place the token in the board array.  If the token was not moved from the ready to
+        go yard, that means it was previously on the board, so that previous board spot is reset to nothing.
         
         Uses for loops to handle the possibility that the tokens are stacked.
         
-        Previous lines in this function should have kicked out an opponent's token if it was present.
+        Previous lines in this function should have kicked out an opponent's token off the board if it was present.
         """
         if home_row_spaces is not None:
             self.move_to_home_rows(player_pos_char, player_obj, token_name, home_row_spaces)
         else:
-            self.set_board_pos_space(token_string, future_board_pos)  # set board position (not +1 as array)
+            self.set_board_pos_space(token_string, future_board_pos)         # set board position (not +1 as array)
+            if step_count > 0:
+                self.set_board_pos_space("", step_count-1, player_pos_char, 1)      # clear prev board pos
+
             for token in token_name:
-                # set token info in player object. +1
+                # set token info in player object. +1 as steps not array pos.  For loop if stacked token.
                 player_obj.set_token_steps(token, future_board_pos + 1 - player_start_space)
 
     def kick_out_opponent_tokens(self, future_board_pos, future_board_pos_space):
@@ -482,7 +486,10 @@ class LudoGame:
             return
 
         if board_pos2 is not None:
-            self._board[board_pos][board_pos2] += token
+            if clear is not None:
+                self._board[board_pos] = token
+            else:
+                self._board[board_pos][board_pos2] += token
         else:
             self._board[board_pos] += token
 

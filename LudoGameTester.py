@@ -35,6 +35,24 @@ class TestLinkedList(unittest.TestCase):
         token_space = game.play_game(players, turns)
         self.assertEqual(['5', 'H', 'R', 'H'], token_space)  # expected, actual
 
+    def test_move_player_A_token_P_to_row_50(self):
+        players = ['A', 'B', 'C', 'D']
+        turns = [('A', 6), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5),
+                 ('A', 5), ('A', 5), ('A', 5), ('A', 5)]
+        game = LudoGame()
+        token_space = game.play_game(players, turns)
+        expected = ['50', 'H', 'H', 'H', 'H', 'H', 'H', 'H']
+        self.assertEqual(expected, token_space)  # expected, actual
+
+    def test_move_player_A_token_P_to_home_row_A5(self):
+        players = ['A', 'B', 'C', 'D']
+        turns = [('A', 6), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5),
+                 ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5)]
+        game = LudoGame()
+        token_space = game.play_game(players, turns)
+        expected = ['A5', 'H', 'H', 'H', 'H', 'H', 'H', 'H']
+        self.assertEqual(expected, token_space)  # expected, actual
+
 
 """Statement so that file only runs main if ran as a script, not when imported."""
 if __name__ == '__main__':
