@@ -141,7 +141,7 @@ class LudoGame:
             token_choice = self.choose_token_algorithm(current_player, current_roll, player_token_p, player_token_q)
 
             if token_choice == "No possible move.":
-                print("Player " + str(turn[0]) + " can't move! Skipping turn.")
+                # print("Player " + str(turn[0]) + " can't move! Skipping turn.")
                 break   # go to next turn in for loop
 
             self.move_token(current_player, token_choice, current_roll)
