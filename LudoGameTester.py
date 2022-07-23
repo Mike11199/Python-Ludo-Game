@@ -19,14 +19,21 @@ class TestLinkedList(unittest.TestCase):
         turns = [('A', 6), ('A', 4)]
         game = LudoGame()
         token_space = game.play_game(players, turns)
-        self.assertEqual(token_space, ['4', 'H', 'H', 'H'])
+        self.assertEqual(['4', 'H', 'H', 'H'], token_space)
 
     def test_token_player_A_move_all_out_of_home_rows(self):
         players = ['A', 'B']
         turns = [('A', 6), ('A', 6)]
         game = LudoGame()
         token_space = game.play_game(players, turns)
-        self.assertEqual(token_space, ['R', 'R', 'H', 'H'])
+        self.assertEqual(['R', 'R', 'H', 'H'], token_space)
+
+    def test_token_player_A_move_all_out_of_home_rows_and_one_token_B(self):
+        players = ['A', 'B']
+        turns = [('A', 6), ('A', 5), ('B', 6)]
+        game = LudoGame()
+        token_space = game.play_game(players, turns)
+        self.assertEqual(['5', 'H', 'R', 'H'], token_space)  # expected, actual
 
 
 """Statement so that file only runs main if ran as a script, not when imported."""

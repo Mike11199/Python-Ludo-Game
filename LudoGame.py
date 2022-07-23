@@ -161,8 +161,6 @@ class LudoGame:
             token_space.append(str(q_space))
             #  token_space.append("Player " + str(player.get_position()) +
             #                     " steps [P: " + str(p_space) + "], [Q: " + str(q_space) + "]")
-
-
         return token_space
 
     def choose_token_algorithm(self, player, current_roll, p_steps, q_steps):
@@ -327,15 +325,17 @@ class LudoGame:
             return
 
         """
-        If token in home yard, set steps as the player start space plus board steps to move.
-          
-        If not in home yard, set steps as the step_count, which has the start space now already built in, 
-        and the steps to move.
+        If token in ready to go yard, set steps as the player start space plus board steps to move.  Also, remove the 
+        token from the board position in the ready to go yard.
+              
+        If not in the ready to go yard, set steps as the step_count, which has the start space now already built in, 
+        plus the steps to move.
            
         This variable, future_board_pos, will be used to determine if the board space is occupied.
         """
-        if step_count == 0:
-            future_board_pos = player_start_space + board_steps-1  # if in home yard set steps plus start pos
+        if step_count == 0:                                                         # if in ready to go yard
+            future_board_pos = player_start_space + board_steps-1  # if in ready to go yard set steps plus start pos
+            self.set_board_pos_space(token_name[0], 61, player_pos_char, 1)  # clear board pos in ready to go yard
         else:
             future_board_pos = step_count + board_steps      # else add steps to board_count where start pos already in
 
@@ -395,7 +395,8 @@ class LudoGame:
         else:
             self.set_board_pos_space(token_string, future_board_pos)  # set board position (not +1 as array)
             for token in token_name:
-                player_obj.set_token_steps(token, future_board_pos + 1 - player_start_space)      # set token info in player object. +1
+                # set token info in player object. +1
+                player_obj.set_token_steps(token, future_board_pos + 1 - player_start_space)
 
     def kick_out_opponent_tokens(self, future_board_pos, future_board_pos_space):
 
