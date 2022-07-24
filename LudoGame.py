@@ -155,10 +155,27 @@ class LudoGame:
     def current_spaces_of_all_tokens(self):
         token_space = []
         for player in self._players:
+
+            player_char = player.get_position()
             p_steps = player.get_token_p_step_count()
             q_steps = player.get_token_q_step_count()
+            player_start = player.get_start_space()
+            player_end = player.get_end_space()
+
+            if player_char == 'B':
+                if 43 > p_steps > 0:
+                    p_steps += 14
+
+            elif player_char == 'C':
+                if 50 > p_steps > 0:
+                    p_steps += 28
+            elif player_char == 'D':
+                if 56 < p_steps > 0:
+                    p_steps += 42
+
             p_space = player.get_space_name(p_steps)
             q_space = player.get_space_name(q_steps)
+
             token_space.append(str(p_space))
             token_space.append(str(q_space))
             #  token_space.append("Player " + str(player.get_position()) +
