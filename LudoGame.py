@@ -349,7 +349,7 @@ class LudoGame:
             future_board_pos = player_start_space + board_steps-1    # if in ready to go yard set steps plus start pos
             self.set_board_pos_space(token_name[0], 61, player_pos_char, 1)      # clear board pos in ready to go yard
         else:
-            future_board_pos = step_count + board_steps - 1   # else add steps to board_count where start pos already in
+            future_board_pos = player_start_space + step_count + board_steps - 1  # array so -1 from steps
 
         # handle B, C, and D positions which have to move from board space 56 (index 55) to space 1 (index 0):
         if future_board_pos > 55:
@@ -407,7 +407,7 @@ class LudoGame:
         """edit board positions"""
         if step_count > 0:
             if step_count <= 50:
-                self.set_board_pos_space("", step_count - 1, None, 1)  # clear prev board pos
+                self.set_board_pos_space("", player_start_space + step_count - 1, None, 1)  # clear prev board pos
 
         # def move_to_home_rows(self, player_pos_char, player_obj, token_name, home_row_spaces):
         if home_row_spaces is not None:
@@ -419,7 +419,12 @@ class LudoGame:
             """edit player obj positions"""
             for token in token_name:
                 # set token info in player object. +1 as steps not array pos.  For loop if stacked token.
-                player_obj.set_token_steps(token, future_board_pos + 1 - player_start_space)
+                player_steps_to_add = future_board_pos + 1 - player_start_space
+
+                if player_steps_to_add < 0:
+                    player_steps_to_add = step_count + board_steps
+
+                player_obj.set_token_steps(token, player_steps_to_add)
 
     def kick_out_opponent_tokens(self, future_board_pos, future_board_pos_space):
 

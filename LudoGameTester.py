@@ -520,15 +520,15 @@ class TestLinkedList(unittest.TestCase):
                  ('B', 5), ('B', 5), ('B', 5)]  
         game = LudoGame()
         token_space = game.play_game(players, turns)
-        expected = ['H', 'H', 'H', 'H', 'H', 'H', 'H', 'H']
+        expected = ['H', 'H', '45', 'H', 'H', 'H', 'H', 'H']
         self.assertEqual(expected, token_space)  # expected, actual
 
         # Test the board spaces and home/ready-to-go yards
         board_dictionary = game.get_entire_board_dictionary()
-        expected = {5: 'pA',
+        expected = {3: 'pB',
                     'Home Yard':
-                        {'A': ['', 'Q'],
-                         'B': ['P', 'Q'],
+                        {'A': ['P', 'Q'],
+                         'B': ['', 'Q'],
                          'C': ['P', 'Q'],
                          'D': ['P', 'Q']},
                     'Ready to Go Yard':
