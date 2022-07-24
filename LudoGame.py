@@ -168,19 +168,8 @@ class LudoGame:
         token_space = []
         for player in self._players:
 
-            player_char = player.get_position()
             p_steps = player.get_token_p_step_count()
             q_steps = player.get_token_q_step_count()
-            player_start = player.get_start_space()
-            player_end = player.get_end_space()
-
-            if player_char != 'A':
-                steps_that_will_pass_space_56 = 56 - player_start + 2
-                if steps_that_will_pass_space_56 > p_steps > 0:
-                    p_steps += (player_start-1)
-                elif p_steps >= steps_that_will_pass_space_56:
-                    if p_steps < 51:
-                        p_steps = p_steps - steps_that_will_pass_space_56 + 1
 
             p_space = player.get_space_name(p_steps)
             q_space = player.get_space_name(q_steps)
@@ -796,6 +785,18 @@ class Player:
         return steps
 
     def get_space_name(self, total_steps):
+
+        player_char = self.get_position()
+        player_start = self.get_start_space()
+        player_end = self.get_end_space()
+
+        if player_char != 'A':
+            steps_that_will_pass_space_56 = 56 - player_start + 2
+            if steps_that_will_pass_space_56 > total_steps > 0:
+                total_steps += (player_start - 1)
+            elif total_steps >= steps_that_will_pass_space_56:
+                if total_steps < 51:
+                    total_steps = total_steps - steps_that_will_pass_space_56 + 1
 
         if total_steps == -1:
             return "H"
