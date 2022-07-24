@@ -732,7 +732,7 @@ class TestLinkedList(unittest.TestCase):
                          'D': ['', '']}}
         self.assertEqual(expected, board_dictionary)  # expected, actual
 
-    def test_player_c_token_p_goes_to(self):
+    def test_player_c_token_p_goes_to_board_space_33(self):
         # Test the function returns correct list of all the tokens
         players = ['A', 'B', 'C', 'D']
         turns = [('C', 6), ('C', 5)]
