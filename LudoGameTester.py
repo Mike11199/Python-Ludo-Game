@@ -374,7 +374,7 @@ class TestLinkedList(unittest.TestCase):
         game = LudoGame()
         token_space = game.play_game(players, turns)
 
-        expected = ['E', 'E', 'H', 'R', 'H', 'H', 'H', 'H']
+        expected = ['E', 'E', 'H', 'R', 'H', 'H', 'H', 'H']         # third H is token P for B that got kicked to home
         self.assertEqual(expected, token_space)  # expected, actual
 
         # Test the board spaces and home/ready-to-go yards
