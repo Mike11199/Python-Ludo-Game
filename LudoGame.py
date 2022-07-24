@@ -368,7 +368,7 @@ class LudoGame:
         if player_pos_char != 'A':
             if future_board_pos > player_end_space:                      # test if position over end space
                 if future_board_pos <= player_start_space:                # test if position also less than start space
-                    home_row_spaces = future_board_pos - player_end_space
+                    home_row_spaces = future_board_pos - player_end_space - 1   # spaces in array: 0 = B1, C1, D1
                     if home_row_spaces > 6:
                         steps_to_backtrack = home_row_spaces - 6
                         home_row_spaces = home_row_spaces - steps_to_backtrack
