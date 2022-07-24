@@ -1001,6 +1001,32 @@ class TestLinkedList(unittest.TestCase):
                          'D': ['', '']}}
         self.assertEqual(expected, board_dictionary)  # expected, actual
 
+    def test_moving__player_D_token_p_to_end_space(self):
+        # Test the function returns correct list of all the tokens
+        players = ['A', 'B', 'C', 'D']
+        turns = [('D', 6), ('D', 5), ('D', 5), ('D', 5), ('D', 5), ('D', 5), ('D', 5),
+                 ('D', 5), ('D', 5), ('D', 5), ('D', 5), ('D', 5), ('D', 1), ('D', 1)]  # end space here
+
+        game = LudoGame()
+        token_space = game.play_game(players, turns)
+        expected = ['H', 'H', 'H', 'H', 'H', 'H', 'E', 'H']
+        self.assertEqual(expected, token_space)  # expected, actual
+
+        # Test the board spaces and home/ready-to-go yards
+        board_dictionary = game.get_entire_board_dictionary()
+        expected = {56: [[6, 'pD']],
+                    'Home Yard':
+                        {'A': ['', ''],
+                         'B': ['P', 'Q'],
+                         'C': ['P', 'Q'],
+                         'D': ['P', 'Q']},
+                    'Ready to Go Yard':
+                        {'A': ['', ''],
+                         'B': ['', ''],
+                         'C': ['', ''],
+                         'D': ['', '']}}
+        self.assertEqual(expected, board_dictionary)  # expected, actual
+
 
 """Statement so that file only runs main if ran as a script, not when imported."""
 if __name__ == '__main__':
