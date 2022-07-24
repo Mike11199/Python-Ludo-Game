@@ -750,8 +750,8 @@ class Player:
 
 def main():
     players = ['A', 'B']
-    turns = [('A', 6), ('A', 4), ('A', 5), ('A', 4), ('B', 6), ('B', 4), ('B', 1), ('B', 2), ('A', 6), ('A', 4),
-             ('A', 6), ('A', 3), ('A', 5), ('A', 1), ('A', 5), ('A', 4)]
+    readme_turns = [('A', 6), ('A', 4), ('A', 5), ('A', 4), ('B', 6), ('B', 4), ('B', 1), ('B', 2), ('A', 6), ('A', 4),
+                    ('A', 6), ('A', 3), ('A', 5), ('A', 1), ('A', 5), ('A', 4)]
 
     turns2 = [('A', 6), ('A', 6), ('A', 5), ('A', 5), ('B', 6), ('B', 4), ('B', 1), ('B', 2), ('A', 3), ('A', 4),
              ('A', 6), ('A', 3), ('A', 5), ('A', 1), ('A', 5), ('A', 4), ('B', 4), ('B', 4), ('B', 4), ('B', 4)]
@@ -761,7 +761,7 @@ def main():
     game = LudoGame()
     # game.play_game(players, turns)
     # game.play_game(players, turns2)
-    token_space = game.play_game(players, turns3)
+    token_space = game.play_game(players, readme_turns)
     print(token_space)
     game.print_game_board()
 
