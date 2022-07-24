@@ -396,6 +396,70 @@ class TestLinkedList(unittest.TestCase):
                          'D': ['', '']}}
         self.assertEqual(expected, board_dictionary)  # expected, actual
 
+    def test_the_get_completed_function_for_player_A(self):
+        # Test the function returns correct list of all the tokens
+        players = ['A', 'B', 'C', 'D']
+        turns = [('A', 6), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5),
+                 ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 1), ('A', 1),  # end space here
+                 ('A', 6), ('A', 6), ('A', 6), ('A', 6), ('A', 6), ('A', 6), ('A', 6),  # these lines moves token q
+                 ('A', 6), ('A', 6), ('A', 6), ('A', 3), ('A', 1), ('A', 5)]
+        game = LudoGame()
+        token_space = game.play_game(players, turns)
+        expected = ['E', 'E', 'H', 'H', 'H', 'H', 'H', 'H']
+        self.assertEqual(expected, token_space)  # expected, actual
+
+        # Test the board spaces and home/ready-to-go yards
+        board_dictionary = game.get_entire_board_dictionary()
+        expected = {56: [6, 'pAqA'],
+                    'Home Yard':
+                        {'A': ['', ''],
+                         'B': ['P', 'Q'],
+                         'C': ['P', 'Q'],
+                         'D': ['P', 'Q']},
+                    'Ready to Go Yard':
+                        {'A': ['', ''],
+                         'B': ['', ''],
+                         'C': ['', ''],
+                         'D': ['', '']}}
+        self.assertEqual(expected, board_dictionary)  # expected, actual
+
+        player_A = game.get_player_by_position('A')
+        self.assertEqual(True, player_A.get_completed())    # expected, actual
+
+    def test_the_get_completed_function_for_false_positives(self):
+        # Test the function returns correct list of all the tokens
+        players = ['A', 'B', 'C', 'D']
+        turns = [('A', 6), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5),
+                 ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 1), ('A', 1),  # end space here
+                 ('A', 6), ('A', 6), ('A', 6), ('A', 6), ('A', 6), ('A', 6), ('A', 6),  # these lines moves token q
+                 ('A', 6), ('A', 6), ('A', 6), ('A', 3), ('A', 1), ('A', 5)]
+        game = LudoGame()
+        token_space = game.play_game(players, turns)
+        expected = ['E', 'E', 'H', 'H', 'H', 'H', 'H', 'H']
+        self.assertEqual(expected, token_space)  # expected, actual
+
+        # Test the board spaces and home/ready-to-go yards
+        board_dictionary = game.get_entire_board_dictionary()
+        expected = {56: [6, 'pAqA'],
+                    'Home Yard':
+                        {'A': ['', ''],
+                         'B': ['P', 'Q'],
+                         'C': ['P', 'Q'],
+                         'D': ['P', 'Q']},
+                    'Ready to Go Yard':
+                        {'A': ['', ''],
+                         'B': ['', ''],
+                         'C': ['', ''],
+                         'D': ['', '']}}
+        self.assertEqual(expected, board_dictionary)  # expected, actual
+
+        player_B = game.get_player_by_position('B')
+        self.assertEqual(False, player_B.get_completed())    # expected, actual
+        player_C = game.get_player_by_position('C')
+        self.assertEqual(False, player_C.get_completed())    # expected, actual
+        player_D = game.get_player_by_position('D')
+        self.assertEqual(False, player_D.get_completed())    # expected, actual
+
 
 """Statement so that file only runs main if ran as a script, not when imported."""
 if __name__ == '__main__':

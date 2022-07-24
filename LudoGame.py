@@ -146,7 +146,9 @@ class LudoGame:
 
             self.move_token(current_player, token_choice, current_roll)
 
-            # self.print_game_board()
+            for player in self._players:
+                player.set_player_status_as_completed_if_finished()
+                # self.print_game_board()
 
         return self.current_spaces_of_all_tokens()
 
@@ -690,6 +692,14 @@ class Player:
 
     def set_token_steps(self, token, pos):
         self._token_positions[token] = pos
+
+    def set_player_status_as_completed_if_finished(self):
+        """:return: true if player has finished the game, or false it not finished."""
+        p_token = self.get_token_p_step_count()
+        q_token = self.get_token_q_step_count()
+
+        if p_token == 57 and q_token == 57:
+            self._game_status = True
 
     def get_completed(self):
         """:return: true if player has finished the game, or false it not finished."""
