@@ -692,6 +692,16 @@ class TestLinkedList(unittest.TestCase):
         expected = ['28', '28', '21', 'H']
         self.assertEqual(expected, token_space)  # expected, actual
 
+        player_A = game.get_player_by_position('A')
+        player_A_completed = player_A.get_completed()
+        player_A_step_count = player_A.get_token_p_step_count()
+        self.assertEqual(False, player_A_completed)  # expected, actual
+        self.assertEqual(28, player_A_step_count)  # expected, actual
+
+        player_B = game.get_player_by_position('B')
+        player_B_Space_name = player_B.get_space_name(55)
+        self.assertEqual("B5", player_B_Space_name)  # expected, actual
+
         # Test the board spaces and home/ready-to-go yards
         board_dictionary = game.get_entire_board_dictionary()
         expected = {20: 'pB', 27: 'pAqA',
