@@ -138,6 +138,18 @@ class TestLinkedList(unittest.TestCase):
         board_dictionary = game.get_entire_board_dictionary()
         self.assertEqual({56: [6, 'pAqA']}, board_dictionary)  # expected, actual
 
+    def test_Player_A_creating_a_stacked_token(self):
+        players = ['A', 'B', 'C', 'D']
+        turns = [('A', 6), ('A', 5), ('A', 6), ('A', 5), ('A', 5), ('A', 5), ('A', 5)]
+        game = LudoGame()
+        token_space = game.play_game(players, turns)
+
+        expected = ['E', 'E', 'H', 'R', 'H', 'H', 'H', 'H']
+        self.assertEqual(expected, token_space)  # expected, actual
+
+        board_dictionary = game.get_entire_board_dictionary()
+        self.assertEqual({56: [6, 'pAqA']}, board_dictionary)  # expected, actual
+
 
 """Statement so that file only runs main if ran as a script, not when imported."""
 if __name__ == '__main__':
