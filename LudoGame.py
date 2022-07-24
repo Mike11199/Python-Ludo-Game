@@ -364,14 +364,15 @@ class LudoGame:
         """
         home_row_spaces = None
         steps_to_backtrack = None
+        future_step_count = step_count + board_steps
 
         if player_pos_char != 'A':
-            if future_board_pos > player_end_space:                      # test if position over end space
-                if future_board_pos <= player_start_space:                # test if position also less than start space
+            if future_board_pos > player_end_space:                                # test if position over end space
+                if future_board_pos <= player_start_space or future_step_count > 57:  # test if pos less than start
                     home_row_spaces = future_board_pos - player_end_space - 1   # spaces in array: 0 = B1, C1, D1
                     if home_row_spaces > 6:
                         steps_to_backtrack = home_row_spaces - 6
-                        home_row_spaces = home_row_spaces - steps_to_backtrack
+                        home_row_spaces = home_row_spaces - steps_to_backtrack - 1
 
         if player_pos_char == 'A':
             if future_board_pos > player_end_space:                          # test if position over end space
@@ -494,7 +495,7 @@ class LudoGame:
             elif p_char == "B":
                 self.set_board_pos_space(token_string, 57, home_row_spaces)  # set new board pos
                 if steps_to_backtrack is not None:
-                    player_obj.set_token_steps(token, future_board_pos_space - steps_to_backtrack)  # player obj steps
+                    player_obj.set_token_steps(token,  step_count + board_steps - steps_to_backtrack) # player obj steps
                 else:
                     player_obj.set_token_steps(token, step_count + board_steps)
                 if step_count > 50:
@@ -503,7 +504,7 @@ class LudoGame:
             elif p_char == "C":
                 self.set_board_pos_space(token_string, 58, home_row_spaces)  # set new board pos
                 if steps_to_backtrack is not None:
-                    player_obj.set_token_steps(token, future_board_pos_space - steps_to_backtrack)  # player obj steps
+                    player_obj.set_token_steps(token,  step_count + board_steps - steps_to_backtrack) # player obj steps
                 else:
                     player_obj.set_token_steps(token, step_count + board_steps)
                 if step_count > 50:
@@ -512,7 +513,7 @@ class LudoGame:
             elif p_char == "D":
                 self.set_board_pos_space("", 59, home_row_spaces)  # set new board pos
                 if steps_to_backtrack is not None:
-                    player_obj.set_token_steps(token, future_board_pos_space - steps_to_backtrack)  # player obj steps
+                    player_obj.set_token_steps(token,  step_count + board_steps - steps_to_backtrack) # player obj steps
                 else:
                     player_obj.set_token_steps(token, step_count + board_steps)
                 if step_count > 50:
