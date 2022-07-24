@@ -804,7 +804,7 @@ class Player:
             return "R"
 
         elif total_steps <= 50:
-            return total_steps
+            return str(total_steps)
 
         elif 57 > total_steps > 50:
             return str(self._position) + str(total_steps - 50)
