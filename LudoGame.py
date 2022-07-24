@@ -751,7 +751,7 @@ class Player:
             self._start_space = 43
             self._end_space = 36
 
-        self._token_positions = {"P": "H", "Q": "H"}        # H = home yard; R = ready to go; these are as steps taken
+        self._token_positions_as_steps = {"P": "H", "Q": "H"}        # H = home yard; R = ready to go; these are as steps taken
         self._game_status = False
         self._token_positions_as_exact_board_space = {"P": "-1", "Q": "-1"}
 
@@ -759,7 +759,7 @@ class Player:
         return self._position
 
     def set_token_steps(self, token, pos):
-        self._token_positions[token] = pos
+        self._token_positions_as_steps[token] = pos
 
     def set_actual_board_spaces_for_tokens(self, token, pos):
         self._token_positions_as_exact_board_space[token] = pos
@@ -780,7 +780,7 @@ class Player:
         return self._game_status
 
     def get_token_p_step_count(self):                        # H = -1, R = 0, s/b no more than 57
-        steps = self._token_positions["P"]
+        steps = self._token_positions_as_steps["P"]
         if steps == "H":
             return -1
         if steps == "R":
@@ -788,7 +788,7 @@ class Player:
         return steps
 
     def get_token_q_step_count(self):                            # H = -1, R = 0, s/b no more than 57
-        steps = self._token_positions["Q"]
+        steps = self._token_positions_as_steps["Q"]
         if steps == "H":
             return -1
         if steps == "R":
