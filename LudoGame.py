@@ -145,6 +145,7 @@ class LudoGame:
                 continue   # go to next turn in for loop
 
             self.move_token(current_player, token_choice, current_roll)
+            self.update_players_actual_token_spaces_board_positions_not_steps()
 
             for player in self._players:
                 player.set_player_status_as_completed_if_finished()
@@ -156,30 +157,37 @@ class LudoGame:
         token_space = []
         for player in self._players:
 
+            p_actual_board_space = player.get_actual_board_spaces_for_tokens("P")
+            q_actual_board_space = player.get_actual_board_spaces_for_tokens("Q")
+            token_space.append(p_actual_board_space)
+            token_space.append(q_actual_board_space)
+
+        return token_space
+
+    def update_players_actual_token_spaces_board_positions_not_steps(self):
+        token_space = []
+        for player in self._players:
+
             player_char = player.get_position()
             p_steps = player.get_token_p_step_count()
             q_steps = player.get_token_q_step_count()
             player_start = player.get_start_space()
             player_end = player.get_end_space()
 
-            if player_char == 'B':
-                if 43 > p_steps > 0:
-                    p_steps += 14
-
-            elif player_char == 'C':
-                if 50 > p_steps > 0:
-                    p_steps += 28
-            elif player_char == 'D':
-                if 56 < p_steps > 0:
-                    p_steps += 42
+            if player_char != 'A':
+                steps_that_will_pass_space_56 = 56 - player_start + 2
+                if steps_that_will_pass_space_56 > p_steps > 0:
+                    p_steps += (player_start-1)
+                elif p_steps >= steps_that_will_pass_space_56:
+                    if p_steps < 51:
+                        p_steps = p_steps - steps_that_will_pass_space_56 + 1
 
             p_space = player.get_space_name(p_steps)
             q_space = player.get_space_name(q_steps)
 
-            token_space.append(str(p_space))
-            token_space.append(str(q_space))
-            #  token_space.append("Player " + str(player.get_position()) +
-            #                     " steps [P: " + str(p_space) + "], [Q: " + str(q_space) + "]")
+            player.set_actual_board_spaces_for_tokens('P', str(p_space))
+            player.set_actual_board_spaces_for_tokens('Q', str(q_space))
+
         return token_space
 
     def choose_token_algorithm(self, player, current_roll, p_steps, q_steps):
@@ -743,14 +751,21 @@ class Player:
             self._start_space = 43
             self._end_space = 36
 
-        self._token_positions = {"P": "H", "Q": "H"}        # H = home yard; R = ready to go;
+        self._token_positions = {"P": "H", "Q": "H"}        # H = home yard; R = ready to go; these are as steps taken
         self._game_status = False
+        self._token_positions_as_exact_board_space = {"P": "-1", "Q": "-1"}
 
     def get_position(self):                                 # e.g- "A", "B", "C", or "D"
         return self._position
 
     def set_token_steps(self, token, pos):
         self._token_positions[token] = pos
+
+    def set_actual_board_spaces_for_tokens(self, token, pos):
+        self._token_positions_as_exact_board_space[token] = pos
+
+    def get_actual_board_spaces_for_tokens(self, token):
+        return self._token_positions_as_exact_board_space[token]
 
     def set_player_status_as_completed_if_finished(self):
         """:return: true if player has finished the game, or false it not finished."""
