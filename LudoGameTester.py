@@ -59,6 +59,72 @@ class TestLinkedList(unittest.TestCase):
                          'D': ['', '']}}
         self.assertEqual(expected, board_dictionary)  # expected, actual
 
+    def test_player_B_moves_both_their_tokens_out_of_home_yard_to_ready_to_go_yard(self):
+        # Test the function returns correct list of all the tokens
+        players = ['A', 'B']
+        turns = [('B', 6), ('B', 6)]
+        game = LudoGame()
+        token_space = game.play_game(players, turns)
+        self.assertEqual(['H', 'H', 'R', 'R'], token_space)
+
+        # Test the board spaces and home/ready-to-go yards
+        board_dictionary = game.get_entire_board_dictionary()
+        expected = {'Home Yard':
+                        {'A': ['P', 'Q'],
+                         'B': ['', ''],
+                         'C': ['', ''],
+                         'D': ['', '']},
+                    'Ready to Go Yard':
+                        {'A': ['', ''],
+                         'B': ['P', 'Q'],
+                         'C': ['', ''],
+                         'D': ['', '']}}
+        self.assertEqual(expected, board_dictionary)  # expected, actual
+
+    def test_player_C_moves_both_their_tokens_out_of_home_yard_to_ready_to_go_yard(self):
+        # Test the function returns correct list of all the tokens
+        players = ['A', 'C']
+        turns = [('C', 6), ('C', 6)]
+        game = LudoGame()
+        token_space = game.play_game(players, turns)
+        self.assertEqual(['H', 'H', 'R', 'R'], token_space)
+
+        # Test the board spaces and home/ready-to-go yards
+        board_dictionary = game.get_entire_board_dictionary()
+        expected = {'Home Yard':
+                        {'A': ['P', 'Q'],
+                         'B': ['', ''],
+                         'C': ['', ''],
+                         'D': ['', '']},
+                    'Ready to Go Yard':
+                        {'A': ['', ''],
+                         'B': ['', ''],
+                         'C': ['P', 'Q'],
+                         'D': ['', '']}}
+        self.assertEqual(expected, board_dictionary)  # expected, actual
+
+    def test_player_D_moves_both_their_tokens_out_of_home_yard_to_ready_to_go_yard(self):
+        # Test the function returns correct list of all the tokens
+        players = ['A', 'D']
+        turns = [('D', 6), ('D', 6)]
+        game = LudoGame()
+        token_space = game.play_game(players, turns)
+        self.assertEqual(['H', 'H', 'R', 'R'], token_space)
+
+        # Test the board spaces and home/ready-to-go yards
+        board_dictionary = game.get_entire_board_dictionary()
+        expected = {'Home Yard':
+                        {'A': ['P', 'Q'],
+                         'B': ['', ''],
+                         'C': ['', ''],
+                         'D': ['', '']},
+                    'Ready to Go Yard':
+                        {'A': ['', ''],
+                         'B': ['', ''],
+                         'C': ['', ''],
+                         'D': ['P', 'Q']}}
+        self.assertEqual(expected, board_dictionary)  # expected, actual
+
     def test_player_A_moves_token_p_to_board_space_5_and_player_B_moves_token_p_to_ready_to_go_yard(self):
         # Test the function returns correct list of all the tokens
         players = ['A', 'B']
@@ -759,6 +825,175 @@ class TestLinkedList(unittest.TestCase):
                          'B': ['P', 'Q'],
                          'C': ['', 'Q'],
                          'D': ['P', 'Q']},
+                    'Ready to Go Yard':
+                        {'A': ['', ''],
+                         'B': ['', ''],
+                         'C': ['', ''],
+                         'D': ['', '']}}
+        self.assertEqual(expected, board_dictionary)  # expected, actual
+
+    def test_player_c_token_p_goes_to_board_space_53_not_into_A_home_rows(self):
+        # Test the function returns correct list of all the tokens
+        players = ['A', 'B', 'C', 'D']
+        turns = [('C', 6), ('C', 5), ('C', 5), ('C', 5), ('C', 5), ('C', 5)]
+        game = LudoGame()
+        token_space = game.play_game(players, turns)
+        expected = ['H', 'H', 'H', 'H', '53', 'H', 'H', 'H']
+        self.assertEqual(expected, token_space)  # expected, actual
+
+        # Test the board spaces and home/ready-to-go yards
+        board_dictionary = game.get_entire_board_dictionary()
+        expected = {52: 'pC',
+                    'Home Yard':
+                        {'A': ['P', 'Q'],
+                         'B': ['P', 'Q'],
+                         'C': ['', 'Q'],
+                         'D': ['P', 'Q']},
+                    'Ready to Go Yard':
+                        {'A': ['', ''],
+                         'B': ['', ''],
+                         'C': ['', ''],
+                         'D': ['', '']}}
+        self.assertEqual(expected, board_dictionary)  # expected, actual
+
+    def test_player_c_token_p_goes_to_board_space_2(self):
+        # Test the function returns correct list of all the tokens
+        players = ['A', 'B', 'C', 'D']
+        turns = [('C', 6), ('C', 5), ('C', 5), ('C', 5), ('C', 5), ('C', 5), ('C', 5)]
+        game = LudoGame()
+        token_space = game.play_game(players, turns)
+        expected = ['H', 'H', 'H', 'H', '2', 'H', 'H', 'H']
+        self.assertEqual(expected, token_space)  # expected, actual
+
+        # Test the board spaces and home/ready-to-go yards
+        board_dictionary = game.get_entire_board_dictionary()
+        expected = {1: 'pC',
+                    'Home Yard':
+                        {'A': ['P', 'Q'],
+                         'B': ['P', 'Q'],
+                         'C': ['', 'Q'],
+                         'D': ['P', 'Q']},
+                    'Ready to Go Yard':
+                        {'A': ['', ''],
+                         'B': ['', ''],
+                         'C': ['', ''],
+                         'D': ['', '']}}
+        self.assertEqual(expected, board_dictionary)  # expected, actual
+
+    def test_player_c_token_p_goes_to_board_space_C2(self):
+        # Test the function returns correct list of all the tokens
+        players = ['A', 'B', 'C', 'D']
+        turns = [('C', 6), ('C', 5), ('C', 5), ('C', 5), ('C', 5), ('C', 5), ('C', 5),
+                 ('C', 5), ('C', 5), ('C', 5), ('C', 5), ('C', 1)]
+        game = LudoGame()
+        token_space = game.play_game(players, turns)
+        expected = ['H', 'H', 'H', 'H', 'C1', 'H', 'H', 'H']
+        self.assertEqual(expected, token_space)  # expected, actual
+
+        # Test the board spaces and home/ready-to-go yards
+        board_dictionary = game.get_entire_board_dictionary()
+        expected = {58: [[0, 'pC']],
+                    'Home Yard':
+                        {'A': ['P', 'Q'],
+                         'B': ['P', 'Q'],
+                         'C': ['', 'Q'],
+                         'D': ['P', 'Q']},
+                    'Ready to Go Yard':
+                        {'A': ['', ''],
+                         'B': ['', ''],
+                         'C': ['', ''],
+                         'D': ['', '']}}
+        self.assertEqual(expected, board_dictionary)  # expected, actual
+
+    def test_player_d_token_p_goes_to_board_space_47(self):
+        # Test the function returns correct list of all the tokens
+        players = ['A', 'B', 'C', 'D']
+        turns = [('D', 6), ('D', 5)]
+        game = LudoGame()
+        token_space = game.play_game(players, turns)
+        expected = ['H', 'H', 'H', 'H', 'H', 'H', '47', 'H']
+        self.assertEqual(expected, token_space)  # expected, actual
+
+        # Test the board spaces and home/ready-to-go yards
+        board_dictionary = game.get_entire_board_dictionary()
+        expected = {46: 'pD',
+                    'Home Yard':
+                        {'A': ['P', 'Q'],
+                         'B': ['P', 'Q'],
+                         'C': ['P', 'Q'],
+                         'D': ['', 'Q']},
+                    'Ready to Go Yard':
+                        {'A': ['', ''],
+                         'B': ['', ''],
+                         'C': ['', ''],
+                         'D': ['', '']}}
+        self.assertEqual(expected, board_dictionary)  # expected, actual
+
+    def test_player_d_token_p_goes_to_board_space_52_not_into_others_home_rows(self):
+        # Test the function returns correct list of all the tokens
+        players = ['A', 'B', 'C', 'D']
+        turns = [('D', 6), ('D', 5), ('D', 5)]
+        game = LudoGame()
+        token_space = game.play_game(players, turns)
+        expected = ['H', 'H', 'H', 'H', 'H', 'H', '52', 'H']
+        self.assertEqual(expected, token_space)  # expected, actual
+
+        # Test the board spaces and home/ready-to-go yards
+        board_dictionary = game.get_entire_board_dictionary()
+        expected = {51: 'pD',
+                    'Home Yard':
+                        {'A': ['P', 'Q'],
+                         'B': ['P', 'Q'],
+                         'C': ['P', 'Q'],
+                         'D': ['', 'Q']},
+                    'Ready to Go Yard':
+                        {'A': ['', ''],
+                         'B': ['', ''],
+                         'C': ['', ''],
+                         'D': ['', '']}}
+        self.assertEqual(expected, board_dictionary)  # expected, actual
+
+    def test_player_d_token_p_goes_to_board_space_1(self):
+        # Test the function returns correct list of all the tokens
+        players = ['A', 'B', 'C', 'D']
+        turns = [('D', 6), ('D', 5), ('D', 5), ('D', 5)]
+        game = LudoGame()
+        token_space = game.play_game(players, turns)
+        expected = ['H', 'H', 'H', 'H', 'H', 'H', '1', 'H']
+        self.assertEqual(expected, token_space)  # expected, actual
+
+        # Test the board spaces and home/ready-to-go yards
+        board_dictionary = game.get_entire_board_dictionary()
+        expected = {0: 'pD',
+                    'Home Yard':
+                        {'A': ['P', 'Q'],
+                         'B': ['P', 'Q'],
+                         'C': ['P', 'Q'],
+                         'D': ['', 'Q']},
+                    'Ready to Go Yard':
+                        {'A': ['', ''],
+                         'B': ['', ''],
+                         'C': ['', ''],
+                         'D': ['', '']}}
+        self.assertEqual(expected, board_dictionary)  # expected, actual
+
+    def test_player_d_token_p_goes_to_board_space_1(self):
+        # Test the function returns correct list of all the tokens
+        players = ['A', 'B', 'C', 'D']
+        turns = [('D', 6), ('D', 5), ('D', 5), ('D', 5)]
+        game = LudoGame()
+        token_space = game.play_game(players, turns)
+        expected = ['H', 'H', 'H', 'H', 'H', 'H', '1', 'H']
+        self.assertEqual(expected, token_space)  # expected, actual
+
+        # Test the board spaces and home/ready-to-go yards
+        board_dictionary = game.get_entire_board_dictionary()
+        expected = {0: 'pD',
+                    'Home Yard':
+                        {'A': ['P', 'Q'],
+                         'B': ['P', 'Q'],
+                         'C': ['P', 'Q'],
+                         'D': ['', 'Q']},
                     'Ready to Go Yard':
                         {'A': ['', ''],
                          'B': ['', ''],

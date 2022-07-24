@@ -789,14 +789,16 @@ class Player:
         player_char = self.get_position()
         player_start = self.get_start_space()
         player_end = self.get_end_space()
+        in_home_row = total_steps > 50
+        converted_total_steps_to_board_space = total_steps
 
         if player_char != 'A':
             steps_that_will_pass_space_56 = 56 - player_start + 2
             if steps_that_will_pass_space_56 > total_steps > 0:
-                total_steps += (player_start - 1)
+                converted_total_steps_to_board_space += (player_start - 1)
             elif total_steps >= steps_that_will_pass_space_56:
                 if total_steps < 51:
-                    total_steps = total_steps - steps_that_will_pass_space_56 + 1
+                    converted_total_steps_to_board_space = total_steps - steps_that_will_pass_space_56 + 1
 
         if total_steps == -1:
             return "H"
@@ -805,16 +807,16 @@ class Player:
             return "R"
 
         elif total_steps <= 50:
-            return str(total_steps)
+            return str(converted_total_steps_to_board_space)
 
         elif 57 > total_steps > 50:
-            return str(self._position) + str(total_steps - 50)
+            return str(self._position) + str(converted_total_steps_to_board_space - 50)
 
-        elif total_steps == 57:
+        elif converted_total_steps_to_board_space == 57:
             return "E"
 
-        elif total_steps > 57:
-            return self.get_space_name(total_steps - (total_steps - 57))    # recursion if over step limit
+        elif converted_total_steps_to_board_space > 57:
+            return self.get_space_name(converted_total_steps_to_board_space - (converted_total_steps_to_board_space - 57))    # recursion if over step limit
 
     def get_start_space(self):
         return self._start_space
