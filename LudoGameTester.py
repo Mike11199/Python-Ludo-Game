@@ -107,6 +107,31 @@ class TestLinkedList(unittest.TestCase):
                          'D': ['', '']}}
         self.assertEqual(expected, board_dictionary)  # expected, actual
 
+    def test_player_A_moves_token_p_to_board_space_A1_from_50(self):
+        # Test the function returns correct list of all the tokens
+        players = ['A', 'B', 'C', 'D']
+        turns = [('A', 6), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5),
+                 ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 1)]
+        game = LudoGame()
+        token_space = game.play_game(players, turns)
+        expected = ['A1', 'H', 'H', 'H', 'H', 'H', 'H', 'H']
+        self.assertEqual(expected, token_space)  # expected, actual
+
+        # Test the board spaces and home/ready-to-go yards
+        board_dictionary = game.get_entire_board_dictionary()
+        expected = {56: [[0, 'pA']],
+                    'Home Yard':
+                        {'A': ['', 'Q'],
+                         'B': ['P', 'Q'],
+                         'C': ['P', 'Q'],
+                         'D': ['P', 'Q']},
+                    'Ready to Go Yard':
+                        {'A': ['', ''],
+                         'B': ['', ''],
+                         'C': ['', ''],
+                         'D': ['', '']}}
+        self.assertEqual(expected, board_dictionary)  # expected, actual
+
     def test_player_A_moves_token_P_to_home_row_A5(self):
         # Test the function returns correct list of all the tokens
         players = ['A', 'B', 'C', 'D']
@@ -119,7 +144,7 @@ class TestLinkedList(unittest.TestCase):
 
         # Test the board spaces and home/ready-to-go yards
         board_dictionary = game.get_entire_board_dictionary()
-        expected = {56: [4, 'pA'],
+        expected = {56: [[4, 'pA']],
                     'Home Yard':
                         {'A': ['', 'Q'],
                          'B': ['P', 'Q'],
@@ -144,7 +169,7 @@ class TestLinkedList(unittest.TestCase):
 
         # Test the board spaces and home/ready-to-go yards
         board_dictionary = game.get_entire_board_dictionary()
-        expected = {56: [5, 'pA'],
+        expected = {56: [[5, 'pA']],
                     'Home Yard':
                         {'A': ['', 'Q'],
                          'B': ['P', 'Q'],
@@ -157,7 +182,7 @@ class TestLinkedList(unittest.TestCase):
                          'D': ['', '']}}
         self.assertEqual(expected, board_dictionary)  # expected, actual
 
-    def test_player_A_moves_token_p_between_home_rows_to_end_row(self):
+    def test_player_A_moves_token_p_between_home_rows_to_end_space(self):
         # Test the function returns correct list of all the tokens
         players = ['A', 'B', 'C', 'D']
         turns = [('A', 6), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5),
@@ -169,7 +194,32 @@ class TestLinkedList(unittest.TestCase):
 
         # Test the board spaces and home/ready-to-go yards
         board_dictionary = game.get_entire_board_dictionary()
-        expected = {56: [6, 'pA'],
+        expected = {56: [[6, 'pA']],
+                    'Home Yard':
+                        {'A': ['', 'Q'],
+                         'B': ['P', 'Q'],
+                         'C': ['P', 'Q'],
+                         'D': ['P', 'Q']},
+                    'Ready to Go Yard':
+                        {'A': ['', ''],
+                         'B': ['', ''],
+                         'C': ['', ''],
+                         'D': ['', '']}}
+        self.assertEqual(expected, board_dictionary)  # expected, actual
+
+    def test_backtracking_in_home_rows_for_player_A_if_exact_roll_to_enter_end_space_not_rolled(self):
+        # Test the function returns correct list of all the tokens
+        players = ['A', 'B', 'C', 'D']
+        turns = [('A', 6), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5),
+                 ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 4), ('A', 4)]  # last move is one over end space
+        game = LudoGame()
+        token_space = game.play_game(players, turns)
+        expected = ['A6', 'H', 'H', 'H', 'H', 'H', 'H', 'H']
+        self.assertEqual(expected, token_space)  # expected, actual
+
+        # Test the board spaces and home/ready-to-go yards
+        board_dictionary = game.get_entire_board_dictionary()
+        expected = {56: [[5, 'pA']],
                     'Home Yard':
                         {'A': ['', 'Q'],
                          'B': ['P', 'Q'],
@@ -194,7 +244,7 @@ class TestLinkedList(unittest.TestCase):
 
         # Test the board spaces and home/ready-to-go yards
         board_dictionary = game.get_entire_board_dictionary()
-        expected = {56: [6, 'pA'],
+        expected = {56: [[6, 'pA']],
                     'Home Yard':
                         {'A': ['', 'Q'],
                          'B': ['P', 'Q'],
@@ -220,7 +270,7 @@ class TestLinkedList(unittest.TestCase):
 
         # Test the board spaces and home/ready-to-go yards
         board_dictionary = game.get_entire_board_dictionary()
-        expected = {56: [6, 'pA'],
+        expected = {56: [[6, 'pA']],
                     'Home Yard':
                         {'A': ['', ''],
                          'B': ['P', 'Q'],
@@ -247,7 +297,7 @@ class TestLinkedList(unittest.TestCase):
 
         # Test the board spaces and home/ready-to-go yards
         board_dictionary = game.get_entire_board_dictionary()
-        expected = {56: [6, 'pAqA'],
+        expected = {56: [[6, 'pAqA']],
                     'Home Yard':
                         {'A': ['', ''],
                          'B': ['P', 'Q'],
@@ -274,7 +324,7 @@ class TestLinkedList(unittest.TestCase):
 
         # Test the board spaces and home/ready-to-go yards
         board_dictionary = game.get_entire_board_dictionary()
-        expected = {56: [6, 'pAqA'],
+        expected = {56: [[6, 'pAqA']],
                     'Home Yard':
                         {'A': ['', ''],
                          'B': ['P', 'Q'],
@@ -301,7 +351,7 @@ class TestLinkedList(unittest.TestCase):
 
         # Test the board spaces and home/ready-to-go yards
         board_dictionary = game.get_entire_board_dictionary()
-        expected = {56: [6, 'pAqA'],
+        expected = {56: [[6, 'pAqA']],
                     'Home Yard':
                         {'A': ['', ''],
                          'B': ['', 'Q'],
@@ -329,7 +379,7 @@ class TestLinkedList(unittest.TestCase):
 
         # Test the board spaces and home/ready-to-go yards
         board_dictionary = game.get_entire_board_dictionary()
-        expected = {56: [6, 'pAqA'],
+        expected = {56: [[6, 'pAqA']],
                     'Home Yard':
                         {'A': ['', ''],
                          'B': ['P', ''],
@@ -406,7 +456,7 @@ class TestLinkedList(unittest.TestCase):
 
         # Test the board spaces and home/ready-to-go yards
         board_dictionary = game.get_entire_board_dictionary()
-        expected = {56: [6, 'pAqA'],
+        expected = {56: [[6, 'pAqA']],
                     'Home Yard':
                         {'A': ['', ''],
                          'B': ['P', 'Q'],
@@ -436,7 +486,7 @@ class TestLinkedList(unittest.TestCase):
 
         # Test the board spaces and home/ready-to-go yards
         board_dictionary = game.get_entire_board_dictionary()
-        expected = {56: [6, 'pAqA'],
+        expected = {56: [[6, 'pAqA']],
                     'Home Yard':
                         {'A': ['', ''],
                          'B': ['P', 'Q'],
@@ -487,31 +537,6 @@ class TestLinkedList(unittest.TestCase):
         self.assertEqual(False, player_C.get_completed())  # expected, actual
         player_D = game.get_player_by_position('D')
         self.assertEqual(False, player_D.get_completed())  # expected, actual
-
-    def test_backtracking_in_home_rows_for_player_A_if_exact_roll_to_enter_end_space_not_rolled(self):
-        # Test the function returns correct list of all the tokens
-        players = ['A', 'B', 'C', 'D']
-        turns = [('A', 6), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5),
-                 ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 4), ('A', 4)]  # last move is one over end space
-        game = LudoGame()
-        token_space = game.play_game(players, turns)
-        expected = ['A6', 'H', 'H', 'H', 'H', 'H', 'H', 'H']
-        self.assertEqual(expected, token_space)  # expected, actual
-
-        # Test the board spaces and home/ready-to-go yards
-        board_dictionary = game.get_entire_board_dictionary()
-        expected = {56: [5, 'pA'],
-                    'Home Yard':
-                        {'A': ['', 'Q'],
-                         'B': ['P', 'Q'],
-                         'C': ['P', 'Q'],
-                         'D': ['P', 'Q']},
-                    'Ready to Go Yard':
-                        {'A': ['', ''],
-                         'B': ['', ''],
-                         'C': ['', ''],
-                         'D': ['', '']}}
-        self.assertEqual(expected, board_dictionary)  # expected, actual
 
     def test_player_b_token_p_goes_past_board_space_56_as_end_space_is_8_to_board_space_3(self):
         # Test the function returns correct list of all the tokens
@@ -575,7 +600,7 @@ class TestLinkedList(unittest.TestCase):
 
         # Test the board spaces and home/ready-to-go yards
         board_dictionary = game.get_entire_board_dictionary()
-        expected = {57: [1, 'pB'],
+        expected = {57: [[1, 'pB']],
                     'Home Yard':
                         {'A': ['P', 'Q'],
                          'B': ['', 'Q'],
@@ -600,7 +625,7 @@ class TestLinkedList(unittest.TestCase):
 
         # Test the board spaces and home/ready-to-go yards
         board_dictionary = game.get_entire_board_dictionary()
-        expected = {57: [2, 'pB'],
+        expected = {57: [[2, 'pB']],
                     'Home Yard':
                         {'A': ['P', 'Q'],
                          'B': ['', 'Q'],
@@ -625,7 +650,7 @@ class TestLinkedList(unittest.TestCase):
 
         # Test the board spaces and home/ready-to-go yards
         board_dictionary = game.get_entire_board_dictionary()
-        expected = {57: [6, 'pB'],
+        expected = {57: [[6, 'pB']],
                     'Home Yard':
                         {'A': ['P', 'Q'],
                          'B': ['', 'Q'],
@@ -650,7 +675,7 @@ class TestLinkedList(unittest.TestCase):
 
         # Test the board spaces and home/ready-to-go yards
         board_dictionary = game.get_entire_board_dictionary()
-        expected = {57: [6, 'pB'],
+        expected = {57: [[6, 'pB']],
                     'Home Yard':
                         {'A': ['P', 'Q'],
                          'B': ['', 'Q'],

@@ -363,6 +363,7 @@ class LudoGame:
         It also tests to make sure      
         """
         home_row_spaces = None
+        steps_to_backtrack = None
 
         if player_pos_char != 'A':
             if future_board_pos > player_end_space:                      # test if position over end space
@@ -373,11 +374,11 @@ class LudoGame:
                         home_row_spaces = home_row_spaces - steps_to_backtrack
 
         if player_pos_char == 'A':
-            if future_board_pos > player_end_space:                      # test if position over end space
-                home_row_spaces = future_board_pos - player_end_space - 1
+            if future_board_pos > player_end_space:                          # test if position over end space
+                home_row_spaces = future_board_pos - player_end_space - 1    # spaces in array: 0 = A1
                 if home_row_spaces > 6:
                     steps_to_backtrack = home_row_spaces - 6
-                    home_row_spaces = home_row_spaces - steps_to_backtrack
+                    home_row_spaces = home_row_spaces - steps_to_backtrack - 1
 
         """
         This determines whether the future board position has an opponent's token in it already to be kicked out.
@@ -414,10 +415,9 @@ class LudoGame:
                 else:
                     self.set_board_pos_space("", step_count + player_start_space - 1, None, 1)  # norm clear prev board
 
-        # def move_to_home_rows(self, player_pos_char, player_obj, token_name, home_row_spaces):
         if home_row_spaces is not None:
             self.move_to_home_rows(player_pos_char, player_obj, token, home_row_spaces, future_board_pos, token_string,
-                                   step_count, board_steps)
+                                   step_count, board_steps, steps_to_backtrack)
         else:
             self.set_board_pos_space(token_string, future_board_pos)        # set board position (not +1 as array)
 
@@ -466,7 +466,7 @@ class LudoGame:
             self.set_board_pos_space("", future_board_pos, None, 1)                     # clear B tokens from board
 
     def move_to_home_rows(self, p_char, player_obj, token_name, home_row_spaces, future_board_pos_space, token_string,
-                          step_count, board_steps):
+                          step_count, board_steps, steps_to_backtrack):
 
         # home_rows_player_A = pos 56
         # home_rows_player_B = pos 57
@@ -477,25 +477,44 @@ class LudoGame:
         if step_count > 50:
             past_home_space_pos = step_count - 51
 
+        if steps_to_backtrack is not None:
+            steps_to_backtrack += 1
+
         for token in token_name:
+
             if p_char == "A":
-                player_obj.set_token_steps(token, future_board_pos_space)
-                self.set_board_pos_space(token_string, 56, home_row_spaces)     # set new board pos
+                self.set_board_pos_space(token_string, 56, home_row_spaces)  # set new board pos
+                if steps_to_backtrack is not None:
+                    player_obj.set_token_steps(token, future_board_pos_space - steps_to_backtrack)  # player obj steps
+                else:
+                    player_obj.set_token_steps(token, future_board_pos_space)  # set player obj steps - no backtracking
                 if step_count > 50:
                     self.set_board_pos_space("", 56, past_home_space_pos, 1)  # clear old board pos
+
             elif p_char == "B":
-                player_obj.set_token_steps(token, step_count + board_steps)
-                self.set_board_pos_space(token_string, 57, home_row_spaces)     # set new board pos
+                self.set_board_pos_space(token_string, 57, home_row_spaces)  # set new board pos
+                if steps_to_backtrack is not None:
+                    player_obj.set_token_steps(token, future_board_pos_space - steps_to_backtrack)  # player obj steps
+                else:
+                    player_obj.set_token_steps(token, step_count + board_steps)
                 if step_count > 50:
                     self.set_board_pos_space("", 57, past_home_space_pos, 1)  # clear old board pos
+
             elif p_char == "C":
-                player_obj.set_token_steps(token, step_count + board_steps)
-                self.set_board_pos_space(token_string, 58, home_row_spaces)     # set new board pos
+                self.set_board_pos_space(token_string, 58, home_row_spaces)  # set new board pos
+                if steps_to_backtrack is not None:
+                    player_obj.set_token_steps(token, future_board_pos_space - steps_to_backtrack)  # player obj steps
+                else:
+                    player_obj.set_token_steps(token, step_count + board_steps)
                 if step_count > 50:
                     self.set_board_pos_space("", 58, past_home_space_pos, 1)  # clear old board pos
+
             elif p_char == "D":
-                player_obj.set_token_steps(token, step_count + board_steps)
-                self.set_board_pos_space("", 59, home_row_spaces)     # set new board pos
+                self.set_board_pos_space("", 59, home_row_spaces)  # set new board pos
+                if steps_to_backtrack is not None:
+                    player_obj.set_token_steps(token, future_board_pos_space - steps_to_backtrack)  # player obj steps
+                else:
+                    player_obj.set_token_steps(token, step_count + board_steps)
                 if step_count > 50:
                     self.set_board_pos_space(token_string, 59, past_home_space_pos, 1)  # clear old board pos
 
@@ -554,24 +573,36 @@ class LudoGame:
                     board_dictionary.update({index: item})
 
             elif index == 56:
+                home_list = []
                 for index2, item2 in enumerate(item):
+                    home_board = [index2, item2]
                     if item2 != "":
-                        board_dictionary.update({index: [index2, item2]})
+                        home_list.append(home_board)
+                        board_dictionary.update({index: home_list})
 
             elif index == 57:
+                home_list = []
                 for index2, item2 in enumerate(item):
+                    home_board = [index2, item2]
                     if item2 != "":
-                        board_dictionary.update({index: [index2, item2]})
+                        home_list.append(home_board)
+                        board_dictionary.update({index: home_list})
 
             elif index == 58:
+                home_list = []
                 for index2, item2 in enumerate(item):
+                    home_board = [index2, item2]
                     if item2 != "":
-                        board_dictionary.update({index: [index2, item2]})
+                        home_list.append(home_board)
+                        board_dictionary.update({index: home_list})
 
             elif index == 59:
+                home_list = []
                 for index2, item2 in enumerate(item):
+                    home_board = [index2, item2]
                     if item2 != "":
-                        board_dictionary.update({index: [index2, item2]})
+                        home_list.append(home_board)
+                        board_dictionary.update({index: home_list})
 
             elif index == 60:
                 board_dictionary.update({"Home Yard": item})
