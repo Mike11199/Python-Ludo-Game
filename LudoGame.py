@@ -440,17 +440,18 @@ class LudoGame:
 
         if len(future_board_pos_space) == 2:                                                   # e.g - pA, pB, qA
             opponent_token = future_board_pos_space[0].upper()
-            opponent_player_obj.set_token_steps(opponent_token, "H")             # kick back to home yard
-            self.set_board_pos_space(opponent_token, 60, opponent_pos_letter)            # set board pos in home yard
+            opponent_player_obj.set_token_steps(opponent_token, "H")              # kick back to home yard player obj
+            self.set_board_pos_space(opponent_token, 60, opponent_pos_letter)     # set board pos in home yard on board
+            self.set_board_pos_space("", future_board_pos, None, 1)               # clear B tokens from board
+
         else:                                                                            # e.g - pAqA or pBqB
             opponent_token_p = future_board_pos_space[0].upper()
             opponent_token_q = future_board_pos_space[2].upper()
-            opponent_player_obj.set_token_steps(opponent_token_p, "H")           # kick back to home yard
-            opponent_player_obj.set_token_steps(opponent_token_q, "H")           # kick back to home yard
-            self.set_board_pos_space(opponent_token_p, 60, opponent_pos_letter)          # set board pos in home yard
-            self.set_board_pos_space(opponent_token_q, 60, opponent_pos_letter)          # set board pos in home yard
-
-        self.set_board_pos_space("", future_board_pos)          # clear opponent token or tokens from board space
+            opponent_player_obj.set_token_steps(opponent_token_p, "H")                  # kick back to home yard
+            opponent_player_obj.set_token_steps(opponent_token_q, "H")                  # kick back to home yard
+            self.set_board_pos_space(opponent_token_p, 60, opponent_pos_letter)         # set board pos in home yard
+            self.set_board_pos_space(opponent_token_q, 60, opponent_pos_letter)         # set board pos in home yard
+            self.set_board_pos_space("", future_board_pos, None, 1)                     # clear B tokens from board
 
     def move_to_home_rows(self, p_char, player_obj, token_name, home_row_spaces, future_board_pos_space, token_string,
                           step_count):
@@ -559,6 +560,12 @@ class LudoGame:
                 for index2, item2 in enumerate(item):
                     if item2 != "":
                         board_dictionary.update({index: [index2, item2]})
+
+            elif index == 60:
+                board_dictionary.update({"Home Yard": item})
+
+            elif index == 61:
+                board_dictionary.update({"Ready to Go Yard": item})
 
         return board_dictionary
 
