@@ -14,12 +14,15 @@ from LudoGame import LudoGame
 
 class TestLinkedList(unittest.TestCase):
 
-    def test_token_player_A_move_P_twice(self):
+    def test_player_A_moves_P_token_twice(self):
         players = ['A', 'B']
         turns = [('A', 6), ('A', 4)]
         game = LudoGame()
         token_space = game.play_game(players, turns)
         self.assertEqual(['4', 'H', 'H', 'H'], token_space)
+
+        board_dictionary = game.get_entire_board_dictionary()
+        self.assertEqual({3: 'pA'}, board_dictionary)  # expected, actual
 
     def test_token_player_A_move_all_out_of_home_rows(self):
         players = ['A', 'B']
@@ -138,17 +141,29 @@ class TestLinkedList(unittest.TestCase):
         board_dictionary = game.get_entire_board_dictionary()
         self.assertEqual({56: [6, 'pAqA']}, board_dictionary)  # expected, actual
 
-    def test_Player_A_creating_a_stacked_token(self):
-        players = ['A', 'B', 'C', 'D']
-        turns = [('A', 6), ('A', 5), ('A', 6), ('A', 5), ('A', 5), ('A', 5), ('A', 5)]
+    def test_player_a_creating_a_stacked_token(self):
+        players = ['A', 'B']
+        turns = [('A', 6), ('A', 5), ('A', 6), ('A', 5)]
         game = LudoGame()
         token_space = game.play_game(players, turns)
 
-        expected = ['E', 'E', 'H', 'R', 'H', 'H', 'H', 'H']
+        expected = ['5', '5', 'H', 'H']
         self.assertEqual(expected, token_space)  # expected, actual
 
         board_dictionary = game.get_entire_board_dictionary()
-        self.assertEqual({56: [6, 'pAqA']}, board_dictionary)  # expected, actual
+        self.assertEqual({4: 'pAqA'}, board_dictionary)  # expected, actual
+
+    def test_player_a_creating_a_stacked_token_and_moving_it(self):
+        players = ['A', 'B']
+        turns = [('A', 6), ('A', 5), ('A', 6), ('A', 5), ('A', 3)]
+        game = LudoGame()
+        token_space = game.play_game(players, turns)
+
+        expected = ['8', '8', 'H', 'H']
+        self.assertEqual(expected, token_space)  # expected, actual
+
+        board_dictionary = game.get_entire_board_dictionary()
+        self.assertEqual({7: 'pAqA'}, board_dictionary)  # expected, actual
 
 
 """Statement so that file only runs main if ran as a script, not when imported."""

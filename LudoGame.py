@@ -521,7 +521,10 @@ class LudoGame:
             else:
                 self._board[board_pos][board_pos2] += token
         else:
-            self._board[board_pos] = token
+            if clear is not None:
+                self._board[board_pos] = token
+            else:
+                self._board[board_pos] += token
 
     def get_board_position_space(self, board_pos):
         return self._board[board_pos]
