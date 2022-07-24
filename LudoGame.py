@@ -509,7 +509,7 @@ class LudoGame:
             elif p_char == "B":
                 self.set_board_pos_space(token_string, 57, home_row_spaces)  # set new board pos
                 if steps_to_backtrack is not None:
-                    player_obj.set_token_steps(token,  step_count + board_steps - steps_to_backtrack) # player obj steps
+                    player_obj.set_token_steps(token,  step_count + board_steps - steps_to_backtrack)  # player steps
                 else:
                     player_obj.set_token_steps(token, step_count + board_steps)
                 if step_count > 50:
@@ -518,20 +518,20 @@ class LudoGame:
             elif p_char == "C":
                 self.set_board_pos_space(token_string, 58, home_row_spaces)  # set new board pos
                 if steps_to_backtrack is not None:
-                    player_obj.set_token_steps(token,  step_count + board_steps - steps_to_backtrack) # player obj steps
+                    player_obj.set_token_steps(token,  step_count + board_steps - steps_to_backtrack)  # player steps
                 else:
                     player_obj.set_token_steps(token, step_count + board_steps)
                 if step_count > 50:
                     self.set_board_pos_space("", 58, past_home_space_pos, 1)  # clear old board pos
 
             elif p_char == "D":
-                self.set_board_pos_space("", 59, home_row_spaces)  # set new board pos
+                self.set_board_pos_space(token_string, 59, home_row_spaces)  # set new board pos
                 if steps_to_backtrack is not None:
-                    player_obj.set_token_steps(token,  step_count + board_steps - steps_to_backtrack) # player obj steps
+                    player_obj.set_token_steps(token,  step_count + board_steps - steps_to_backtrack)  # player steps
                 else:
                     player_obj.set_token_steps(token, step_count + board_steps)
                 if step_count > 50:
-                    self.set_board_pos_space(token_string, 59, past_home_space_pos, 1)  # clear old board pos
+                    self.set_board_pos_space("", 59, past_home_space_pos, 1)  # clear old board pos
 
     def set_board_pos_space(self, token, board_pos, board_pos2=None, clear=None):
 

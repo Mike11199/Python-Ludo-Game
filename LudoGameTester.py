@@ -1001,7 +1001,7 @@ class TestLinkedList(unittest.TestCase):
                          'D': ['', '']}}
         self.assertEqual(expected, board_dictionary)  # expected, actual
 
-    def test_moving__player_D_token_p_to_end_space(self):
+    def test_moving_player_D_token_p_to_end_space(self):
         # Test the function returns correct list of all the tokens
         players = ['A', 'B', 'C', 'D']
         turns = [('D', 6), ('D', 5), ('D', 5), ('D', 5), ('D', 5), ('D', 5), ('D', 5),
@@ -1014,11 +1014,37 @@ class TestLinkedList(unittest.TestCase):
 
         # Test the board spaces and home/ready-to-go yards
         board_dictionary = game.get_entire_board_dictionary()
-        expected = {56: [[6, 'pD']],
+        expected = {59: [[6, 'pD']],
                     'Home Yard':
-                        {'A': ['', ''],
+                        {'A': ['P', 'Q'],
                          'B': ['P', 'Q'],
                          'C': ['P', 'Q'],
+                         'D': ['', 'Q']},
+                    'Ready to Go Yard':
+                        {'A': ['', ''],
+                         'B': ['', ''],
+                         'C': ['', ''],
+                         'D': ['', '']}}
+        self.assertEqual(expected, board_dictionary)  # expected, actual
+
+    def test_moving_player_C_token_p_to_end_space(self):
+        # Test the function returns correct list of all the tokens
+        players = ['A', 'B', 'C', 'D']
+        turns = [('C', 6), ('C', 5), ('C', 5), ('C', 5), ('C', 5), ('C', 5), ('C', 5),
+                 ('C', 5), ('C', 5), ('C', 5), ('C', 5), ('C', 5), ('C', 1), ('C', 1)]  # enC space here
+
+        game = LudoGame()
+        token_space = game.play_game(players, turns)
+        expected = ['H', 'H', 'H', 'H', 'E', 'H', 'H', 'H']
+        self.assertEqual(expected, token_space)  # expected, actual
+
+        # Test the board spaces and home/ready-to-go yards
+        board_dictionary = game.get_entire_board_dictionary()
+        expected = {58: [[6, 'pC']],
+                    'Home Yard':
+                        {'A': ['P', 'Q'],
+                         'B': ['P', 'Q'],
+                         'C': ['', 'Q'],
                          'D': ['P', 'Q']},
                     'Ready to Go Yard':
                         {'A': ['', ''],
