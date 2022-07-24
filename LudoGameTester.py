@@ -460,6 +460,24 @@ class TestLinkedList(unittest.TestCase):
         player_D = game.get_player_by_position('D')
         self.assertEqual(False, player_D.get_completed())    # expected, actual
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     def test_game_returns_string_matching_the_readme_project_sample_output(self):
         # Test the function returns correct list of all the tokens
         players = ['A', 'B']
@@ -491,6 +509,31 @@ class TestLinkedList(unittest.TestCase):
         self.assertEqual(False, player_C.get_completed())  # expected, actual
         player_D = game.get_player_by_position('D')
         self.assertEqual(False, player_D.get_completed())  # expected, actual
+
+    def test_backtracking_in_home_rows_for_player_A_if_exact_roll_to_enter_end_space_not_rolled(self):
+        # Test the function returns correct list of all the tokens
+        players = ['A', 'B', 'C', 'D']
+        turns = [('A', 6), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5),
+                 ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 4), ('A', 4)]  # last move is one over end space
+        game = LudoGame()
+        token_space = game.play_game(players, turns)
+        expected = ['A6', 'H', 'H', 'H', 'H', 'H', 'H', 'H']
+        self.assertEqual(expected, token_space)  # expected, actual
+
+        # Test the board spaces and home/ready-to-go yards
+        board_dictionary = game.get_entire_board_dictionary()
+        expected = {56: [5, 'pA'],
+                    'Home Yard':
+                        {'A': ['', 'Q'],
+                         'B': ['P', 'Q'],
+                         'C': ['P', 'Q'],
+                         'D': ['P', 'Q']},
+                    'Ready to Go Yard':
+                        {'A': ['', ''],
+                         'B': ['', ''],
+                         'C': ['', ''],
+                         'D': ['', '']}}
+        self.assertEqual(expected, board_dictionary)  # expected, actual
 
 
 """Statement so that file only runs main if ran as a script, not when imported."""
