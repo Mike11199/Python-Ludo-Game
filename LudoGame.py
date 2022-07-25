@@ -252,7 +252,7 @@ class LudoGame:
         if p_steps == 0:
             future_board_space_p = self.get_board_position_space(player_start_space + current_roll)
         elif p_steps != -1:
-            future_pos_p = p_steps + current_roll
+            future_pos_p = p_steps + current_roll + player_start_space - 1
             if future_pos_p > 56:                   # test or else will return list of home rows when s/b blank
                 future_board_space_p = ""
             else:
@@ -262,11 +262,11 @@ class LudoGame:
         if q_steps == 0:
             future_board_space_q = self.get_board_position_space(player_start_space + current_roll)
         elif q_steps != -1:
-            future_pos_q = q_steps + current_roll
+            future_pos_q = q_steps + current_roll + player_start_space - 1
             if future_pos_q > 56:                   # test or else will return list of home rows when s/b blank
                 future_board_space_q = ""
             else:
-                future_board_space_p = self.get_board_position_space(future_pos_q)
+                future_board_space_q = self.get_board_position_space(future_pos_q)
 
         # if future board pos token p is not empty, and it contains an enemy token
         if future_board_space_p is not None and future_board_space_p != "":

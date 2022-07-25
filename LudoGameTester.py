@@ -1130,7 +1130,6 @@ class TestLinkedList(unittest.TestCase):
     Received this test from professor Zhang on request via Teams as gradescope test receiving strange error.
     """
     def test_tokens_will_be_kicked_back_to_home_yard_by_opponent_with_priority_rule_3(self):
-        # TODO:  Fix as failing
         game = LudoGame()
         players = ['A', 'B']
         turns = [('A', 6), ('A', 5), ('A', 6), ('A', 4), ('B', 6), ('B', 6), ('B', 2), ('B', 2), ('A', 6), ('A', 6)]
@@ -1140,8 +1139,7 @@ class TestLinkedList(unittest.TestCase):
                                    f'{current_tokens_space}')
         player_B = game.get_player_by_position('B')
         ret = player_B.get_token_p_step_count()
-        print("stop here")
-        # self.assertAlmostEqual(ret, -1, msg=f'\nExpected value for player B: -1 \nValue from your code: {ret}')
+        self.assertAlmostEqual(ret, -1, msg=f'\nExpected value for player B: -1 \nValue from your code: {ret}')
 
 
 """Statement so that file only runs main if ran as a script, not when imported."""
