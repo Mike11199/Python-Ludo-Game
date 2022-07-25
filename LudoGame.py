@@ -43,9 +43,13 @@ class LudoGame:
 
     def sort_turns(self, turns_list):
         """
+        THIS FUNCTION IS NOT USED ANY LONGER AS IT WAS CAUSING GRADESCOPE TESTS TO FAIL.  THE GRADESCOPE TEST USE THE
+        MOVES IN ORDER OF THE LIST, NOT THE ORDER PROPOSED HERE.
+
         This sorts the list of tuples that represents the move order of the game.  A goes first, then B, then C, then D.
 
-        If anyone rolls a 6, that player can go again (one time).
+        If anyone rolls a 6, that player can go again (one time, not again if they roll two sixes in a row).
+
         :param turns_list:
         :return:
         """
