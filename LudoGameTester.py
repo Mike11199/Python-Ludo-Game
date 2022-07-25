@@ -433,10 +433,10 @@ class TestLinkedList(unittest.TestCase):
     def test_player_B_token_p_on_board_being_kicked_off_to_home_yard_and_both_A_tokens_moving_to_end(self):
         # Test the function returns correct list of all the tokens
         players = ['A', 'B', 'C', 'D']
-        turns = [('A', 6), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5),
-                 ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 1), ('A', 1),  # end space here
-                 ('A', 6), ('A', 6), ('A', 6), ('A', 6), ('A', 6), ('A', 6), ('A', 6),  # these lines moves token q
-                 ('A', 6), ('A', 6), ('A', 6), ('A', 3), ('B', 6), ('B', 6), ('B', 6)]  # move Bs to ready, one on board
+        turns = [('A', 6), ('A', 5), ('B', 6), ('B', 6), ('A', 5), ('B', 6), ('A', 5), ('A', 5), ('A', 5), ('A', 5),
+                 ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 1), ('A', 1), ('A', 6), ('A', 6), ('A', 6),
+                 ('A', 6), ('A', 6), ('A', 6), ('A', 6), ('A', 6), ('A', 6), ('A', 6), ('A', 3)]
+
         game = LudoGame()
         token_space = game.play_game(players, turns)
 

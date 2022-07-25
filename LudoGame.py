@@ -128,10 +128,11 @@ class LudoGame:
     def play_game(self, players_list, turns_list):
 
         self.create_player_list(players_list)            # add player objects to LudoGame object as an array of objects
-        sorted_turns_list = self.sort_turns(turns_list)  # sort turns.  A, B, C, D unless roll 6 then player goes twice
-        self._turns = sorted_turns_list
+        # sorted_turns_list = self.sort_turns(turns_list)  # sort turns.  A, B, C, D unless roll 6 then player goes twice
+        # self._turns = sorted_turns_list
+        self._turns = turns_list
 
-        for turn in sorted_turns_list:
+        for turn in turns_list:
             current_player = self.get_player_by_position(turn[0])
             current_roll = turn[1]
             current_player_char = turn[0]
