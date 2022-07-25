@@ -128,7 +128,7 @@ class LudoGame:
     def play_game(self, players_list, turns_list):
 
         self.create_player_list(players_list)            # add player objects to LudoGame object as an array of objects
-        # sorted_turns_list = self.sort_turns(turns_list)  # sort turns.  A, B, C, D unless roll 6 then player goes twice
+        # sorted_turns_list = self.sort_turns(turns_list)  # sort turns.  A, B, C, D unless roll 6 then player twice
         # self._turns = sorted_turns_list
         self._turns = turns_list
 
@@ -512,40 +512,43 @@ class LudoGame:
         for token in token_name:
 
             if p_char == "A":
+                if step_count > 50:
+                    self.set_board_pos_space("", 56, past_home_space_pos, 1)  # clear old board pos
                 self.set_board_pos_space(token_string, 56, home_row_spaces)  # set new board pos
                 if steps_to_backtrack is not None:
                     player_obj.set_token_steps(token, future_board_pos_space - steps_to_backtrack)  # player obj steps
                 else:
                     player_obj.set_token_steps(token, future_board_pos_space)  # set player obj steps - no backtracking
-                if step_count > 50:
-                    self.set_board_pos_space("", 56, past_home_space_pos, 1)  # clear old board pos
+
 
             elif p_char == "B":
+                if step_count > 50:
+                    self.set_board_pos_space("", 57, past_home_space_pos, 1)  # clear old board pos
                 self.set_board_pos_space(token_string, 57, home_row_spaces)  # set new board pos
                 if steps_to_backtrack is not None:
                     player_obj.set_token_steps(token,  step_count + board_steps - steps_to_backtrack)  # player steps
                 else:
                     player_obj.set_token_steps(token, step_count + board_steps)
-                if step_count > 50:
-                    self.set_board_pos_space("", 57, past_home_space_pos, 1)  # clear old board pos
 
             elif p_char == "C":
+                if step_count > 50:
+                    self.set_board_pos_space("", 58, past_home_space_pos, 1)  # clear old board pos
                 self.set_board_pos_space(token_string, 58, home_row_spaces)  # set new board pos
                 if steps_to_backtrack is not None:
                     player_obj.set_token_steps(token,  step_count + board_steps - steps_to_backtrack)  # player steps
                 else:
                     player_obj.set_token_steps(token, step_count + board_steps)
-                if step_count > 50:
-                    self.set_board_pos_space("", 58, past_home_space_pos, 1)  # clear old board pos
+
 
             elif p_char == "D":
+                if step_count > 50:
+                    self.set_board_pos_space("", 59, past_home_space_pos, 1)  # clear old board pos
                 self.set_board_pos_space(token_string, 59, home_row_spaces)  # set new board pos
                 if steps_to_backtrack is not None:
                     player_obj.set_token_steps(token,  step_count + board_steps - steps_to_backtrack)  # player steps
                 else:
                     player_obj.set_token_steps(token, step_count + board_steps)
-                if step_count > 50:
-                    self.set_board_pos_space("", 59, past_home_space_pos, 1)  # clear old board pos
+
 
     def set_board_pos_space(self, token, board_pos, board_pos2=None, clear=None):
 

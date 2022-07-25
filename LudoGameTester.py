@@ -1066,7 +1066,7 @@ class TestLinkedList(unittest.TestCase):
 
         # Test the board spaces and home/ready-to-go yards
         board_dictionary = game.get_entire_board_dictionary()
-        expected = {59: [[6, 'pD']],
+        expected = {59: [[5, 'pD']],
                     'Home Yard':
                         {'A': ['P', 'Q'],
                          'B': ['P', 'Q'],
