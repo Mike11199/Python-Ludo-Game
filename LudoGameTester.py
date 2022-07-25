@@ -579,7 +579,6 @@ class TestLinkedList(unittest.TestCase):
                  ('B', 5), ('B', 5), ('B', 5)]  
         game = LudoGame()
         token_space = game.play_game(players, turns)
-        #expected = ['H', 'H', '45', 'H', 'H', 'H', 'H', 'H']
         expected = ['H', 'H', '3', 'H', 'H', 'H', 'H', 'H']
         self.assertEqual(expected, token_space)  # expected, actual
 
