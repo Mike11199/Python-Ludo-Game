@@ -1108,12 +1108,12 @@ class TestLinkedList(unittest.TestCase):
                  ('A', 6), ('A', 6), ('A', 6), ('A', 2)]  # TODO: fix error with last A,2 move should stack
         game = LudoGame()
         token_space = game.play_game(players, turns)
-        expected = ['E', 'E', 'H', 'H', 'H', 'H', 'H', 'H']
+        expected = ['A6', 'A6', 'H', 'H', 'H', 'H', 'H', 'H']
         self.assertEqual(expected, token_space)  # expected, actual
 
         # Test the board spaces and home/ready-to-go yards
         board_dictionary = game.get_entire_board_dictionary()
-        expected = {56: [[6, 'pAqA']],
+        expected = {56: [[5, 'pAqA']],
                     'Home Yard':
                         {'A': ['', ''],
                          'B': ['P', 'Q'],

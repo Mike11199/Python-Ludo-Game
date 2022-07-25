@@ -520,7 +520,6 @@ class LudoGame:
                 else:
                     player_obj.set_token_steps(token, future_board_pos_space)  # set player obj steps - no backtracking
 
-
             elif p_char == "B":
                 if step_count > 50:
                     self.set_board_pos_space("", 57, past_home_space_pos, 1)  # clear old board pos
