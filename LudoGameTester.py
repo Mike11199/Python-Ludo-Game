@@ -1099,6 +1099,49 @@ class TestLinkedList(unittest.TestCase):
         steps = player_A.get_token_q_step_count()
         self.assertAlmostEqual(steps, -1, msg=f'\nExpected value: -1 \nValue from your code: {steps}')
 
+    def test_player_A_tokens_get_stacked_in_home_end_spaces(self):
+        # Test the function returns correct list of all the tokens
+        players = ['A', 'B', 'C', 'D']
+        turns = [('A', 6), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5),
+                 ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 1),   # 1 before end space here
+                 ('A', 6), ('A', 6), ('A', 6), ('A', 6), ('A', 6), ('A', 6), ('A', 6),  # these lines moves token q
+                 ('A', 6), ('A', 6), ('A', 6), ('A', 2)]  # TODO: fix error with last A,2 move should stack
+        game = LudoGame()
+        token_space = game.play_game(players, turns)
+        expected = ['E', 'E', 'H', 'H', 'H', 'H', 'H', 'H']
+        self.assertEqual(expected, token_space)  # expected, actual
+
+        # Test the board spaces and home/ready-to-go yards
+        board_dictionary = game.get_entire_board_dictionary()
+        expected = {56: [[6, 'pAqA']],
+                    'Home Yard':
+                        {'A': ['', ''],
+                         'B': ['P', 'Q'],
+                         'C': ['P', 'Q'],
+                         'D': ['P', 'Q']},
+                    'Ready to Go Yard':
+                        {'A': ['', ''],
+                         'B': ['', ''],
+                         'C': ['', ''],
+                         'D': ['', '']}}
+        self.assertEqual(expected, board_dictionary)  # expected, actual
+
+    """
+    Received this test from professor Zhang on request via Teams as gradescope test receiving strange error.
+    """
+    def test_tokens_will_be_kicked_back_to_home_yard_by_opponent_with_priority_rule_3(self):
+        # TODO:  Fix as failing
+        game = LudoGame()
+        players = ['A', 'B']
+        turns = [('A', 6), ('A', 5), ('A', 6), ('A', 4), ('B', 6), ('B', 6), ('B', 2), ('B', 2), ('A', 6), ('A', 6)]
+        current_tokens_space = game.play_game(players, turns)
+        self.assertAlmostEqual(current_tokens_space, ['5', '16', 'H', 'H'],
+                               msg=f'\nExpected value: [\'5\', \'16\', \'H\', \'H\'] \nValue from your code: '
+                                   f'{current_tokens_space}')
+        player_B = game.get_player_by_position('B')
+        ret = player_B.get_token_p_step_count()
+        self.assertAlmostEqual(ret, -1, msg=f'\nExpected value for player B: -1 \nValue from your code: {ret}')
+
 
 """Statement so that file only runs main if ran as a script, not when imported."""
 if __name__ == '__main__':
