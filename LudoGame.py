@@ -173,8 +173,8 @@ class LudoGame:
             if q_actual_board_space == '0':
                 q_actual_board_space = "R"
 
-            token_space.append(p_actual_board_space)
-            token_space.append(q_actual_board_space)
+            token_space.append(str(p_actual_board_space))
+            token_space.append(str(q_actual_board_space))
 
         return token_space
 

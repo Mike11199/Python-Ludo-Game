@@ -1082,13 +1082,14 @@ class TestLinkedList(unittest.TestCase):
     """
     Received this test from professor Zhang on request via Teams.
     """
-    def test_we_can_create_players_list_and_each_players_attributes_are_initilized_correctly(self):
+    def test_we_can_create_players_list_and_each_players_attributes_are_initialized_correctly(self):
         game = LudoGame()
         players = ['A', 'B']
         turns = []
         current_tokens_space = game.play_game(players, turns)
         self.assertAlmostEqual(current_tokens_space, ['H', 'H', 'H', 'H'],
-                               msg=f'\nExpected value for current_tokens_space: [\'H\', \'H\', \'H\', \'H\'] \nValue from your code: {current_tokens_space}')
+        msg=f'\nExpected value for current_tokens_space: [\'H\', \'H\', \'H\', \'H\'] \nValue from your code: '
+            f'{current_tokens_space}')
         player_A = game.get_player_by_position('A')
         finished = player_A.get_completed()
         self.assertAlmostEqual(finished, False, msg=f'\nExpected value: False \nValue from your code: {finished}')
@@ -1097,8 +1098,6 @@ class TestLinkedList(unittest.TestCase):
         self.assertAlmostEqual(steps, -1, msg=f'\nExpected value: -1 \nValue from your code: {steps}')
         steps = player_A.get_token_q_step_count()
         self.assertAlmostEqual(steps, -1, msg=f'\nExpected value: -1 \nValue from your code: {steps}')
-
-
 
 
 """Statement so that file only runs main if ran as a script, not when imported."""
