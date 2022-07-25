@@ -846,6 +846,9 @@ class Player:
 
 
 def main():
+    """
+    Ignore this section.  This was before test cases were added.
+    """
     players = ['A', 'B']
     readme_turns = [('A', 6), ('A', 4), ('A', 5), ('A', 4), ('B', 6), ('B', 4), ('B', 1), ('B', 2), ('A', 6), ('A', 4),
                     ('A', 6), ('A', 3), ('A', 5), ('A', 1), ('A', 5), ('A', 4)]
@@ -864,7 +867,12 @@ def main():
 
     # print_walk_around_board()
 
+
 def print_walk_around_board():
+    """
+    Ignore.  Used by the main function to repeatedly print the board spaces to test token movement, when the program
+    was first being developed.
+    """
     game = LudoGame()
     # game.print_game_board()
     # game._board[28] = "A_P"
@@ -885,7 +893,7 @@ def print_walk_around_board():
         time.sleep(.5)
         game.print_game_board()
 
-    #print(game._board[5])
+    # print(game._board[5])
     game.print_game_board()
 
     game._board[55] = ""
