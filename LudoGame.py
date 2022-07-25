@@ -160,6 +160,19 @@ class LudoGame:
 
             p_actual_board_space = player.get_actual_board_spaces_for_tokens("P")
             q_actual_board_space = player.get_actual_board_spaces_for_tokens("Q")
+
+            if p_actual_board_space == '-1':
+                p_actual_board_space = "H"
+
+            if q_actual_board_space == '-1':
+                q_actual_board_space = "H"
+
+            if p_actual_board_space == '0':
+                p_actual_board_space = "R"
+
+            if q_actual_board_space == '0':
+                q_actual_board_space = "R"
+
             token_space.append(p_actual_board_space)
             token_space.append(q_actual_board_space)
 
