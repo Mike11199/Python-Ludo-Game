@@ -1104,7 +1104,7 @@ class TestLinkedList(unittest.TestCase):
         turns = [('A', 6), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5),
                  ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 1),   # 1 before end space here
                  ('A', 6), ('A', 6), ('A', 6), ('A', 6), ('A', 6), ('A', 6), ('A', 6),  # these lines moves token q
-                 ('A', 6), ('A', 6), ('A', 6), ('A', 2)]  # TODO: fix error with last A,2 move should stack
+                 ('A', 6), ('A', 6), ('A', 6), ('A', 2)]
         game = LudoGame()
         token_space = game.play_game(players, turns)
         expected = ['A6', 'A6', 'H', 'H', 'H', 'H', 'H', 'H']
@@ -1139,6 +1139,86 @@ class TestLinkedList(unittest.TestCase):
         player_B = game.get_player_by_position('B')
         ret = player_B.get_token_p_step_count()
         self.assertAlmostEqual(ret, -1, msg=f'\nExpected value for player B: -1 \nValue from your code: {ret}')
+
+    def test_case_from_canvas_word_doc_1(self):
+        game = LudoGame()
+        players = ['A', 'B', 'C', 'D']
+        turns = [('A', 6), ('A', 1), ('B', 6), ('B', 2), ('C', 6), ('C', 3), ('D', 6), ('D', 4)]
+        current_tokens_space = game.play_game(players, turns)
+        expected = ['1', 'H', '16', 'H', '31', 'H', '46', 'H']
+        self.assertEqual(expected, current_tokens_space)  # expected, actual
+
+    def test_case_from_canvas_word_doc_2(self):
+        game = LudoGame()
+        players = ['A', 'B']
+        turns = [('B', 6),('B', 4),('B', 5),('B', 4),('B', 4),('B', 3),('B', 4),('B', 5),('B', 4),('B', 4),('B', 5),
+                 ('B', 4),('B', 1),('B', 4),('B', 5),('B', 5),('B', 5)]
+        current_tokens_space = game.play_game(players, turns)
+        expected = ['H', 'H', 'B6', 'H']
+        self.assertEqual(expected, current_tokens_space)  # expected, actual
+
+    def test_case_from_canvas_word_doc_3(self):
+        game = LudoGame()
+        players = ['A','B']
+        turns = [('A', 6), ('A', 3), ('A', 6), ('A', 3), ('A', 6), ('A', 5), ('A', 4), ('A', 6), ('A', 4)]
+        current_tokens_space = game.play_game(players, turns)
+        expected = ['28', '28', 'H', 'H']
+        self.assertEqual(expected, current_tokens_space)  # expected, actual
+
+    def test_case_from_canvas_word_doc_4(self):
+        game = LudoGame()
+        players = ['A','C']
+        turns = [('A', 6),('A', 4),('A', 4),('A', 4),('A', 5),('A', 6),('A', 4),('A', 6),('A', 4),('A', 6),('A', 6),
+                 ('A', 6),('A', 4),('A', 6),('A', 6),('C', 6),('C', 4)]
+        current_tokens_space = game.play_game(players, turns)
+        expected = ['33', 'H', '32', 'H']
+        self.assertEqual(expected, current_tokens_space)  # expected, actual
+
+    def test_case_from_canvas_word_doc_5(self):
+        game = LudoGame()
+        players = ['A','B']
+        turns = [('A', 6), ('A', 4), ('A', 4), ('A', 4), ('A', 5), ('A', 6), ('A', 4), ('A', 6), ('A', 4), ('A', 6),
+                 ('A', 6), ('A', 4), ('A', 6), ('A', 4), ('A', 6), ('A', 6), ('A', 4), ('A', 6), ('A', 6), ('A', 4),
+                 ('A', 6), ('A', 6), ('A', 4), ('A', 6), ('A', 3), ('A', 6), ('B', 6), ('A', 6)]
+        current_tokens_space = game.play_game(players, turns)
+        expected = ['E', 'E', 'R', 'H']
+        self.assertEqual(expected, current_tokens_space)  # expected, actual
+
+    def test_case_from_canvas_word_doc_6(self):
+        game = LudoGame()
+        players = ['A','B']
+        turns = [('A', 6), ('A', 2), ('A', 2), ('A', 6), ('A', 4), ('A', 5), ('A', 4), ('A', 4), ('B', 6), ('B', 3),
+                 ('A', 6), ('A', 3)]
+        current_tokens_space = game.play_game(players, turns)
+        expected = ['3', 'H', '17', 'H']
+        self.assertEqual(expected, current_tokens_space)  # expected, actual
+
+    def test_case_from_canvas_word_doc_7(self):
+        game = LudoGame()
+        players = ['A', 'B']
+        turns = [('A', 6), ('A', 4), ('A', 5), ('A', 4), ('A', 4), ('A', 4), ('A', 5), ('A', 4), ('A', 5), ('A', 5),
+                 ('A', 3), ('A', 5), ('A', 3), ('A', 6)]
+        current_tokens_space = game.play_game(players, turns)
+        expected = ['A1', 'R', 'H', 'H']
+        self.assertEqual(expected, current_tokens_space)  # expected, actual
+
+    def test_case_from_canvas_word_doc_8(self):
+        game = LudoGame()
+        players = ['A', 'B']
+        turns = [('A', 6), ('A', 4), ('A', 5), ('A', 4), ('A', 4), ('A', 4), ('A', 5), ('A', 4), ('A', 5), ('A', 5),
+                 ('A', 3), ('A', 5), ('A', 5), ('A', 6), ('A', 5), ('A', 5), ('A', 3), ('B', 6), ('B', 3), ('A', 4)]
+        current_tokens_space = game.play_game(players, turns)
+        expected = ['E', '13', '17', 'H']
+        self.assertEqual(expected, current_tokens_space)  # expected, actual
+
+    def test_case_from_canvas_word_doc_9(self):
+        game = LudoGame()
+        players = ['A', 'B']
+        turns = [('A', 6), ('A', 4), ('A', 4), ('A', 4), ('A', 6), ('A', 5), ('A', 3), ('B', 6), ('B', 2), ('A', 2),
+                 ('A', 4)]
+        current_tokens_space = game.play_game(players, turns)
+        expected = ['16', '10', 'H', 'H']
+        self.assertEqual(expected, current_tokens_space)  # expected, actual
 
 
 """Statement so that file only runs main if ran as a script, not when imported."""
