@@ -733,7 +733,6 @@ class LudoGame:
                  'C': ['', ''],
                  'D': ['', '']}}
 
-
         """
         board_dictionary = {}
         for index, item in enumerate(self._board):
@@ -783,6 +782,14 @@ class LudoGame:
         return board_dictionary
 
     def create_player_list(self, players_list):
+        """
+        Used to initialize players on the board game object.  Creates a new player object for each string in the list,
+        appends it to the player list on the board game object, and sets the tokens in the home yard spaces before they
+        have entered the board.
+
+        :param players_list: list of players (A, B, C, D).
+        :return: none.
+        """
 
         for position in players_list:
             self._players.append(Player(position))
@@ -792,7 +799,7 @@ class LudoGame:
     def print_game_board(self):
         """
         This prints the array and 4 sub-arrays to the console in a form that actually looks like a Ludo board.
-        :return:
+        :return: none
         """
 
         print("Home Yard Spaces:  " + str(self._board[60]))
@@ -895,7 +902,7 @@ class Player:
             self._start_space = 43
             self._end_space = 36
 
-        self._token_positions_as_steps = {"P": "H", "Q": "H"}        # H = home yard; R = ready to go; these are as steps taken
+        self._token_positions_as_steps = {"P": "H", "Q": "H"}  # H = home yard; R = ready to go;these are as steps taken
         self._game_status = False
         self._token_positions_as_exact_board_space = {"P": "-1", "Q": "-1"}
 
@@ -903,6 +910,19 @@ class Player:
         return self._position
 
     def set_token_steps(self, token, pos):
+        """
+        This sets the token positions as steps for the player, using the player _token_positions_as_steps data member
+        which keeps track of how many steps each token as moved on the board.  These steps will be differ from
+        the actual board space numbers, as each player has different start/end locations.
+
+        e.g. -
+
+        {"P": "23", "Q": "10"}
+
+        :param token: The token whose step count should be updated.
+        :param pos:   The position the token will be updated with.
+        :return:      None.
+        """
         self._token_positions_as_steps[token] = pos
 
     def set_actual_board_spaces_for_tokens(self, token, pos):
