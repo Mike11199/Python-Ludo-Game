@@ -226,6 +226,19 @@ class LudoGame:
         return token_space
 
     def update_players_actual_token_spaces_board_positions_not_steps(self):
+        """
+        This function takes no parameters, and is used to update each player object's data member which keeps track of
+        its tokens positions as spaces on the board.  This is separate from the player's objects data member which
+        tracks how many steps each token has taken.
+
+        This will loop through each player in the board game class, obtain its step count, and based on that step count
+        and each unique player, will update that player's board steps.
+
+        For example, player B's 5 steps will lead to that token being updated to space 19, while for Player C, 5 steps
+        will update the space as 33.
+
+        :return:     A list of strings containing all the board spaces of each player's tokens.
+        """
         token_space = []
         for player in self._players:
 
@@ -243,7 +256,7 @@ class LudoGame:
     def choose_token_algorithm(self, player, current_roll, p_steps, q_steps):
         """
         This function implements the algorithm to decide which of the player's two tokens they should move.  Or if the
-        tokens will be stacked.
+        tokens will be stacked.  Steps the algorithm takes are broken out in further doc strings below.
 
         :param player:          Player object by reference
         :param current_roll:    Int of how far each token could move based on the die roll
@@ -262,7 +275,7 @@ class LudoGame:
                         return ["P", "Q"]                # tokens are stacked so move both
 
         """
-        Step 1) If the die roll is 6, if a token is in the home yard, return that token to move.  Checks P first so if
+        Step 1/2) If the die roll is 6, if a token is in the home yard, return that token to move.  Checks P first so if
         both are in the home yard, P will be chosen as the token.
 
         Also incorporates step 2 of the algorithm.  If one token is in the home square, and the other is exactly 6 steps
@@ -327,9 +340,11 @@ class LudoGame:
                 if q_steps != 57:
                     return ["Q"]
 
-        """Step 4)  Move the token that is furthest from the finishing square.  Don't move if at end step.
-           Also don't move token if it's at the home yard as if it were possible to move, would have been handled
-           above at the if dice roll 6 conditional lines."""
+        """
+        Step 4)  Move the token that is furthest from the finishing square.  Don't move if at end step.
+        Also don't move token if it's at the home yard as if it were possible to move, would have been handled
+        above at the if dice roll 6 conditional lines.
+        """
         if p_steps > q_steps:
             if q_steps != -1:       # debugger breaks if attempting one line:  if q_steps != -1 and q_steps != 57
                 if q_steps != 57:
@@ -370,7 +385,7 @@ class LudoGame:
 
 
         :param token_name:      list token name ['P'], ['Q'], or [P, Q] if choose_token algorithm decides tokens are
-                                stacked
+                                stacked.
 
         :param board_steps:     steps the token will take across the board as an int
         :return:                none
@@ -508,7 +523,6 @@ class LudoGame:
                 player_obj.set_token_steps(token, player_steps_to_add)
 
     def kick_out_opponent_tokens(self, future_board_pos, future_board_pos_space):
-
         """
         This function kicks an opponent's token or stacked tokens back to that opponent's home yard, or position -1.
 
@@ -543,7 +557,29 @@ class LudoGame:
 
     def move_to_home_rows(self, p_char, player_obj, token_name, home_row_spaces, future_board_pos_space, token_string,
                           step_count, board_steps, steps_to_backtrack):
+        """
+        This function
 
+
+
+
+
+
+
+
+
+
+        :param p_char:
+        :param player_obj:
+        :param token_name:
+        :param home_row_spaces:
+        :param future_board_pos_space:
+        :param token_string:
+        :param step_count:
+        :param board_steps:
+        :param steps_to_backtrack:
+        :return:
+        """
         # home_rows_player_A = pos 56
         # home_rows_player_B = pos 57
         # home_rows_player_C = pos 58
@@ -585,7 +621,6 @@ class LudoGame:
                 else:
                     player_obj.set_token_steps(token, step_count + board_steps)
 
-
             elif p_char == "D":
                 if step_count > 50:
                     self.set_board_pos_space("", 59, past_home_space_pos, 1)  # clear old board pos
@@ -594,7 +629,6 @@ class LudoGame:
                     player_obj.set_token_steps(token,  step_count + board_steps - steps_to_backtrack)  # player steps
                 else:
                     player_obj.set_token_steps(token, step_count + board_steps)
-
 
     def set_board_pos_space(self, token, board_pos, board_pos2=None, clear=None):
 
