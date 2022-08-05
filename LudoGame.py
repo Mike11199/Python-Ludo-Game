@@ -881,6 +881,13 @@ class LudoGame:
 
 
 class Player:
+    """
+    Represents a player object.  Such as player A, B, C, or D.
+
+    This contains data members keeping track of each player's unique start/end space.  Steps each of their two tokens
+    P or Q have taken, as well as each tokens actual location on the board, whether in a sub array:  home yard, the
+    ready to go yard, home spaces, or end space.
+    """
 
     def __init__(self, position):
 
@@ -907,6 +914,10 @@ class Player:
         self._token_positions_as_exact_board_space = {"P": "-1", "Q": "-1"}
 
     def get_position(self):                                 # e.g- "A", "B", "C", or "D"
+        """
+        Return what position the player is.  e.g- will return "A" for player A, or "B" for player B.
+        :return:    data member of position
+        """
         return self._position
 
     def set_token_steps(self, token, pos):
@@ -915,9 +926,7 @@ class Player:
         which keeps track of how many steps each token as moved on the board.  These steps will be differ from
         the actual board space numbers, as each player has different start/end locations.
 
-        e.g. -
-
-        {"P": "23", "Q": "10"}
+        e.g. -  {"P": "23", "Q": "10"}
 
         :param token: The token whose step count should be updated.
         :param pos:   The position the token will be updated with.
@@ -926,9 +935,21 @@ class Player:
         self._token_positions_as_steps[token] = pos
 
     def set_actual_board_spaces_for_tokens(self, token, pos):
+        """
+        Sets actual board spaces for each token in the player's data variable.  E.G - this will be E if at end space,
+        while the token steps would show 57.
+        :param token: what token to update
+        :param pos: the board space to update token dict with
+        :return:    none
+        """
         self._token_positions_as_exact_board_space[token] = pos
 
     def get_actual_board_spaces_for_tokens(self, token):
+        """
+        Return actual board space for token P or Q.
+        :param token: string indicating if token P or Q is being queried.
+        :return:
+        """
         return self._token_positions_as_exact_board_space[token]
 
     def set_player_status_as_completed_if_finished(self):
@@ -944,6 +965,10 @@ class Player:
         return self._game_status
 
     def get_token_p_step_count(self):                        # H = -1, R = 0, s/b no more than 57
+        """
+        Return steps player has taken on the board for token P.  Decreased if player backtracks or kicked to home row.
+        :return: steps as int
+        """
         steps = self._token_positions_as_steps["P"]
         if steps == "H":
             return -1
@@ -952,6 +977,10 @@ class Player:
         return steps
 
     def get_token_q_step_count(self):                            # H = -1, R = 0, s/b no more than 57
+        """
+        Return steps player has taken on the board for token Q.  Decreased if player backtracks or kicked to home row.
+        :return: steps as int
+        """
         steps = self._token_positions_as_steps["Q"]
         if steps == "H":
             return -1
@@ -960,6 +989,19 @@ class Player:
         return steps
 
     def get_space_name(self, total_steps):
+        """
+        This function is used on a player object to determine where a token will be on the board based on the
+        number of steps it has taken.
+
+        Each player has a unique start and end position, and unique array for home spaces before the end space, so this
+        function has to make use of the player's data member variable, and whether it is player "A", "B", "C", or "D",
+        to return the correct space. name.
+
+        :param total_steps: steps taken as int
+        :return: string with the board space.  This could be space "2", "H", "R", "A5", "D1", "E".  For example.  51
+        would return "A1" or "B1".  57 would return "E".  25 would return different spaces for player "A" and player
+        "B".
+        """
 
         player_char = self.get_position()
         player_start = self.get_start_space()
@@ -994,9 +1036,15 @@ class Player:
             return self.get_space_name(converted_total_steps_to_board_space - (converted_total_steps_to_board_space - 57))    # recursion if over step limit
 
     def get_start_space(self):
+        """
+        :return: int of start space
+        """
         return self._start_space
 
     def get_end_space(self):
+        """
+        :return: int of end space
+        """
         return self._end_space
 
 
