@@ -558,27 +558,35 @@ class LudoGame:
     def move_to_home_rows(self, p_char, player_obj, token_name, home_row_spaces, future_board_pos_space, token_string,
                           step_count, board_steps, steps_to_backtrack):
         """
-        This function
+        This function is called to move tokens to the home rows, which is the nested lists in spaces 56-59 of the board
+        array.  It updates clears the old board position (on the regular board or previous home space) which requires
+        special handling.
+
+        It also handles backtracking if the player did not roll the exact number needed to enter the home space.
+
+        Lastly, it updates the player objects step counts for each token.
 
 
+        :param p_char:      used to determine what Player (A,B,C,D) is.  This is needed as each player is unique, and
+                            enters different home rows of the board.
 
+        :param player_obj:  used to update player token step count.
 
+        :param token_name:  used to determine which token to update for the step count.
 
+        :param home_row_spaces: how many spaces in the home row (0 = space 1 for example as array)
 
+        :param future_board_pos_space:     future space on the board
 
+        :param token_string:    used to update board array with name of token as string
 
+        :param step_count:      previous step count
 
+        :param board_steps:     steps taken this time
 
-        :param p_char:
-        :param player_obj:
-        :param token_name:
-        :param home_row_spaces:
-        :param future_board_pos_space:
-        :param token_string:
-        :param step_count:
-        :param board_steps:
-        :param steps_to_backtrack:
-        :return:
+        :param steps_to_backtrack:  If this exists, function works differently.
+
+        :return:    Nothing.  updates board array and player token steps.
         """
         # home_rows_player_A = pos 56
         # home_rows_player_B = pos 57
@@ -631,8 +639,26 @@ class LudoGame:
                     player_obj.set_token_steps(token, step_count + board_steps)
 
     def set_board_pos_space(self, token, board_pos, board_pos2=None, clear=None):
+        """
+        This function updates the board array to reflect what token exists in it.
 
-        # board_pops2 = home rows before end space
+        First it checks if the position is 60 for the home yard rows (before it is on the board), or the ready to
+        go yard.  If so it updates these locations.
+
+        If the token is NOT in these two arrays, then it is actually on the board.  The function will clear the space
+        or add the token string to the space depending on if the "clear" flag is set.
+
+        Board_pos_2 is used to provide an extra array index for the home/ready to go yards.  This extra index is also
+        used for the nested list for each tokens "home spaces" array before the end space.
+
+
+        :param token:       string representing the token of the player, P or Q
+        :param board_pos:   first array index for the board position.  space 1  = 0
+        :param board_pos2:  second array index for board position (home/ready to go yards, or home spaces)
+        :param clear:       flag if position is being cleared, not added to
+        :return:            none
+        """
+        # home rows (before on board, must roll a six to exit)
         if board_pos == 60:
             if clear is not None:
                 if token == 'P':
@@ -646,6 +672,7 @@ class LudoGame:
                     self._board[board_pos][board_pos2][1] = "Q"
             return
 
+        # ready to go rows
         if board_pos == 61:
             if clear is not None:
                 if token == 'P':
@@ -671,12 +698,43 @@ class LudoGame:
                 self._board[board_pos] += token
 
     def get_board_position_space(self, board_pos):
+        """
+        Obtains what string is located in a board position space.  Used to determine if space is occupied by an enemy
+        token.
+        :param   board_pos: int
+        :return: none
+        """
         return self._board[board_pos]
 
     def get_entire_board(self):
+        """
+        :return: entire board data member
+        """
         return self._board
 
     def get_entire_board_dictionary(self):
+        """"
+        This function returns a dictionary showing only spaces that are occupied on the board array.  It shows ALL
+        spaces on the Home Yard and Ready to Go Yard.  It does this by looping through the board data member and
+        creating a dictionary.  This dictionary is used in test cases to ensure tokens are placed correctly on the
+        board.
+
+        EXAMPLE OUTPUT:
+
+        expected = {56: [[5, 'pAqA']],
+            'Home Yard':
+                {'A': ['', ''],
+                 'B': ['P', 'Q'],
+                 'C': ['P', 'Q'],
+                 'D': ['P', 'Q']},
+            'Ready to Go Yard':
+                {'A': ['', ''],
+                 'B': ['', ''],
+                 'C': ['', ''],
+                 'D': ['', '']}}
+
+
+        """
         board_dictionary = {}
         for index, item in enumerate(self._board):
 
