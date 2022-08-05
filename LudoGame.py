@@ -13,7 +13,17 @@ import time
 
 class LudoGame:
     """
-    This represents the Ludo game being currently played.  It contains an array which represents the board.
+    This represents the Ludo game being currently played.  It contains an array which represents the board.  This array
+    is created when the LudoGame object is initialized.
+
+    This array also contains spaces for the home rows for all players, the home yard, and ready positions, as nested
+    lists in board positions 56 to 61.  Each player has a unique series of home rows that only it can enter, that a
+    token can move into on its 51st step.  Players pass home rows of other players.
+
+    Players B,C, and D are special cases in that they start at positions other than 1 (B:15, C:29, D:53), and have to
+    circle around the board to enter their home space.  Different procedures take this into account, where the step
+    count of these players (other than A) will not reflect their actual position on the board (e.g- Player B's first
+    step onto the board is space 15 and enters the home row at space 8, while player B starts at 29 and enters at 22).
     """
 
     def __init__(self):
@@ -130,6 +140,26 @@ class LudoGame:
         return sorted_turns_list
 
     def play_game(self, players_list, turns_list):
+        """
+        This function takes a list of the players in the game e.g. - [A, B, C, D] and turns list with tuples of each
+        move e.g- [('A', 6), ('A', 4), ('A', 5)] and plays the Ludo Game, calling other procedures as necessary.
+
+        After this function finishes, the LudoGame object's state will reflect the result of the game, storing player
+        positions.  The player objects will also be updated with whether a player has won the game.
+
+        :param players_list:   List of players.  This is used to append player objects to the board game class.
+
+        :param turns_list:     This is a list of tuples, containing the player and turns for each move of the game.  It
+                               is assumed that this list contains the correct order of moves, taking into account if a
+                               player rolls a 6 and can go again.  This function previously sorted the turns to make
+                               sure of this, but the GradeScope tests do not take this into account.
+
+        :return:                A list of strings containing all the board spaces of each player's tokens.  For example,
+                                it might return [E, E, 20, 25] if both of Player A's tokens are in the end space, and if
+                                Player B's P token is in space 20, and Player B's Q token is in space 25.
+
+                                It uses the self.current_spaces_of_all_tokens() to return this list.
+        """
 
         self.create_player_list(players_list)            # add player objects to LudoGame object as an array of objects
         # sorted_turns_list = self.sort_turns(turns_list)  # sort turns.  A, B, C, D unless roll 6 then player twice
@@ -159,6 +189,19 @@ class LudoGame:
         return self.current_spaces_of_all_tokens()
 
     def current_spaces_of_all_tokens(self):
+        """
+        This function takes no parameters, is what the play_game() function of the LudoGame class returns.  It returns
+        a list of strings showing every player's location on the board.  It has to take into account that the step count
+        for each player is unique, due to each player's unique start and end space, which adds significant complexity
+        to this program.
+
+        It does this by looping through each player object that is listed in the board class and using that player's
+        get_actual_board_spaces_for_tokens() method.
+
+        :return:     A list of strings containing all the board spaces of each player's tokens.  For example,
+                     it might return [E, E, 20, 25] if both of Player A's tokens are in the end space, and if
+                     Player B's P token is in space 20, and Player B's Q token is in space 25.
+        """
         token_space = []
         for player in self._players:
 
