@@ -291,7 +291,6 @@ class LudoGame:
             if q_steps + current_roll == 57:
                 return ["Q"]
 
-
         """
         Step 3)  If one token can move and kick out an opponent token, then move that token.  Tests P first so 
         will choose P if both tokens can kick out an opponent's token.
@@ -452,23 +451,25 @@ class LudoGame:
         It also tests to make sure      
         """
         home_row_spaces = None
-        steps_to_backtrack = None
+        backtracking = 0
         future_step_count = step_count + board_steps
 
         if player_pos_char != 'A':
             if future_board_pos > player_end_space:                                # test if position over end space
-                if future_board_pos <= player_start_space or future_step_count > 57:  # test if pos less than start
-                    home_row_spaces = future_board_pos - player_end_space - 1   # spaces in array: 0 = B1, C1, D1
+                if future_step_count > 57 or future_board_pos <= player_start_space:  # test if pos less than start
+                    home_row_spaces = future_step_count - 51    # spaces in array: 0 = B1, C1, D1
                     if home_row_spaces > 6:
-                        steps_to_backtrack = home_row_spaces - 6
-                        home_row_spaces = home_row_spaces - steps_to_backtrack - 1
+                        steps_over = home_row_spaces - 6
+                        home_row_spaces = 7 - steps_over - 1
+                        backtracking = steps_over
 
         if player_pos_char == 'A':
             if future_board_pos > player_end_space:                          # test if position over end space
                 home_row_spaces = future_board_pos - player_end_space - 1    # spaces in array: 0 = A1
                 if home_row_spaces > 6:
-                    steps_to_backtrack = home_row_spaces - 6
-                    home_row_spaces = home_row_spaces - steps_to_backtrack - 1
+                    steps_over = home_row_spaces - 6
+                    home_row_spaces = 7 - steps_over - 1
+                    backtracking = steps_over
 
         """
         This determines whether the future board position has an opponent's token in it already to be kicked out.
@@ -507,7 +508,7 @@ class LudoGame:
 
         if home_row_spaces is not None:
             self.move_to_home_rows(player_pos_char, player_obj, token, home_row_spaces, future_board_pos, token_string,
-                                   step_count, board_steps, steps_to_backtrack)
+                                   step_count, board_steps, backtracking)
         else:
             self.set_board_pos_space(token_string, future_board_pos)        # set board position (not +1 as array)
 
@@ -555,7 +556,7 @@ class LudoGame:
             self.set_board_pos_space("", future_board_pos, None, 1)                     # clear B tokens from board
 
     def move_to_home_rows(self, p_char, player_obj, token_name, home_row_spaces, future_board_pos_space, token_string,
-                          step_count, board_steps, steps_to_backtrack):
+                          step_count, board_steps, backtracking):
         """
         This function is called to move tokens to the home rows, which is the nested lists in spaces 56-59 of the board
         array.  It updates clears the old board position (on the regular board or previous home space) which requires
@@ -583,59 +584,67 @@ class LudoGame:
 
         :param board_steps:     steps taken this time
 
-        :param steps_to_backtrack:  If this exists, function works differently.
-
         :return:    Nothing.  updates board array and player token steps.
         """
-        # home_rows_player_A = pos 56
-        # home_rows_player_B = pos 57
-        # home_rows_player_C = pos 58
-        # home_rows_player_D = pos 59
+
+        # backtracking += 1
         future_board_pos_space += 1
 
         if step_count > 50:
             past_home_space_pos = step_count - 51
 
-        if steps_to_backtrack is not None:
-            steps_to_backtrack += 1
-
         for token in token_name:
+
+            if step_count <= 50:
+                actual_token_space = player_obj.get_actual_board_spaces_for_tokens(token_name)
+                actual_token_space = int(actual_token_space)
+                actual_token_space -= 1
 
             if p_char == "A":
                 if step_count > 50:
-                    self.set_board_pos_space("", 56, past_home_space_pos, 1)  # clear old board pos
-                self.set_board_pos_space(token_string, 56, home_row_spaces)  # set new board pos
-                if steps_to_backtrack is not None:
-                    player_obj.set_token_steps(token, future_board_pos_space - steps_to_backtrack)  # player obj steps
+                    self.set_board_pos_space("", 56, past_home_space_pos, 1)   # clear old board pos
                 else:
-                    player_obj.set_token_steps(token, future_board_pos_space)  # set player obj steps - no backtracking
+                    self.set_board_pos_space("", actual_token_space, None, 1)  # clear old board pos
+                self.set_board_pos_space(token_string, 56, home_row_spaces)    # set new board pos
+                if backtracking >= 1:
+                    player_obj.set_token_steps(token, 57 - backtracking)
+                else:
+                    player_obj.set_token_steps(token, step_count + board_steps)
 
             elif p_char == "B":
                 if step_count > 50:
-                    self.set_board_pos_space("", 57, past_home_space_pos, 1)  # clear old board pos
-                self.set_board_pos_space(token_string, 57, home_row_spaces)  # set new board pos
-                if steps_to_backtrack is not None:
-                    player_obj.set_token_steps(token,  step_count + board_steps - steps_to_backtrack)  # player steps
+                    self.set_board_pos_space("", 57, past_home_space_pos, 1)   # clear old board pos
+                else:
+                    self.set_board_pos_space("", actual_token_space, None, 1)  # clear old board pos
+                self.set_board_pos_space(token_string, 57, home_row_spaces)    # set new board pos
+                if backtracking >= 1:
+                    player_obj.set_token_steps(token, 57 - backtracking)
                 else:
                     player_obj.set_token_steps(token, step_count + board_steps)
 
             elif p_char == "C":
                 if step_count > 50:
-                    self.set_board_pos_space("", 58, past_home_space_pos, 1)  # clear old board pos
-                self.set_board_pos_space(token_string, 58, home_row_spaces)  # set new board pos
-                if steps_to_backtrack is not None:
-                    player_obj.set_token_steps(token,  step_count + board_steps - steps_to_backtrack)  # player steps
+                    self.set_board_pos_space("", 58, past_home_space_pos, 1)   # clear old board pos
+                else:
+                    self.set_board_pos_space("", actual_token_space, None, 1)  # clear old board pos
+                self.set_board_pos_space(token_string, 58, home_row_spaces)    # set new board pos
+                if backtracking >= 1:
+                    player_obj.set_token_steps(token, 57 - backtracking)
                 else:
                     player_obj.set_token_steps(token, step_count + board_steps)
 
             elif p_char == "D":
                 if step_count > 50:
-                    self.set_board_pos_space("", 59, past_home_space_pos, 1)  # clear old board pos
-                self.set_board_pos_space(token_string, 59, home_row_spaces)  # set new board pos
-                if steps_to_backtrack is not None:
-                    player_obj.set_token_steps(token,  step_count + board_steps - steps_to_backtrack)  # player steps
+                    self.set_board_pos_space("", 59, past_home_space_pos, 1)   # clear old board pos
+                else:
+                    self.set_board_pos_space("", actual_token_space, None, 1)  # clear old board pos
+                self.set_board_pos_space(token_string, 59, home_row_spaces)    # set new board pos
+                if backtracking >= 1:
+                    player_obj.set_token_steps(token, 57 - backtracking)
                 else:
                     player_obj.set_token_steps(token, step_count + board_steps)
+
+
 
     def set_board_pos_space(self, token, board_pos, board_pos2=None, clear=None):
         """
