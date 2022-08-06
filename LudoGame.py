@@ -283,15 +283,14 @@ class LudoGame:
         """
         if current_roll == 6:
             if p_steps == -1:
-                if q_steps + current_roll == 57:
-                    return ["Q"]
-                else:
-                    return ["P"]
-            elif q_steps == -1:
-                if p_steps + current_roll == 57:
-                    return ["P"]
-                else:
-                    return ["Q"]
+                return ["P"]
+            if q_steps == -1:
+                return ["Q"]
+            if p_steps + current_roll == 57:
+                return ["P"]
+            if q_steps + current_roll == 57:
+                return ["Q"]
+
 
         """
         Step 3)  If one token can move and kick out an opponent token, then move that token.  Tests P first so 
