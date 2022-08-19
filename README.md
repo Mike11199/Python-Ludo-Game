@@ -1,4 +1,4 @@
 # Python-Ludo-Game
 CS 162 Portfolio Project
 
-![image](https://user-images.githubusercontent.com/91037796/185715478-c644562d-467e-4d71-85d4-c15ed93ebb02.png)
+![image](https://user-images.githubusercontent.com/91037796/185715528-fcaf9a07-f0d8-488f-8e00-eb3a29e0b5d9.png)
