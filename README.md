@@ -2,7 +2,7 @@
 
 
 
--CS 162 Portfolio Project.  Allowed to be posted to a public GitHub repo per Syllabus.  This is an implementation of the game Ludo in Python, using object-oriented programming concepts taught in the course.  It contains two classes, 
+-CS 162 Portfolio Project.  Allowed to be posted to a public GitHub repo per Syllabus.  This is an implementation of the game Ludo in Python, using object-oriented programming concepts taught in the course.  It contains two classes with various functions, unit testing, and a main function that can be called with an array of players and array of tuples containg the game moves.
 
 
 <h2>Game Description</h2>
@@ -20,7 +20,7 @@
 
 <h2>Test Cases</h2>
 
--Added 54  test cases to this project, 9 provided by the instructors.  
+-Added 54 test cases to this project, 9 provided by the instructors.  
 
 -Tested board position in the board game array, and token steps, boad space variables in the player object data members.
 
