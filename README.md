@@ -31,3 +31,39 @@
 <img src="https://user-images.githubusercontent.com/91037796/185717670-5a8aee14-b0fe-4d06-9657-a6d5f88607fc.png" width=90% height=90%>
 
 
+
+-For example, here is a test case which check that
+
+
+```python
+    def test_player_B_token_p_on_board_being_kicked_off_to_home_yard_and_both_A_tokens_moving_to_end(self):
+        # Test the function returns correct list of all the tokens
+        players = ['A', 'B', 'C', 'D']
+        turns = [('A', 6), ('A', 5), ('B', 6), ('B', 6), ('A', 5), ('B', 6), ('A', 5), ('A', 5), ('A', 5), ('A', 5),
+                 ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 5), ('A', 1), ('A', 1), ('A', 6), ('A', 6), ('A', 6),
+                 ('A', 6), ('A', 6), ('A', 6), ('A', 6), ('A', 6), ('A', 6), ('A', 6), ('A', 3)]
+
+        game = LudoGame()
+        token_space = game.play_game(players, turns)
+
+        expected = ['E', 'E', 'H', 'R', 'H', 'H', 'H', 'H']         # third H is token P for B that got kicked to home
+        self.assertEqual(expected, token_space)  # expected, actual
+
+        # Test the board spaces and home/ready-to-go yards
+        board_dictionary = game.get_entire_board_dictionary()
+        expected = {56: [[6, 'pAqA']],
+                    'Home Yard':
+                        {'A': ['', ''],
+                         'B': ['P', ''],
+                         'C': ['P', 'Q'],
+                         'D': ['P', 'Q']},
+                    'Ready to Go Yard':
+                        {'A': ['', ''],
+                         'B': ['', 'Q'],
+                         'C': ['', ''],
+                         'D': ['', '']}}
+        self.assertEqual(expected, board_dictionary)  # expected, actual
+
+```
+
+
