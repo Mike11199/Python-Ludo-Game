@@ -447,8 +447,6 @@ class LudoGame:
         """
         This determines whether the future board position will be in the player's home rows.  It adds backtracking if
         the die roll is not the exact roll needed to enter the end "E" space of the game board.   
-        
-        It also tests to make sure      
         """
         home_row_spaces = None
         backtracking = 0
