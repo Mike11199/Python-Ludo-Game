@@ -2,7 +2,7 @@
 
 
 
--CS 162 Portfolio Project.  Allowed to be posted to a public GitHub repo per Syllabus.  This is an implementation of the game Ludo in Python, using object-oriented programming concepts taught in the course.  It contains two classes with various functions, unit testing, and a main function that can be called with an array of players and array of tuples containg the game moves.
+-CS 162 Portfolio Project.  Allowed to be posted to a public GitHub repo per Syllabus.  This is an implementation of the game [Ludo](https://en.wikipedia.org/wiki/Ludo_(board_game)) in Python, using object-oriented programming concepts taught in the course.  It is very similar to the game Sorry!, and involves 4 players rolling dice to move tokens around a game board, attempting to reach the end space.  It contains two classes with various functions, unit testing, and a main function that can be called with an array of players and array of tuples containg the game moves (player/roll).
 
 
 <h2>Game Description</h2>
