@@ -26,6 +26,8 @@
 
 -Test cases were essential in this project to ensure that complex game rules functioned correctly, and that each new feature added did not break previous functions.  For example, this was helpful in adding token backtracking in the home spaces, deciding whether to kick an opponent's token, and token priorty rules in the game.
 
-<img src="https://user-images.githubusercontent.com/91037796/185717670-5a8aee14-b0fe-4d06-9657-a6d5f88607fc.png" width=60% height=60%>
+
+<br>
+<img src="https://user-images.githubusercontent.com/91037796/185717670-5a8aee14-b0fe-4d06-9657-a6d5f88607fc.png" width=90% height=90%>
 
 
