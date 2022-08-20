@@ -70,10 +70,11 @@
 
 
 
-<h2>Function Structure</h2>
+<h2>Class and Function Structure</h2>
 
 ```python
  class LudoGame:
+ 
     
     def __init__(self):
       
