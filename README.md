@@ -34,7 +34,9 @@
 
 
 
--For example, here is a test case which check that
+-For example, here is a test case which checks that checks that the play_game function returns the correct string, indicating the positions of all tokens in the game, in the order of Players A, B, C, and D, from token P to token Q.  In this series of moves, one of Player A's tokens should have kicked Player B's token back to the home yard spaces.  This also tests that Player A's tokens were stacked (both landing on the same space, and can move together).  
+
+-A function is used to return all non-empty spaces of the board as a dictionary, which is used by the test case to also test that the board array was updated correctly (old position cleared by a move, new position filled).  This array was not required by the project, but was added in case a GUI was ever added for the game.
 
 
 ```python
