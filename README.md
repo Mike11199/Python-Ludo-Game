@@ -6,7 +6,7 @@
 
 -It is very similar to the game Sorry! and involves 4 players rolling dice to move tokens around a game board, attempting to reach the end space.  It contains two classes with various functions, unit testing, and a main function that can be called with an array of players and array of tuples containg the game moves (player/roll).
 
-
+<br>
 <h2>Game Description</h2>
 
 <img src="https://user-images.githubusercontent.com/91037796/185715851-58d242f7-cfdc-43c7-8666-0cca9bd03db2.png" width=60% height=60%>
@@ -19,7 +19,7 @@
 
 
 
-
+<br>
 <h2>Test Cases</h2>
 
 -Added 54 test cases to this project, 9 provided by the instructors.  
