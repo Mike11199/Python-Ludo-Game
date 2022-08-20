@@ -71,7 +71,7 @@
 ```
 
 
-
+<br>
 <h2>Class and Function Structure</h2>
 
 ```python
